@@ -1,11 +1,15 @@
 -- TrackMyProgress · esquema del módulo Gimnasio
 -- Ejecutar en el SQL editor del proyecto de Supabase.
+-- Nota: si esta base de datos ya tenía el esquema anterior (sin las columnas de
+-- importación de Hevy), ejecuta en su lugar supabase/migrations/001_hevy_import.sql.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
   date date not null,
   notes text,
+  -- start_time original de Hevy (u otro origen externo), para evitar reimportar duplicados.
+  external_ref text,
   created_at timestamptz not null default now()
 );
 
@@ -14,14 +18,22 @@ create table if not exists workout_sets (
   workout_id uuid not null references workouts (id) on delete cascade,
   exercise_name text not null,
   set_number int not null,
-  reps int not null,
-  weight_kg numeric not null,
+  -- nullable: una serie de cardio puro no tiene reps/peso.
+  reps int,
+  weight_kg numeric,
+  set_type text default 'normal',
+  rpe numeric,
+  distance_km numeric,
+  duration_seconds int,
+  superset_id int,
   order_index int not null default 0,
   created_at timestamptz not null default now()
 );
 
 create index if not exists workouts_user_id_date_idx on workouts (user_id, date desc);
 create index if not exists workout_sets_workout_id_idx on workout_sets (workout_id);
+create unique index if not exists workouts_user_external_ref_idx
+  on workouts (user_id, external_ref) where external_ref is not null;
 
 alter table workouts enable row level security;
 alter table workout_sets enable row level security;

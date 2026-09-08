@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
+import ImportHevy from './pages/ImportHevy'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import WorkoutDetail from './pages/WorkoutDetail'
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/entrenamientos/nuevo" element={<WorkoutNew />} />
             <Route path="/entrenamientos/:id" element={<WorkoutDetail />} />
             <Route path="/historial" element={<WorkoutHistory />} />
+            <Route path="/importar" element={<ImportHevy />} />
           </Route>
         </Route>
       </Routes>

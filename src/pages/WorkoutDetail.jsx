@@ -2,6 +2,18 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
+const SET_TYPE_LABELS = {
+  warmup: 'Calentamiento',
+  failure: 'Fallo',
+  dropset: 'Dropset',
+}
+
+function formatDuration(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${String(seconds).padStart(2, '0')}`
+}
+
 export default function WorkoutDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -95,16 +107,48 @@ export default function WorkoutDetail() {
                   <th className="w-10 font-normal">Serie</th>
                   <th className="font-normal">Reps</th>
                   <th className="font-normal">Peso</th>
+                  <th className="font-normal">Detalles</th>
                 </tr>
               </thead>
               <tbody>
-                {exSets.map((s) => (
-                  <tr key={s.id} className="border-t border-slate-800/60">
-                    <td className="py-1.5 text-slate-500">{s.set_number}</td>
-                    <td className="py-1.5">{s.reps}</td>
-                    <td className="py-1.5">{s.weight_kg} kg</td>
-                  </tr>
-                ))}
+                {exSets.map((s) => {
+                  const isCardio = s.reps == null && s.weight_kg == null
+                  return (
+                    <tr key={s.id} className="border-t border-slate-800/60">
+                      <td className="py-1.5 text-slate-500">{s.set_number}</td>
+                      <td className="py-1.5">
+                        {isCardio
+                          ? s.duration_seconds
+                            ? formatDuration(s.duration_seconds)
+                            : '—'
+                          : (s.reps ?? '—')}
+                      </td>
+                      <td className="py-1.5">
+                        {isCardio
+                          ? s.distance_km
+                            ? `${s.distance_km} km`
+                            : '—'
+                          : s.weight_kg != null
+                            ? `${s.weight_kg} kg`
+                            : '—'}
+                      </td>
+                      <td className="py-1.5 text-slate-500">
+                        <div className="flex flex-wrap gap-1">
+                          {s.set_type && s.set_type !== 'normal' && (
+                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-xs">
+                              {SET_TYPE_LABELS[s.set_type] ?? s.set_type}
+                            </span>
+                          )}
+                          {s.rpe != null && (
+                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-xs">
+                              RPE {s.rpe}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
