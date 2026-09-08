@@ -1,7 +1,7 @@
--- TrackMyProgress · esquema del módulo Gimnasio
+-- TrackMyProgress · esquema completo (Gimnasio + Peso corporal)
 -- Ejecutar en el SQL editor del proyecto de Supabase.
--- Nota: si esta base de datos ya tenía el esquema anterior (sin las columnas de
--- importación de Hevy), ejecuta en su lugar supabase/migrations/001_hevy_import.sql.
+-- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
+-- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql...).
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -65,3 +65,28 @@ create policy "workout_sets_delete_own" on workout_sets
   for delete using (
     exists (select 1 from workouts w where w.id = workout_id and w.user_id = auth.uid())
   );
+
+-- Peso corporal
+
+create table if not exists body_weight_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  date date not null,
+  weight_kg numeric not null,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists body_weight_logs_user_date_idx
+  on body_weight_logs (user_id, date);
+
+alter table body_weight_logs enable row level security;
+
+create policy "body_weight_logs_select_own" on body_weight_logs
+  for select using (auth.uid() = user_id);
+create policy "body_weight_logs_insert_own" on body_weight_logs
+  for insert with check (auth.uid() = user_id);
+create policy "body_weight_logs_update_own" on body_weight_logs
+  for update using (auth.uid() = user_id);
+create policy "body_weight_logs_delete_own" on body_weight_logs
+  for delete using (auth.uid() = user_id);

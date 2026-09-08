@@ -5,6 +5,7 @@ const navItems = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
   { to: '/entrenamientos/nuevo', label: 'Nuevo', icon: '➕' },
   { to: '/historial', label: 'Historial', icon: '📋' },
+  { to: '/peso', label: 'Peso', icon: '⚖️' },
 ]
 
 function NavItems({ orientation }) {
