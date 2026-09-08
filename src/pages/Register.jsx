@@ -16,13 +16,18 @@ export default function Register() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const { error } = await signUp(email, password)
+    const { data, error } = await signUp(email, password)
     setLoading(false)
     if (error) {
       setError(error.message)
       return
     }
-    setDone(true)
+    // Si la confirmación por email está desactivada, Supabase ya devuelve
+    // sesión activa: el AuthContext la recoge solo y el guard de arriba
+    // (if (user) ...) redirige a "/". Si no hay sesión, sí hace falta confirmar.
+    if (!data.session) {
+      setDone(true)
+    }
   }
 
   if (done) {
