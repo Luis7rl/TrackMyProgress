@@ -1,7 +1,9 @@
--- TrackMyProgress · esquema completo (Gimnasio + Peso corporal)
+-- TrackMyProgress · esquema completo (Gimnasio + Peso corporal + Pasos)
 -- Ejecutar en el SQL editor del proyecto de Supabase.
 -- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
--- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql...).
+-- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql,
+-- 003_steps_webhook.sql...). El INSERT de la clave del webhook de pasos (ver
+-- 003_steps_webhook.sql) hay que ejecutarlo aparte, no está aquí.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -90,3 +92,62 @@ create policy "body_weight_logs_update_own" on body_weight_logs
   for update using (auth.uid() = user_id);
 create policy "body_weight_logs_delete_own" on body_weight_logs
   for delete using (auth.uid() = user_id);
+
+-- Pasos + webhook para Atajos de iPhone
+
+create table if not exists step_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  date date not null,
+  steps int not null,
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists step_logs_user_date_idx
+  on step_logs (user_id, date);
+
+alter table step_logs enable row level security;
+
+create policy "step_logs_select_own" on step_logs
+  for select using (auth.uid() = user_id);
+create policy "step_logs_insert_own" on step_logs
+  for insert with check (auth.uid() = user_id);
+create policy "step_logs_update_own" on step_logs
+  for update using (auth.uid() = user_id);
+create policy "step_logs_delete_own" on step_logs
+  for delete using (auth.uid() = user_id);
+
+create table if not exists webhook_secrets (
+  key text primary key,
+  secret text not null
+);
+alter table webhook_secrets enable row level security;
+
+create or replace function public.log_steps_webhook(p_date date, p_steps int, p_secret text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user_id uuid;
+  v_secret text;
+begin
+  select secret into v_secret from webhook_secrets where key = 'steps';
+  if v_secret is null or p_secret <> v_secret then
+    raise exception 'unauthorized';
+  end if;
+
+  select id into v_user_id from auth.users limit 1;
+  if v_user_id is null then
+    raise exception 'no user found';
+  end if;
+
+  insert into step_logs (user_id, date, steps)
+  values (v_user_id, p_date, p_steps)
+  on conflict (user_id, date) do update set steps = excluded.steps;
+end;
+$$;
+
+revoke all on function public.log_steps_webhook(date, int, text) from public;
+grant execute on function public.log_steps_webhook(date, int, text) to anon;

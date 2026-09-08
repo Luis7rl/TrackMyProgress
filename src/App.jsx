@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import ImportHevy from './pages/ImportHevy'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Steps from './pages/Steps'
 import WorkoutDetail from './pages/WorkoutDetail'
 import WorkoutHistory from './pages/WorkoutHistory'
 import WorkoutNew from './pages/WorkoutNew'
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/historial" element={<WorkoutHistory />} />
             <Route path="/importar" element={<ImportHevy />} />
             <Route path="/peso" element={<BodyWeight />} />
+            <Route path="/pasos" element={<Steps />} />
           </Route>
         </Route>
       </Routes>
