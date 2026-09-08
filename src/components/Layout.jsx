@@ -21,7 +21,7 @@ function NavItems({ orientation }) {
       className={({ isActive }) =>
         `${base} ${
           isActive
-            ? 'text-blue-500 font-medium'
+            ? 'text-violet-500 font-medium'
             : 'text-slate-400 hover:text-slate-200'
         }`
       }
@@ -40,7 +40,7 @@ export default function Layout() {
       {/* Top bar: visible on desktop, also shows on mobile as a simple header */}
       <header className="safe-top sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur">
         <span className="text-lg font-semibold">
-          Track<span className="text-blue-500">MyProgress</span>
+          Track<span className="text-violet-500">MyProgress</span>
         </span>
         <nav className="hidden gap-1 md:flex">
           <NavItems orientation="top" />

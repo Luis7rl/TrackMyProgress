@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'TrackMyProgress',
         short_name: 'TrackMyProgress',
         description: 'Seguimiento personal de gimnasio, dieta, estudios y peso corporal',
-        theme_color: '#2563eb',
-        background_color: '#0b1220',
+        theme_color: '#7c3aed',
+        background_color: '#0b0a14',
         display: 'standalone',
         start_url: '/',
         icons: [

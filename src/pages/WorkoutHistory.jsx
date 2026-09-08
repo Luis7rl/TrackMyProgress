@@ -33,7 +33,7 @@ export default function WorkoutHistory() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-semibold">Historial</h1>
-        <Link to="/importar" className="text-sm text-blue-500 hover:underline">
+        <Link to="/importar" className="text-sm text-violet-500 hover:underline">
           Importar desde Hevy
         </Link>
       </div>

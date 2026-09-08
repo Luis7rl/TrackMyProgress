@@ -48,10 +48,10 @@ export default function Dashboard() {
         </div>
         <Link
           to="/entrenamientos/nuevo"
-          className="flex flex-col items-center justify-center rounded-xl bg-blue-600 p-4 text-center hover:bg-blue-500"
+          className="flex flex-col items-center justify-center rounded-xl bg-violet-600 p-4 text-center hover:bg-violet-500"
         >
           <p className="text-lg font-medium">+ Nuevo</p>
-          <p className="text-sm text-blue-100">Registrar entrenamiento</p>
+          <p className="text-sm text-violet-100">Registrar entrenamiento</p>
         </Link>
       </div>
 
@@ -82,7 +82,7 @@ export default function Dashboard() {
       </ul>
 
       {recent.length > 0 && (
-        <Link to="/historial" className="mt-4 inline-block text-sm text-blue-500 hover:underline">
+        <Link to="/historial" className="mt-4 inline-block text-sm text-violet-500 hover:underline">
           Ver historial completo →
         </Link>
       )}

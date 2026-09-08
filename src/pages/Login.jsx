@@ -29,7 +29,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-semibold">
-          Track<span className="text-blue-500">MyProgress</span>
+          Track<span className="text-violet-500">MyProgress</span>
         </h1>
         <p className="mb-8 text-center text-sm text-slate-400">
           Inicia sesión para ver tu progreso
@@ -42,7 +42,7 @@ export default function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
+            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
           <input
             type="password"
@@ -50,7 +50,7 @@ export default function Login() {
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
+            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
 
           {error && <p className="text-sm text-red-400">{error}</p>}
@@ -58,7 +58,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-blue-600 py-2.5 text-sm font-medium hover:bg-blue-500 disabled:opacity-50"
+            className="rounded-lg bg-violet-600 py-2.5 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
@@ -66,7 +66,7 @@ export default function Login() {
 
         <p className="mt-6 text-center text-sm text-slate-400">
           ¿No tienes cuenta?{' '}
-          <Link to="/register" className="text-blue-500 hover:underline">
+          <Link to="/register" className="text-violet-500 hover:underline">
             Regístrate
           </Link>
         </p>

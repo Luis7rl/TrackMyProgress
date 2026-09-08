@@ -118,7 +118,7 @@ export default function WorkoutNew() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
             />
           </label>
           <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
@@ -128,7 +128,7 @@ export default function WorkoutNew() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ej. día de empuje"
-              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
             />
           </label>
         </div>
@@ -143,7 +143,7 @@ export default function WorkoutNew() {
                   placeholder="Ejercicio (ej. Press banca)"
                   value={ex.name}
                   onChange={(e) => updateExerciseName(exIdx, e.target.value)}
-                  className="flex-1 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="flex-1 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-violet-500"
                 />
                 {exercises.length > 1 && (
                   <button
@@ -167,7 +167,7 @@ export default function WorkoutNew() {
                       placeholder="Reps"
                       value={s.reps}
                       onChange={(e) => updateSet(exIdx, setIdx, 'reps', e.target.value)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                      className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-violet-500"
                     />
                     <input
                       type="number"
@@ -176,7 +176,7 @@ export default function WorkoutNew() {
                       placeholder="Kg"
                       value={s.weight}
                       onChange={(e) => updateSet(exIdx, setIdx, 'weight', e.target.value)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                      className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-violet-500"
                     />
                     {ex.sets.length > 1 && (
                       <button
@@ -195,7 +195,7 @@ export default function WorkoutNew() {
               <button
                 type="button"
                 onClick={() => addSet(exIdx)}
-                className="mt-3 text-sm text-blue-500 hover:underline"
+                className="mt-3 text-sm text-violet-500 hover:underline"
               >
                 + Añadir serie
               </button>
@@ -216,7 +216,7 @@ export default function WorkoutNew() {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-blue-600 py-3 text-sm font-medium hover:bg-blue-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 py-3 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar entrenamiento'}
         </button>

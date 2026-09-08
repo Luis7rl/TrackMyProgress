@@ -72,7 +72,7 @@ export default function WorkoutDetail() {
 
   return (
     <div>
-      <Link to="/historial" className="mb-4 inline-block text-sm text-blue-500 hover:underline">
+      <Link to="/historial" className="mb-4 inline-block text-sm text-violet-500 hover:underline">
         ← Historial
       </Link>
 
