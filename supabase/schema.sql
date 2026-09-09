@@ -1,9 +1,9 @@
--- TrackMyProgress · esquema completo (Gimnasio + Peso corporal + Pasos + Carrera)
+-- TrackMyProgress · esquema completo (Gimnasio + Peso corporal + Pasos + Carrera + Fotos)
 -- Ejecutar en el SQL editor del proyecto de Supabase.
 -- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
 -- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql,
--- 003_steps_webhook.sql, 004_running.sql...). El INSERT de la clave del webhook de pasos
--- (ver 003_steps_webhook.sql) hay que ejecutarlo aparte, no está aquí.
+-- 003_steps_webhook.sql, 004_running.sql, 005_progress_photos.sql...). El INSERT de la
+-- clave del webhook de pasos (ver 003_steps_webhook.sql) hay que ejecutarlo aparte.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -76,6 +76,7 @@ create table if not exists body_weight_logs (
   date date not null,
   weight_kg numeric not null,
   notes text,
+  photo_path text,
   created_at timestamptz not null default now()
 );
 
@@ -199,3 +200,26 @@ create policy "running_plan_days_update_own" on running_plan_days
   for update using (auth.uid() = user_id);
 create policy "running_plan_days_delete_own" on running_plan_days
   for delete using (auth.uid() = user_id);
+
+-- Fotos de progreso (Storage)
+
+insert into storage.buckets (id, name, public)
+values ('progress-photos', 'progress-photos', false)
+on conflict (id) do nothing;
+
+create policy "progress_photos_select_own" on storage.objects
+  for select using (
+    bucket_id = 'progress-photos' and (storage.foldername(name))[1] = auth.uid()::text
+  );
+create policy "progress_photos_insert_own" on storage.objects
+  for insert with check (
+    bucket_id = 'progress-photos' and (storage.foldername(name))[1] = auth.uid()::text
+  );
+create policy "progress_photos_update_own" on storage.objects
+  for update using (
+    bucket_id = 'progress-photos' and (storage.foldername(name))[1] = auth.uid()::text
+  );
+create policy "progress_photos_delete_own" on storage.objects
+  for delete using (
+    bucket_id = 'progress-photos' and (storage.foldername(name))[1] = auth.uid()::text
+  );
