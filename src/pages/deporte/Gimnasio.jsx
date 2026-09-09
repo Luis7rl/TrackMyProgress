@@ -6,6 +6,26 @@ import { supabase } from '../../lib/supabaseClient'
 import { classifyExercise, MUSCLE_GROUPS } from '../../lib/muscleGroups'
 
 const VISIBLE_LIMIT = 10
+const PAGE_SIZE = 1000
+
+// Supabase limita cada select a 1000 filas por defecto: paginamos para no
+// subcontar el volumen por grupo muscular en historiales largos (ej. Hevy).
+async function fetchAllExerciseNames() {
+  let from = 0
+  let all = []
+  for (;;) {
+    const { data, error } = await supabase
+      .from('workout_sets')
+      .select('exercise_name')
+      .order('id', { ascending: true })
+      .range(from, from + PAGE_SIZE - 1)
+    if (error) throw error
+    all = all.concat(data)
+    if (data.length < PAGE_SIZE) break
+    from += PAGE_SIZE
+  }
+  return all.map((row) => row.exercise_name)
+}
 
 export default function Gimnasio() {
   const [workouts, setWorkouts] = useState(null)
@@ -17,21 +37,22 @@ export default function Gimnasio() {
     let active = true
 
     async function load() {
-      const [{ data: w, error: wErr }, { data: s, error: sErr }] = await Promise.all([
-        supabase
-          .from('workouts')
-          .select('id, date, notes, workout_sets(count)')
-          .order('date', { ascending: false }),
-        supabase.from('workout_sets').select('exercise_name'),
-      ])
+      try {
+        const [{ data: w, error: wErr }, names] = await Promise.all([
+          supabase
+            .from('workouts')
+            .select('id, date, notes, workout_sets(count)')
+            .order('date', { ascending: false }),
+          fetchAllExerciseNames(),
+        ])
 
-      if (!active) return
-      if (wErr || sErr) {
-        setError((wErr || sErr).message)
-        return
+        if (!active) return
+        if (wErr) throw wErr
+        setWorkouts(w)
+        setExerciseNames(names)
+      } catch (err) {
+        if (active) setError(err.message)
       }
-      setWorkouts(w)
-      setExerciseNames(s.map((row) => row.exercise_name))
     }
 
     load()
