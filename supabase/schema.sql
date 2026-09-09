@@ -1,9 +1,9 @@
--- TrackMyProgress · esquema completo (Gimnasio + Peso corporal + Pasos + Carrera + Fotos)
+-- TrackMyProgress · esquema completo (Gimnasio + Peso corporal + Pasos + Carrera + Fotos + Dieta)
 -- Ejecutar en el SQL editor del proyecto de Supabase.
 -- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
 -- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql,
--- 003_steps_webhook.sql, 004_running.sql, 005_progress_photos.sql...). El INSERT de la
--- clave del webhook de pasos (ver 003_steps_webhook.sql) hay que ejecutarlo aparte.
+-- 003_steps_webhook.sql, 004_running.sql, 005_progress_photos.sql, 006_diet.sql...). El
+-- INSERT de la clave del webhook de pasos (ver 003_steps_webhook.sql) hay que ejecutarlo aparte.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -223,3 +223,31 @@ create policy "progress_photos_delete_own" on storage.objects
   for delete using (
     bucket_id = 'progress-photos' and (storage.foldername(name))[1] = auth.uid()::text
   );
+
+-- Dieta
+
+create table if not exists diet_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  date date not null,
+  calories int not null,
+  protein_g numeric,
+  carbs_g numeric,
+  fat_g numeric,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists diet_logs_user_date_idx
+  on diet_logs (user_id, date);
+
+alter table diet_logs enable row level security;
+
+create policy "diet_logs_select_own" on diet_logs
+  for select using (auth.uid() = user_id);
+create policy "diet_logs_insert_own" on diet_logs
+  for insert with check (auth.uid() = user_id);
+create policy "diet_logs_update_own" on diet_logs
+  for update using (auth.uid() = user_id);
+create policy "diet_logs_delete_own" on diet_logs
+  for delete using (auth.uid() = user_id);
