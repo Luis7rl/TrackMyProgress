@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 const SET_TYPE_LABELS = {
   warmup: 'Calentamiento',
@@ -59,7 +59,7 @@ export default function WorkoutDetail() {
       setError(error.message)
       return
     }
-    navigate('/historial')
+    navigate('/deporte/gimnasio')
   }
 
   if (error) return <p className="text-sm text-red-400">{error}</p>
@@ -72,8 +72,8 @@ export default function WorkoutDetail() {
 
   return (
     <div>
-      <Link to="/historial" className="mb-4 inline-block text-sm text-violet-500 hover:underline">
-        ← Historial
+      <Link to="/deporte/gimnasio" className="mb-4 inline-block text-sm text-violet-500 hover:underline">
+        ← Gimnasio
       </Link>
 
       <div className="mb-6 flex items-start justify-between">

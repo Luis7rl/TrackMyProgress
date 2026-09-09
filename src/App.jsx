@@ -1,15 +1,20 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import DeporteLayout from './components/DeporteLayout'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
-import BodyWeight from './pages/BodyWeight'
+import Calendario from './pages/Calendario'
 import Dashboard from './pages/Dashboard'
-import ImportHevy from './pages/ImportHevy'
+import Carrera from './pages/deporte/Carrera'
+import Fisico from './pages/deporte/Fisico'
+import Gimnasio from './pages/deporte/Gimnasio'
+import ImportHevy from './pages/deporte/ImportHevy'
+import Pasos from './pages/deporte/Pasos'
+import WorkoutDetail from './pages/deporte/WorkoutDetail'
+import WorkoutNew from './pages/deporte/WorkoutNew'
+import Dieta from './pages/Dieta'
+import Estudio from './pages/Estudio'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Steps from './pages/Steps'
-import WorkoutDetail from './pages/WorkoutDetail'
-import WorkoutHistory from './pages/WorkoutHistory'
-import WorkoutNew from './pages/WorkoutNew'
 
 export default function App() {
   return (
@@ -21,12 +26,21 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/entrenamientos/nuevo" element={<WorkoutNew />} />
-            <Route path="/entrenamientos/:id" element={<WorkoutDetail />} />
-            <Route path="/historial" element={<WorkoutHistory />} />
-            <Route path="/importar" element={<ImportHevy />} />
-            <Route path="/peso" element={<BodyWeight />} />
-            <Route path="/pasos" element={<Steps />} />
+
+            <Route path="/deporte" element={<DeporteLayout />}>
+              <Route index element={<Navigate to="gimnasio" replace />} />
+              <Route path="gimnasio" element={<Gimnasio />} />
+              <Route path="gimnasio/nuevo" element={<WorkoutNew />} />
+              <Route path="gimnasio/importar" element={<ImportHevy />} />
+              <Route path="gimnasio/:id" element={<WorkoutDetail />} />
+              <Route path="carrera" element={<Carrera />} />
+              <Route path="pasos" element={<Pasos />} />
+              <Route path="fisico" element={<Fisico />} />
+            </Route>
+
+            <Route path="/dieta" element={<Dieta />} />
+            <Route path="/estudio" element={<Estudio />} />
+            <Route path="/calendario" element={<Calendario />} />
           </Route>
         </Route>
       </Routes>

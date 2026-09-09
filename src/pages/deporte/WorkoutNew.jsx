@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 function emptySet() {
   return { reps: '', weight: '' }
@@ -98,7 +98,7 @@ export default function WorkoutNew() {
       const { error: setsError } = await supabase.from('workout_sets').insert(rows)
       if (setsError) throw setsError
 
-      navigate(`/entrenamientos/${workout.id}`)
+      navigate(`/deporte/gimnasio/${workout.id}`)
     } catch (err) {
       setError(err.message)
     } finally {

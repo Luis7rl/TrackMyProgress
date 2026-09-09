@@ -3,10 +3,10 @@ import { useAuth } from '../context/AuthContext'
 
 const navItems = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
-  { to: '/entrenamientos/nuevo', label: 'Nuevo', icon: '➕' },
-  { to: '/historial', label: 'Historial', icon: '📋' },
-  { to: '/peso', label: 'Peso', icon: '⚖️' },
-  { to: '/pasos', label: 'Pasos', icon: '👟' },
+  { to: '/deporte', label: 'Deporte', icon: '🏋️' },
+  { to: '/dieta', label: 'Dieta', icon: '🍎' },
+  { to: '/estudio', label: 'Estudio', icon: '📚' },
+  { to: '/calendario', label: 'Calendario', icon: '🗓️' },
 ]
 
 function NavItems({ orientation }) {

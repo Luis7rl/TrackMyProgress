@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 import { useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 const LBS_TO_KG = 0.453592
 const MILES_TO_KM = 1.60934
