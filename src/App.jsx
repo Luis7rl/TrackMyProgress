@@ -5,11 +5,13 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Calendario from './pages/Calendario'
 import Dashboard from './pages/Dashboard'
 import Carrera from './pages/deporte/Carrera'
+import ExerciseProgress from './pages/deporte/ExerciseProgress'
 import Fisico from './pages/deporte/Fisico'
 import Gimnasio from './pages/deporte/Gimnasio'
 import ImportHevy from './pages/deporte/ImportHevy'
 import Pasos from './pages/deporte/Pasos'
 import WorkoutDetail from './pages/deporte/WorkoutDetail'
+import WorkoutEdit from './pages/deporte/WorkoutEdit'
 import WorkoutNew from './pages/deporte/WorkoutNew'
 import Dieta from './pages/Dieta'
 import Estudio from './pages/Estudio'
@@ -32,7 +34,9 @@ export default function App() {
               <Route path="gimnasio" element={<Gimnasio />} />
               <Route path="gimnasio/nuevo" element={<WorkoutNew />} />
               <Route path="gimnasio/importar" element={<ImportHevy />} />
+              <Route path="gimnasio/ejercicio/:name" element={<ExerciseProgress />} />
               <Route path="gimnasio/:id" element={<WorkoutDetail />} />
+              <Route path="gimnasio/:id/editar" element={<WorkoutEdit />} />
               <Route path="carrera" element={<Carrera />} />
               <Route path="pasos" element={<Pasos />} />
               <Route path="fisico" element={<Fisico />} />

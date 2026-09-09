@@ -88,13 +88,21 @@ export default function WorkoutDetail() {
           </h1>
           {workout.notes && <p className="mt-1 text-sm text-slate-400">{workout.notes}</p>}
         </div>
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className="rounded-lg px-3 py-1.5 text-sm text-red-400 hover:bg-red-950 disabled:opacity-50"
-        >
-          Eliminar
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            to={`/deporte/gimnasio/${id}/editar`}
+            className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+          >
+            Editar
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="rounded-lg px-3 py-1.5 text-sm text-red-400 hover:bg-red-950 disabled:opacity-50"
+          >
+            Eliminar
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">

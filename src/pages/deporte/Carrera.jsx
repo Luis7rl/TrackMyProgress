@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import ProgressBar from '../../components/ProgressBar'
+import { mondayOf } from '../../lib/dates'
+import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
@@ -80,6 +83,7 @@ function WeeklyPlan() {
 
 export default function Carrera() {
   const [sessions, setSessions] = useState(null)
+  const [goals, setGoals] = useState(DEFAULT_GOALS)
   const [expanded, setExpanded] = useState(false)
   const [date, setDate] = useState(todayISO)
   const [distance, setDistance] = useState('')
@@ -103,7 +107,20 @@ export default function Carrera() {
 
   useEffect(() => {
     load()
+    fetchGoals()
+      .then(setGoals)
+      .catch((err) => setError(err.message))
   }, [])
+
+  async function handleGoalBlur(value) {
+    const num = value === '' ? null : Number(value)
+    setGoals((g) => ({ ...g, target_weekly_km: num }))
+    try {
+      await saveGoal('target_weekly_km', num)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -142,6 +159,12 @@ export default function Carrera() {
   const visible = expanded ? sessions : sessions?.slice(0, VISIBLE_LIMIT)
   const remaining = sessions ? sessions.length - VISIBLE_LIMIT : 0
 
+  const mondayKey = mondayOf(new Date()).toISOString().slice(0, 10)
+  const weekKm = sessions?.reduce((sum, s) => (s.date >= mondayKey ? sum + Number(s.distance_km) : sum), 0) ?? 0
+  const weekGoalPercent = goals.target_weekly_km
+    ? Math.max(0, Math.min(100, (weekKm / goals.target_weekly_km) * 100))
+    : null
+
   return (
     <div>
       <h1 className="mb-6 text-xl font-semibold">Carrera</h1>
@@ -155,6 +178,33 @@ export default function Carrera() {
           <p className="text-2xl font-semibold">{totalKm.toFixed(1)} km</p>
           <p className="text-sm text-slate-500">Distancia total</p>
         </div>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-sm text-slate-400">Objetivo semanal</span>
+          <div className="flex items-center gap-1 text-sm">
+            <input
+              type="number"
+              step="0.5"
+              defaultValue={goals.target_weekly_km ?? ''}
+              key={goals.target_weekly_km}
+              onBlur={(e) => handleGoalBlur(e.target.value)}
+              className="w-20 rounded-lg border border-slate-800 bg-slate-900 px-2 py-1 text-right outline-none focus:border-violet-500"
+            />
+            <span className="text-slate-500">km</span>
+          </div>
+        </div>
+        {weekGoalPercent != null ? (
+          <>
+            <ProgressBar percent={weekGoalPercent} />
+            <p className="mt-2 text-xs text-slate-500">
+              {weekKm.toFixed(1)} / {goals.target_weekly_km} km esta semana
+            </p>
+          </>
+        ) : (
+          <p className="text-xs text-slate-500">Sin objetivo definido.</p>
+        )}
       </div>
 
       <div className="mb-6">

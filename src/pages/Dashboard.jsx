@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { estimateBurn } from '../lib/calorieEstimate'
+import { mondayOf } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
-
-function mondayOf(date) {
-  const d = new Date(date)
-  const diff = (d.getDay() + 6) % 7 // lunes = 0
-  d.setDate(d.getDate() - diff)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
 
 function computeWeekStreak(dates) {
   const weeks = new Set(dates.map((d) => mondayOf(`${d}T00:00:00`).toISOString().slice(0, 10)))

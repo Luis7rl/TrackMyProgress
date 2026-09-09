@@ -4,8 +4,8 @@
 -- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
 -- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql,
 -- 003_steps_webhook.sql, 004_running.sql, 005_progress_photos.sql, 006_diet.sql,
--- 007_study.sql, 008_calendar.sql...). El INSERT de la clave del webhook de pasos (ver
--- 003_steps_webhook.sql) hay que ejecutarlo aparte.
+-- 007_study.sql, 008_calendar.sql, 009_goals_and_measurements.sql...). El INSERT de la
+-- clave del webhook de pasos (ver 003_steps_webhook.sql) hay que ejecutarlo aparte.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -79,6 +79,9 @@ create table if not exists body_weight_logs (
   weight_kg numeric not null,
   notes text,
   photo_path text,
+  waist_cm numeric,
+  arm_cm numeric,
+  chest_cm numeric,
   created_at timestamptz not null default now()
 );
 
@@ -326,4 +329,25 @@ create policy "calendar_events_insert_own" on calendar_events
 create policy "calendar_events_update_own" on calendar_events
   for update using (auth.uid() = user_id);
 create policy "calendar_events_delete_own" on calendar_events
+  for delete using (auth.uid() = user_id);
+
+-- Objetivos
+
+create table if not exists user_goals (
+  user_id uuid primary key default auth.uid() references auth.users (id) on delete cascade,
+  target_weight_kg numeric,
+  target_daily_steps int,
+  target_weekly_km numeric,
+  updated_at timestamptz not null default now()
+);
+
+alter table user_goals enable row level security;
+
+create policy "user_goals_select_own" on user_goals
+  for select using (auth.uid() = user_id);
+create policy "user_goals_insert_own" on user_goals
+  for insert with check (auth.uid() = user_id);
+create policy "user_goals_update_own" on user_goals
+  for update using (auth.uid() = user_id);
+create policy "user_goals_delete_own" on user_goals
   for delete using (auth.uid() = user_id);

@@ -135,24 +135,26 @@ export default function Gimnasio() {
           <h2 className="mb-3 text-sm font-medium text-slate-400">Récords personales</h2>
           <ul className="mb-6 flex flex-col gap-2">
             {visiblePrs.map((pr) => (
-              <li
-                key={pr.exercise}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3"
-              >
-                <span className="text-sm">{pr.exercise}</span>
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="font-medium">
-                    {pr.weight} kg × {pr.reps}
-                  </span>
-                  {pr.date && (
-                    <span className="text-slate-500">
-                      {new Date(pr.date + 'T00:00:00').toLocaleDateString('es-ES', {
-                        day: 'numeric',
-                        month: 'short',
-                      })}
+              <li key={pr.exercise}>
+                <Link
+                  to={`/deporte/gimnasio/ejercicio/${encodeURIComponent(pr.exercise)}`}
+                  className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700"
+                >
+                  <span className="text-sm">{pr.exercise}</span>
+                  <div className="flex items-center gap-3 text-sm">
+                    <span className="font-medium">
+                      {pr.weight} kg × {pr.reps}
                     </span>
-                  )}
-                </div>
+                    {pr.date && (
+                      <span className="text-slate-500">
+                        {new Date(pr.date + 'T00:00:00').toLocaleDateString('es-ES', {
+                          day: 'numeric',
+                          month: 'short',
+                        })}
+                      </span>
+                    )}
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
