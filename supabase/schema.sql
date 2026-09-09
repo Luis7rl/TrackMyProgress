@@ -1,10 +1,11 @@
--- TrackMyProgress · esquema completo (Gimnasio + Peso + Pasos + Carrera + Fotos + Dieta + Estudio)
+-- TrackMyProgress · esquema completo
+-- (Gimnasio + Peso + Pasos + Carrera + Fotos + Dieta + Estudio + Calendario)
 -- Ejecutar en el SQL editor del proyecto de Supabase.
 -- Nota: si esta base de datos ya tenía un esquema anterior, ejecuta en su lugar los
 -- scripts de supabase/migrations/ en orden (001_hevy_import.sql, 002_body_weight.sql,
 -- 003_steps_webhook.sql, 004_running.sql, 005_progress_photos.sql, 006_diet.sql,
--- 007_study.sql...). El INSERT de la clave del webhook de pasos (ver 003_steps_webhook.sql)
--- hay que ejecutarlo aparte.
+-- 007_study.sql, 008_calendar.sql...). El INSERT de la clave del webhook de pasos (ver
+-- 003_steps_webhook.sql) hay que ejecutarlo aparte.
 
 create table if not exists workouts (
   id uuid primary key default gen_random_uuid(),
@@ -299,4 +300,30 @@ create policy "study_plan_days_insert_own" on study_plan_days
 create policy "study_plan_days_update_own" on study_plan_days
   for update using (auth.uid() = user_id);
 create policy "study_plan_days_delete_own" on study_plan_days
+  for delete using (auth.uid() = user_id);
+
+-- Calendario
+
+create table if not exists calendar_events (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  date date not null,
+  title text not null,
+  type text not null default 'tarea' check (type in ('tarea', 'entrenamiento', 'plan')),
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists calendar_events_user_date_idx
+  on calendar_events (user_id, date);
+
+alter table calendar_events enable row level security;
+
+create policy "calendar_events_select_own" on calendar_events
+  for select using (auth.uid() = user_id);
+create policy "calendar_events_insert_own" on calendar_events
+  for insert with check (auth.uid() = user_id);
+create policy "calendar_events_update_own" on calendar_events
+  for update using (auth.uid() = user_id);
+create policy "calendar_events_delete_own" on calendar_events
   for delete using (auth.uid() = user_id);
