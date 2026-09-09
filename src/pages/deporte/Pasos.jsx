@@ -5,6 +5,13 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10)
 }
 
+// Estimación aproximada, no personalizada por peso/altura.
+const KCAL_PER_STEP = 0.04
+
+function estimateKcal(steps) {
+  return Math.round(steps * KCAL_PER_STEP)
+}
+
 function StepsChart({ entries }) {
   const width = 600
   const height = 180
@@ -95,6 +102,7 @@ export default function Steps() {
   const sorted = entries ? [...entries].sort((a, b) => b.date.localeCompare(a.date)) : []
   const last7 = sorted.slice(0, 7)
   const avg7 = last7.length ? Math.round(last7.reduce((sum, e) => sum + e.steps, 0) / last7.length) : null
+  const totalSteps = entries?.reduce((sum, e) => sum + e.steps, 0) ?? 0
 
   return (
     <div>
@@ -151,11 +159,22 @@ export default function Steps() {
               <p className="text-sm text-slate-500">
                 Último registro ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
+              <p className="mt-1 text-xs text-violet-400">
+                ≈ {estimateKcal(sorted[0].steps).toLocaleString('es-ES')} kcal
+              </p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-              <p className="text-2xl font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'}</p>
-              <p className="text-sm text-slate-500">Media últimos {last7.length} días</p>
+              <p className="text-2xl font-semibold">{totalSteps.toLocaleString('es-ES')}</p>
+              <p className="text-sm text-slate-500">Total acumulado</p>
+              <p className="mt-1 text-xs text-violet-400">
+                ≈ {estimateKcal(totalSteps).toLocaleString('es-ES')} kcal
+              </p>
             </div>
+          </div>
+
+          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+            <p className="text-lg font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'}</p>
+            <p className="text-sm text-slate-500">Media de los últimos {last7.length} días</p>
           </div>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
