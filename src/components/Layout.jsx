@@ -1,5 +1,34 @@
+import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabaseClient'
+
+const EXPORT_TABLES = [
+  'workouts',
+  'workout_sets',
+  'body_weight_logs',
+  'step_logs',
+  'running_sessions',
+  'running_plan_days',
+  'diet_logs',
+  'study_sessions',
+  'study_plan_days',
+  'calendar_events',
+]
+
+async function fetchAllRows(table) {
+  const pageSize = 1000
+  let from = 0
+  let all = []
+  for (;;) {
+    const { data, error } = await supabase.from(table).select('*').range(from, from + pageSize - 1)
+    if (error) throw error
+    all = all.concat(data)
+    if (data.length < pageSize) break
+    from += pageSize
+  }
+  return all
+}
 
 const navItems = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
@@ -45,6 +74,30 @@ export default function Layout() {
   const { signOut } = useAuth()
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
+  const [exporting, setExporting] = useState(false)
+
+  async function handleExport() {
+    setExporting(true)
+    try {
+      const result = {}
+      for (const table of EXPORT_TABLES) {
+        result[table] = await fetchAllRows(table)
+      }
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `trackmyprogress-export-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      alert(`Error al exportar: ${err.message}`)
+    } finally {
+      setExporting(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
@@ -57,12 +110,22 @@ export default function Layout() {
           <nav className="hidden gap-1 md:flex">
             <NavItems orientation="top" />
           </nav>
-          <button
-            onClick={signOut}
-            className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
-          >
-            Cerrar sesión
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              title="Exportar todos tus datos en un archivo JSON"
+              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
+            >
+              {exporting ? 'Exportando...' : 'Exportar'}
+            </button>
+            <button
+              onClick={signOut}
+              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </header>
 
         {inDeporte && (

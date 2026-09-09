@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { estimateBurn } from '../lib/calorieEstimate'
 import { supabase } from '../lib/supabaseClient'
 
 function mondayOf(date) {
@@ -32,20 +33,63 @@ function computeWeekStreak(dates) {
 
 export default function Dashboard() {
   const [streak, setStreak] = useState(null)
+  const [weekly, setWeekly] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
     let active = true
 
     async function load() {
-      const { data, error } = await supabase.from('workouts').select('date')
+      try {
+        const mondayKey = mondayOf(new Date()).toISOString().slice(0, 10)
 
-      if (!active) return
-      if (error) {
-        setError(error.message)
-        return
+        const [
+          { data: allWorkouts, error: allWErr },
+          { data: weekWorkouts, error: wErr },
+          { data: running, error: rErr },
+          { data: steps, error: sErr },
+          { data: diet, error: dErr },
+          { data: study, error: stErr },
+          { data: weight, error: wgErr },
+        ] = await Promise.all([
+          supabase.from('workouts').select('date'),
+          supabase.from('workouts').select('date').gte('date', mondayKey),
+          supabase.from('running_sessions').select('distance_km').gte('date', mondayKey),
+          supabase.from('step_logs').select('steps').gte('date', mondayKey),
+          supabase.from('diet_logs').select('calories').gte('date', mondayKey),
+          supabase.from('study_sessions').select('duration_minutes').gte('date', mondayKey),
+          supabase.from('body_weight_logs').select('weight_kg').order('date', { ascending: false }).limit(1),
+        ])
+
+        const err = allWErr || wErr || rErr || sErr || dErr || stErr || wgErr
+        if (!active) return
+        if (err) throw err
+
+        setStreak(computeWeekStreak(allWorkouts.map((w) => w.date)))
+
+        const totalKm = running.reduce((sum, r) => sum + Number(r.distance_km), 0)
+        const totalSteps = steps.reduce((sum, s) => sum + s.steps, 0)
+        const totalStudyMinutes = study.reduce((sum, s) => sum + s.duration_minutes, 0)
+        const consumed = diet.reduce((sum, d) => sum + d.calories, 0)
+        const burn = estimateBurn({
+          steps: totalSteps,
+          km: totalKm,
+          gymSessions: weekWorkouts.length,
+          weightKg: weight[0]?.weight_kg,
+        })
+
+        setWeekly({
+          gymCount: weekWorkouts.length,
+          totalKm,
+          totalSteps,
+          studyHours: Math.round((totalStudyMinutes / 60) * 10) / 10,
+          consumed,
+          burn,
+          hasDiet: diet.length > 0,
+        })
+      } catch (err) {
+        if (active) setError(err.message)
       }
-      setStreak(computeWeekStreak(data.map((w) => w.date)))
     }
 
     load()
@@ -70,9 +114,49 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <Link to="/deporte/gimnasio" className="mt-8 text-sm text-violet-500 hover:underline">
+      <Link to="/deporte/gimnasio" className="mt-6 text-sm text-violet-500 hover:underline">
         Ir a Deporte →
       </Link>
+
+      {weekly && (
+        <div className="mt-10 w-full text-left">
+          <p className="mb-3 text-sm font-medium text-slate-400">Esta semana</p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p className="text-xl font-semibold">{weekly.gymCount}</p>
+              <p className="text-sm text-slate-500">Entrenamientos</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p className="text-xl font-semibold">{weekly.totalKm.toFixed(1)} km</p>
+              <p className="text-sm text-slate-500">Corridos</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p className="text-xl font-semibold">{weekly.totalSteps.toLocaleString('es-ES')}</p>
+              <p className="text-sm text-slate-500">Pasos</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p className="text-xl font-semibold">{weekly.studyHours}h</p>
+              <p className="text-sm text-slate-500">Estudio</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:col-span-2">
+              {weekly.hasDiet ? (
+                <>
+                  <p className="text-xl font-semibold">
+                    {weekly.consumed.toLocaleString('es-ES')} <span className="text-slate-500">/</span>{' '}
+                    {weekly.burn.toLocaleString('es-ES')} kcal
+                  </p>
+                  <p className="text-sm text-slate-500">Consumidas / quemadas en actividad</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xl font-semibold">{weekly.burn.toLocaleString('es-ES')} kcal</p>
+                  <p className="text-sm text-slate-500">Quemadas en actividad</p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

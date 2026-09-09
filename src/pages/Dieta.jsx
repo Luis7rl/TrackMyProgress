@@ -1,14 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { DEFAULT_WEIGHT_KG, GYM_SESSION_KCAL, estimateBurn } from '../lib/calorieEstimate'
 import { supabase } from '../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
-
-// Estimaciones aproximadas de kcal quemadas por actividad (no incluyen el
-// metabolismo basal, solo el gasto extra de pasos + carrera + gimnasio).
-const KCAL_PER_STEP = 0.04
-const GYM_SESSION_KCAL = 300
-const RUNNING_KCAL_PER_KM_PER_KG = 1.0
-const DEFAULT_WEIGHT_KG = 75
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10)
@@ -107,14 +101,14 @@ export default function Dieta() {
     load()
   }, [])
 
-  function estimateBurn(date) {
+  function burnForDate(date) {
     if (!activity) return 0
-    const steps = activity.stepsByDate[date] ?? 0
-    const km = activity.kmByDate[date] ?? 0
-    const gymSessions = activity.gymByDate[date] ?? 0
-    return Math.round(
-      steps * KCAL_PER_STEP + km * activity.weightKg * RUNNING_KCAL_PER_KM_PER_KG + gymSessions * GYM_SESSION_KCAL,
-    )
+    return estimateBurn({
+      steps: activity.stepsByDate[date] ?? 0,
+      km: activity.kmByDate[date] ?? 0,
+      gymSessions: activity.gymByDate[date] ?? 0,
+      weightKg: activity.weightKg,
+    })
   }
 
   async function handleSubmit(e) {
@@ -163,7 +157,7 @@ export default function Dieta() {
   const visible = expanded ? sorted : sorted.slice(0, VISIBLE_LIMIT)
   const remaining = sorted.length - VISIBLE_LIMIT
 
-  const latestBurn = sorted[0] ? estimateBurn(sorted[0].date) : null
+  const latestBurn = sorted[0] ? burnForDate(sorted[0].date) : null
   const latestNet = sorted[0] ? sorted[0].calories - latestBurn : null
 
   return (
@@ -301,7 +295,7 @@ export default function Dieta() {
                 </span>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="font-medium">{entry.calories} kcal</span>
-                  <span className="text-slate-500">−{estimateBurn(entry.date)}</span>
+                  <span className="text-slate-500">−{burnForDate(entry.date)}</span>
                   {(entry.protein_g || entry.carbs_g || entry.fat_g) && (
                     <span className="hidden text-slate-500 sm:inline">
                       P {entry.protein_g ?? '—'} · C {entry.carbs_g ?? '—'} · G {entry.fat_g ?? '—'}
