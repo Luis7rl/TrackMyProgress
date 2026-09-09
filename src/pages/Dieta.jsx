@@ -3,6 +3,13 @@ import { supabase } from '../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
 
+// Estimaciones aproximadas de kcal quemadas por actividad (no incluyen el
+// metabolismo basal, solo el gasto extra de pasos + carrera + gimnasio).
+const KCAL_PER_STEP = 0.04
+const GYM_SESSION_KCAL = 300
+const RUNNING_KCAL_PER_KM_PER_KG = 1.0
+const DEFAULT_WEIGHT_KG = 75
+
 function todayISO() {
   return new Date().toISOString().slice(0, 10)
 }
@@ -48,6 +55,7 @@ function CaloriesChart({ entries }) {
 
 export default function Dieta() {
   const [entries, setEntries] = useState(null)
+  const [activity, setActivity] = useState(null) // { stepsByDate, kmByDate, gymByDate, weightKg }
   const [expanded, setExpanded] = useState(false)
   const [date, setDate] = useState(todayISO)
   const [calories, setCalories] = useState('')
@@ -58,21 +66,56 @@ export default function Dieta() {
   const [error, setError] = useState('')
 
   async function load() {
-    const { data, error } = await supabase
-      .from('diet_logs')
-      .select('*')
-      .order('date', { ascending: true })
+    const [dietRes, stepsRes, runningRes, workoutsRes, weightRes] = await Promise.all([
+      supabase.from('diet_logs').select('*').order('date', { ascending: true }),
+      supabase.from('step_logs').select('date, steps'),
+      supabase.from('running_sessions').select('date, distance_km'),
+      supabase.from('workouts').select('date'),
+      supabase
+        .from('body_weight_logs')
+        .select('weight_kg')
+        .order('date', { ascending: false })
+        .limit(1),
+    ])
 
-    if (error) {
-      setError(error.message)
+    const err = dietRes.error || stepsRes.error || runningRes.error || workoutsRes.error || weightRes.error
+    if (err) {
+      setError(err.message)
       return
     }
-    setEntries(data)
+
+    setEntries(dietRes.data)
+
+    const stepsByDate = {}
+    stepsRes.data.forEach((s) => (stepsByDate[s.date] = s.steps))
+
+    const kmByDate = {}
+    runningRes.data.forEach((r) => (kmByDate[r.date] = (kmByDate[r.date] ?? 0) + Number(r.distance_km)))
+
+    const gymByDate = {}
+    workoutsRes.data.forEach((w) => (gymByDate[w.date] = (gymByDate[w.date] ?? 0) + 1))
+
+    setActivity({
+      stepsByDate,
+      kmByDate,
+      gymByDate,
+      weightKg: weightRes.data[0]?.weight_kg ?? DEFAULT_WEIGHT_KG,
+    })
   }
 
   useEffect(() => {
     load()
   }, [])
+
+  function estimateBurn(date) {
+    if (!activity) return 0
+    const steps = activity.stepsByDate[date] ?? 0
+    const km = activity.kmByDate[date] ?? 0
+    const gymSessions = activity.gymByDate[date] ?? 0
+    return Math.round(
+      steps * KCAL_PER_STEP + km * activity.weightKg * RUNNING_KCAL_PER_KM_PER_KG + gymSessions * GYM_SESSION_KCAL,
+    )
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -119,6 +162,9 @@ export default function Dieta() {
     : null
   const visible = expanded ? sorted : sorted.slice(0, VISIBLE_LIMIT)
   const remaining = sorted.length - VISIBLE_LIMIT
+
+  const latestBurn = sorted[0] ? estimateBurn(sorted[0].date) : null
+  const latestNet = sorted[0] ? sorted[0].calories - latestBurn : null
 
   return (
     <div>
@@ -196,13 +242,13 @@ export default function Dieta() {
         <p className="text-sm text-slate-500">Todavía no has registrado ningún día.</p>
       ) : (
         <>
-          <div className="mb-6 grid grid-cols-2 gap-3">
+          <div className="mb-3 grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
               <p className="text-2xl font-semibold">
                 {sorted[0].calories.toLocaleString('es-ES')} kcal
               </p>
               <p className="text-sm text-slate-500">
-                Último registro ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
+                Consumidas ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
@@ -210,6 +256,31 @@ export default function Dieta() {
               <p className="text-sm text-slate-500">Media últimos {last7.length} días</p>
             </div>
           </div>
+
+          <div className="mb-6 grid grid-cols-2 gap-3">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p className="text-2xl font-semibold text-violet-400">
+                {latestBurn?.toLocaleString('es-ES') ?? '—'} kcal
+              </p>
+              <p className="text-sm text-slate-500">Quemadas en actividad (pasos + carrera + gimnasio)</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <p
+                className={`text-2xl font-semibold ${
+                  latestNet == null ? '' : latestNet > 0 ? 'text-amber-400' : 'text-emerald-400'
+                }`}
+              >
+                {latestNet == null ? '—' : `${latestNet > 0 ? '+' : ''}${latestNet.toLocaleString('es-ES')}`} kcal
+              </p>
+              <p className="text-sm text-slate-500">Neto (consumidas − actividad)</p>
+            </div>
+          </div>
+
+          <p className="mb-6 text-xs text-slate-600">
+            Las kcal quemadas son una estimación (pasos, distancia de carrera y ~{GYM_SESSION_KCAL} kcal por
+            sesión de gimnasio) y no incluyen el metabolismo basal, así que el "neto" no es tu balance
+            calórico real — sirve solo como referencia relativa día a día.
+          </p>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
             <CaloriesChart entries={entries} />
@@ -230,8 +301,9 @@ export default function Dieta() {
                 </span>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="font-medium">{entry.calories} kcal</span>
+                  <span className="text-slate-500">−{estimateBurn(entry.date)}</span>
                   {(entry.protein_g || entry.carbs_g || entry.fat_g) && (
-                    <span className="text-slate-500">
+                    <span className="hidden text-slate-500 sm:inline">
                       P {entry.protein_g ?? '—'} · C {entry.carbs_g ?? '—'} · G {entry.fat_g ?? '—'}
                     </span>
                   )}
