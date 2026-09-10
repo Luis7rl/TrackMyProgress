@@ -5,6 +5,31 @@ import { supabase } from '../../lib/supabaseClient'
 const LBS_TO_KG = 0.453592
 const MILES_TO_KM = 1.60934
 
+const MONTHS_ES = {
+  ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06',
+  jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12',
+}
+
+// Soporta el formato ISO habitual de Hevy ("2026-09-10 10:58:00") y también
+// un formato local tipo "10 sep 2026, 10:58" (sin cero delante en días de
+// un dígito) que puede aparecer si el CSV se abrió/guardó con Excel/Numbers.
+// Nunca recortar por posición de caracteres: con días de 1 y 2 dígitos la
+// longitud del string cambia y un slice(0, N) fijo desplaza el año.
+function parseHevyDate(startTime) {
+  if (!startTime) return null
+
+  const iso = startTime.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`
+
+  const es = startTime.match(/^(\d{1,2})\s+([a-zñ]{3,4})\.?\s+(\d{4})/i)
+  if (es) {
+    const month = MONTHS_ES[es[2].toLowerCase().slice(0, 3)]
+    if (month) return `${es[3]}-${month}-${es[1].padStart(2, '0')}`
+  }
+
+  return null
+}
+
 function toNumberOrNull(value) {
   if (value === undefined || value === null || value === '') return null
   const n = Number(value)
@@ -24,7 +49,7 @@ function groupByWorkout(rows) {
 
 function buildWorkoutPayload(rows) {
   const first = rows[0]
-  const date = (first.start_time || '').slice(0, 10)
+  const date = parseHevyDate(first.start_time)
   const notes = [first.title, first.description].filter(Boolean).join(' — ') || null
 
   const setCounters = new Map()
@@ -118,6 +143,11 @@ export default function ImportHevy() {
 
       const { workout, sets, skipped } = buildWorkoutPayload(rows)
       skippedSets += skipped
+
+      if (!workout.date) {
+        errors.push(`Fecha no reconocida: "${workout.external_ref}"`)
+        continue
+      }
 
       try {
         const { data: existing, error: existingError } = await supabase
