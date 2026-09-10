@@ -39,7 +39,7 @@ export default function MonthCalendar({ markedDates }) {
   for (let day = 1; day <= daysInMonth; day++) cells.push(day)
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
         <button
           onClick={() => changeMonth(-1)}

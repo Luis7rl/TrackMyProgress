@@ -41,7 +41,7 @@ function WeeklyPlan() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="mb-3 text-sm font-medium text-slate-600">Horario semanal</p>
       {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
       {plan === null ? (
@@ -57,7 +57,7 @@ function WeeklyPlan() {
                 placeholder="Ej. Matemáticas 18:00-20:00"
                 onChange={(e) => updateLocal(i, e.target.value)}
                 onBlur={(e) => saveDay(i, e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none focus:border-violet-500"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           ))}
@@ -130,14 +130,14 @@ export default function Estudio() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Estudio</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Estudio</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-2xl font-semibold">{sessions?.length ?? '—'}</p>
           <p className="text-sm text-slate-500">Sesiones</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-2xl font-semibold">{formatHours(totalMinutes)}</p>
           <p className="text-sm text-slate-500">Horas totales</p>
         </div>
@@ -154,7 +154,7 @@ export default function Estudio() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
@@ -164,7 +164,7 @@ export default function Estudio() {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Ej. Cálculo"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -176,13 +176,13 @@ export default function Estudio() {
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
             placeholder="90"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar sesión'}
         </button>
@@ -201,7 +201,7 @@ export default function Estudio() {
         {visible?.map((s) => (
           <li
             key={s.id}
-            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
           >
             <div>
               <p className="font-medium">

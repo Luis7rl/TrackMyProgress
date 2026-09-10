@@ -159,7 +159,7 @@ export default function Dieta() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Dieta</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Dieta</h1>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -168,7 +168,7 @@ export default function Dieta() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -180,7 +180,7 @@ export default function Dieta() {
             value={calories}
             onChange={(e) => setCalories(e.target.value)}
             placeholder="2200"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -191,7 +191,7 @@ export default function Dieta() {
             value={protein}
             onChange={(e) => setProtein(e.target.value)}
             placeholder="150"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -202,7 +202,7 @@ export default function Dieta() {
             value={carbs}
             onChange={(e) => setCarbs(e.target.value)}
             placeholder="220"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -213,13 +213,13 @@ export default function Dieta() {
             value={fat}
             onChange={(e) => setFat(e.target.value)}
             placeholder="70"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
@@ -234,7 +234,7 @@ export default function Dieta() {
       ) : (
         <>
           <div className="mb-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-2xl font-semibold">
                 {sorted[0].calories.toLocaleString('es-ES')} kcal
               </p>
@@ -242,20 +242,20 @@ export default function Dieta() {
                 Consumidas ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-2xl font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'} kcal</p>
               <p className="text-sm text-slate-500">Media últimos {last7.length} días</p>
             </div>
           </div>
 
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-2xl font-semibold text-violet-600">
                 {latestBurn?.toLocaleString('es-ES') ?? '—'} kcal
               </p>
               <p className="text-sm text-slate-500">Quemadas en actividad (pasos + carrera + gimnasio)</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p
                 className={`text-2xl font-semibold ${
                   latestNet == null ? '' : latestNet > 0 ? 'text-amber-600' : 'text-emerald-600'
@@ -273,7 +273,7 @@ export default function Dieta() {
             calórico real — sirve solo como referencia relativa día a día.
           </p>
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <CaloriesChart entries={entries} />
           </div>
 
@@ -281,7 +281,7 @@ export default function Dieta() {
             {visible.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
               >
                 <span className="text-sm">
                   {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {

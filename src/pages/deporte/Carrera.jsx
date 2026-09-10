@@ -51,7 +51,7 @@ function WeeklyPlan() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="mb-3 text-sm font-medium text-slate-600">Plan semanal</p>
       {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
       {plan === null ? (
@@ -67,7 +67,7 @@ function WeeklyPlan() {
                 placeholder="Ej. 5km ritmo suave"
                 onChange={(e) => updateLocal(i, e.target.value)}
                 onBlur={(e) => saveDay(i, e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none focus:border-violet-500"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           ))}
@@ -163,20 +163,20 @@ export default function Carrera() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Carrera</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Carrera</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-2xl font-semibold">{sessions?.length ?? '—'}</p>
           <p className="text-sm text-slate-500">Entrenamientos</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-2xl font-semibold">{totalKm.toFixed(1)} km</p>
           <p className="text-sm text-slate-500">Distancia total</p>
         </div>
       </div>
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-sm text-slate-600">Objetivo semanal</span>
           <div className="flex items-center gap-1 text-sm">
@@ -186,7 +186,7 @@ export default function Carrera() {
               defaultValue={goals.target_weekly_km ?? ''}
               key={goals.target_weekly_km}
               onBlur={(e) => handleGoalBlur(e.target.value)}
-              className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none focus:border-violet-500"
+              className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
             <span className="text-slate-500">km</span>
           </div>
@@ -214,7 +214,7 @@ export default function Carrera() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -227,7 +227,7 @@ export default function Carrera() {
             value={distance}
             onChange={(e) => setDistance(e.target.value)}
             placeholder="5.0"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -240,7 +240,7 @@ export default function Carrera() {
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
             placeholder="28.5"
-            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
@@ -250,13 +250,13 @@ export default function Carrera() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Ej. rodaje suave"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
@@ -275,7 +275,7 @@ export default function Carrera() {
         {visible?.map((s) => (
           <li
             key={s.id}
-            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
           >
             <div>
               <p className="font-medium">

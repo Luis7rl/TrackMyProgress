@@ -91,7 +91,7 @@ export default function WorkoutForm({
 
   return (
     <div>
-      <h1 className="mb-2 text-xl font-semibold">{title}</h1>
+      <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">{title}</h1>
       {warning && <p className="mb-6 text-xs text-amber-600">{warning}</p>}
 
       <form onSubmit={handleSubmit} className={`flex flex-col gap-6 ${warning ? '' : 'mt-4'}`}>
@@ -102,7 +102,7 @@ export default function WorkoutForm({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
           </label>
           <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
@@ -112,14 +112,14 @@ export default function WorkoutForm({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ej. día de empuje"
-              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
           </label>
         </div>
 
         <div className="flex flex-col gap-4">
           {exercises.map((ex, exIdx) => (
-            <div key={exIdx} className="rounded-xl border border-slate-200 bg-white p-4">
+            <div key={exIdx} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="mb-3 flex items-center gap-2">
                 <input
                   type="text"
@@ -127,7 +127,7 @@ export default function WorkoutForm({
                   placeholder="Ejercicio (ej. Press banca)"
                   value={ex.name}
                   onChange={(e) => updateExerciseName(exIdx, e.target.value)}
-                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500"
+                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
                 />
                 {exercises.length > 1 && (
                   <button
@@ -151,7 +151,7 @@ export default function WorkoutForm({
                       placeholder="Reps"
                       value={s.reps}
                       onChange={(e) => updateSet(exIdx, setIdx, 'reps', e.target.value)}
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
                     />
                     <input
                       type="number"
@@ -160,7 +160,7 @@ export default function WorkoutForm({
                       placeholder="Kg"
                       value={s.weight}
                       onChange={(e) => updateSet(exIdx, setIdx, 'weight', e.target.value)}
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
                     />
                     {ex.sets.length > 1 && (
                       <button
@@ -200,7 +200,7 @@ export default function WorkoutForm({
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 py-3 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors py-3 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : submitLabel}
         </button>

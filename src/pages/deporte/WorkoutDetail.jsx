@@ -78,7 +78,7 @@ export default function WorkoutDetail() {
 
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             {new Date(workout.date + 'T00:00:00').toLocaleDateString('es-ES', {
               weekday: 'long',
               day: 'numeric',
@@ -107,7 +107,7 @@ export default function WorkoutDetail() {
 
       <div className="flex flex-col gap-4">
         {Object.entries(grouped).map(([exerciseName, exSets]) => (
-          <div key={exerciseName} className="rounded-xl border border-slate-200 bg-white p-4">
+          <div key={exerciseName} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <h2 className="mb-3 font-medium">{exerciseName}</h2>
             <table className="w-full text-sm">
               <thead>
@@ -143,12 +143,12 @@ export default function WorkoutDetail() {
                       <td className="py-1.5 text-slate-500">
                         <div className="flex flex-wrap gap-1">
                           {s.set_type && s.set_type !== 'normal' && (
-                            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">
+                            <span className="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">
                               {SET_TYPE_LABELS[s.set_type] ?? s.set_type}
                             </span>
                           )}
                           {s.rpe != null && (
-                            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">
+                            <span className="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">
                               RPE {s.rpe}
                             </span>
                           )}

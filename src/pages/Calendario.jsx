@@ -119,11 +119,11 @@ export default function Calendario() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Calendario</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Calendario</h1>
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="mb-3 flex items-center justify-between">
           <button
             onClick={() => changeMonth(-1)}
@@ -203,7 +203,7 @@ export default function Calendario() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Ej. Entrega proyecto"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -211,7 +211,7 @@ export default function Calendario() {
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           >
             {TYPE_OPTIONS.map((t) => (
               <option key={t.value} value={t.value}>
@@ -223,7 +223,7 @@ export default function Calendario() {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Añadiendo...' : 'Añadir'}
         </button>
@@ -238,7 +238,7 @@ export default function Calendario() {
             return (
               <li
                 key={e.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${opt?.dot ?? 'bg-violet-500'}`} />

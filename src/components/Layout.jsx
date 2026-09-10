@@ -58,15 +58,28 @@ function NavItems({ orientation }) {
       to={item.to}
       end={item.end}
       className={({ isActive }) =>
-        `${base} ${
+        `${base} transition-colors ${
           isActive
             ? 'text-violet-600 font-medium'
             : 'text-slate-600 hover:text-slate-800'
         }`
       }
     >
-      <span aria-hidden="true">{item.icon}</span>
-      <span>{item.label}</span>
+      {({ isActive }) => (
+        <>
+          <span
+            aria-hidden="true"
+            className={
+              orientation === 'bottom' && isActive
+                ? 'rounded-full bg-violet-100 px-2.5 py-0.5'
+                : undefined
+            }
+          >
+            {item.icon}
+          </span>
+          <span>{item.label}</span>
+        </>
+      )}
     </NavLink>
   ))
 }
@@ -104,8 +117,8 @@ export default function Layout() {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       {/* Cabecera + submenú de Deporte (si aplica): fijos juntos arriba, no se pierden al hacer scroll */}
       <div className="sticky top-0 z-10">
-        <header className="safe-top flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur">
-          <span className="text-lg font-semibold">
+        <header className="safe-top flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
+          <span className="text-xl font-bold tracking-tight text-slate-900">
             Track<span className="text-violet-600">MyProgress</span>
           </span>
           <nav className="hidden gap-1 md:flex">
@@ -136,9 +149,9 @@ export default function Layout() {
                 key={tab.to}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm ${
+                  `flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'border-violet-500 bg-violet-500/10 text-violet-600'
+                      ? 'border-violet-500 bg-violet-500/10 text-violet-600 shadow-sm'
                       : 'border-slate-200 text-slate-600 hover:border-slate-400 hover:text-slate-800'
                   }`
                 }

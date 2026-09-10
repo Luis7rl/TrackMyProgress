@@ -104,14 +104,14 @@ export default function Gimnasio() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Gimnasio</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Gimnasio</h1>
         <div className="flex items-center gap-4">
           <Link to="/deporte/gimnasio/importar" className="text-sm text-violet-600 hover:underline">
             Importar desde Hevy
           </Link>
           <Link
             to="/deporte/gimnasio/nuevo"
-            className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-500"
+            className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-500"
           >
             + Nuevo
           </Link>
@@ -120,7 +120,7 @@ export default function Gimnasio() {
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <p className="text-2xl font-semibold">{workouts?.length ?? '—'}</p>
         <p className="text-sm text-slate-500">Entrenamientos totales</p>
       </div>
@@ -138,7 +138,7 @@ export default function Gimnasio() {
               <li key={pr.exercise}>
                 <Link
                   to={`/deporte/gimnasio/ejercicio/${encodeURIComponent(pr.exercise)}`}
-                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300"
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 shadow-sm"
                 >
                   <span className="text-sm">{pr.exercise}</span>
                   <div className="flex items-center gap-3 text-sm">
@@ -182,7 +182,7 @@ export default function Gimnasio() {
           <li key={w.id}>
             <Link
               to={`/deporte/gimnasio/${w.id}`}
-              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 shadow-sm"
             >
               <div>
                 <p className="font-medium">

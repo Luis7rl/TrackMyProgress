@@ -62,13 +62,13 @@ function PhotoComparator({ photoEntries, photoUrls }) {
   }
 
   return (
-    <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+    <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="mb-3 text-sm font-medium text-slate-600">Comparar fotos</p>
       <div className="mb-3 grid grid-cols-2 gap-3">
         <select
           value={dateA}
           onChange={(e) => setDateA(e.target.value)}
-          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500"
+          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
         >
           {photoEntries.map((e) => (
             <option key={e.id} value={e.date}>
@@ -79,7 +79,7 @@ function PhotoComparator({ photoEntries, photoUrls }) {
         <select
           value={dateB}
           onChange={(e) => setDateB(e.target.value)}
-          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500"
+          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
         >
           {photoEntries.map((e) => (
             <option key={e.id} value={e.date}>
@@ -243,7 +243,7 @@ export default function Fisico() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Físico</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Físico</h1>
 
       <form onSubmit={handleSubmit} className="mb-3 flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -252,7 +252,7 @@ export default function Fisico() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -265,7 +265,7 @@ export default function Fisico() {
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             placeholder="Ej. 78.4"
-            className="w-32 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+            className="w-32 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
@@ -280,7 +280,7 @@ export default function Fisico() {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
@@ -304,7 +304,7 @@ export default function Fisico() {
               step="0.1"
               value={waist}
               onChange={(e) => setWaist(e.target.value)}
-              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -315,7 +315,7 @@ export default function Fisico() {
               step="0.1"
               value={arm}
               onChange={(e) => setArm(e.target.value)}
-              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm text-slate-600">
@@ -326,7 +326,7 @@ export default function Fisico() {
               step="0.1"
               value={chest}
               onChange={(e) => setChest(e.target.value)}
-              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
+              className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
           </label>
         </div>
@@ -334,7 +334,7 @@ export default function Fisico() {
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-sm text-slate-600">Objetivo de peso</span>
           <div className="flex items-center gap-1 text-sm">
@@ -344,7 +344,7 @@ export default function Fisico() {
               defaultValue={goals.target_weight_kg ?? ''}
               key={goals.target_weight_kg}
               onBlur={(e) => handleGoalBlur(e.target.value)}
-              className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none focus:border-violet-500"
+              className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
             />
             <span className="text-slate-500">kg</span>
           </div>
@@ -369,13 +369,13 @@ export default function Fisico() {
       ) : (
         <>
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-2xl font-semibold">{latest.weight_kg} kg</p>
               <p className="text-sm text-slate-500">
                 Último registro ({new Date(latest.date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p
                 className={`text-2xl font-semibold ${
                   delta == null ? 'text-slate-500' : delta > 0 ? 'text-amber-600' : delta < 0 ? 'text-emerald-600' : ''
@@ -387,7 +387,7 @@ export default function Fisico() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <WeightChart entries={entries} />
           </div>
 
@@ -420,7 +420,7 @@ export default function Fisico() {
             {sorted.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
               >
                 <div>
                   <span className="text-sm">

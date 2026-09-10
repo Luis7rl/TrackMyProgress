@@ -90,7 +90,7 @@ export default function ExerciseProgress() {
         ← Gimnasio
       </Link>
 
-      <h1 className="mb-6 text-xl font-semibold">{exerciseName}</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">{exerciseName}</h1>
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
@@ -101,7 +101,7 @@ export default function ExerciseProgress() {
       ) : (
         <>
           {best && (
-            <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+            <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-2xl font-semibold">
                 {best.weight} kg × {best.reps}
               </p>
@@ -111,7 +111,7 @@ export default function ExerciseProgress() {
             </div>
           )}
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p className="mb-2 text-sm font-medium text-slate-600">Evolución (1RM estimado)</p>
             <ProgressChart points={sessions} />
           </div>
@@ -120,7 +120,7 @@ export default function ExerciseProgress() {
             {chronological.map((s) => (
               <li
                 key={s.date}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
               >
                 <span className="text-sm">
                   {new Date(s.date + 'T00:00:00').toLocaleDateString('es-ES', {

@@ -88,7 +88,7 @@ const LEGEND = [
 
 export default function MuscleMap({ volumes }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="mb-4 text-sm font-medium text-slate-600">Grupos musculares trabajados</p>
       <div className="flex justify-center gap-8">
         <div className="flex flex-col items-center gap-1">
