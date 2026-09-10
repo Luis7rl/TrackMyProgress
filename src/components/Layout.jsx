@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
 const EXPORT_TABLES = [
@@ -87,7 +88,7 @@ export default function Layout() {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `trackmyprogress-export-${new Date().toISOString().slice(0, 10)}.json`
+      a.download = `trackmyprogress-export-${todayKey()}.json`
       document.body.appendChild(a)
       a.click()
       a.remove()

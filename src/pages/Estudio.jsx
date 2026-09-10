@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
+import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
 const WEEKDAY_LABELS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 function formatHours(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60)
@@ -73,7 +70,7 @@ function WeeklyPlan() {
 export default function Estudio() {
   const [sessions, setSessions] = useState(null)
   const [expanded, setExpanded] = useState(false)
-  const [date, setDate] = useState(todayISO)
+  const [date, setDate] = useState(todayKey)
   const [subject, setSubject] = useState('')
   const [minutes, setMinutes] = useState('')
   const [saving, setSaving] = useState(false)

@@ -1,14 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
 import { useAuth } from '../../context/AuthContext'
+import { todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
 
 const BUCKET = 'progress-photos'
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 function WeightChart({ entries }) {
   const width = 600
@@ -121,7 +118,7 @@ export default function Fisico() {
   const [entries, setEntries] = useState(null)
   const [photoUrls, setPhotoUrls] = useState({})
   const [goals, setGoals] = useState(DEFAULT_GOALS)
-  const [date, setDate] = useState(todayISO)
+  const [date, setDate] = useState(todayKey)
   const [weight, setWeight] = useState('')
   const [waist, setWaist] = useState('')
   const [arm, setArm] = useState('')

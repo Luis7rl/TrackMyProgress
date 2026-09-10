@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
-import { mondayOf } from '../../lib/dates'
+import { mondayOf, toDateKey, todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
 const WEEKDAY_LABELS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 function formatDuration(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60)
@@ -85,7 +81,7 @@ export default function Carrera() {
   const [sessions, setSessions] = useState(null)
   const [goals, setGoals] = useState(DEFAULT_GOALS)
   const [expanded, setExpanded] = useState(false)
-  const [date, setDate] = useState(todayISO)
+  const [date, setDate] = useState(todayKey)
   const [distance, setDistance] = useState('')
   const [minutes, setMinutes] = useState('')
   const [notes, setNotes] = useState('')
@@ -159,7 +155,7 @@ export default function Carrera() {
   const visible = expanded ? sessions : sessions?.slice(0, VISIBLE_LIMIT)
   const remaining = sessions ? sessions.length - VISIBLE_LIMIT : 0
 
-  const mondayKey = mondayOf(new Date()).toISOString().slice(0, 10)
+  const mondayKey = toDateKey(mondayOf(new Date()))
   const weekKm = sessions?.reduce((sum, s) => (s.date >= mondayKey ? sum + Number(s.distance_km) : sum), 0) ?? 0
   const weekGoalPercent = goals.target_weekly_km
     ? Math.max(0, Math.min(100, (weekKm / goals.target_weekly_km) * 100))

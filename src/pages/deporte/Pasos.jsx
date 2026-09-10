@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
+import { todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 // Estimación aproximada, no personalizada por peso/altura.
 const KCAL_PER_STEP = 0.04
@@ -52,7 +49,7 @@ function StepsChart({ entries }) {
 export default function Steps() {
   const [entries, setEntries] = useState(null)
   const [goals, setGoals] = useState(DEFAULT_GOALS)
-  const [date, setDate] = useState(todayISO)
+  const [date, setDate] = useState(todayKey)
   const [steps, setSteps] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -119,7 +116,7 @@ export default function Steps() {
   const last7 = sorted.slice(0, 7)
   const avg7 = last7.length ? Math.round(last7.reduce((sum, e) => sum + e.steps, 0) / last7.length) : null
   const totalSteps = entries?.reduce((sum, e) => sum + e.steps, 0) ?? 0
-  const todayEntry = entries?.find((e) => e.date === todayISO())
+  const todayEntry = entries?.find((e) => e.date === todayKey())
   const relevantSteps = todayEntry?.steps ?? 0
   const goalPercent =
     goals.target_daily_steps ? Math.max(0, Math.min(100, (relevantSteps / goals.target_daily_steps) * 100)) : null

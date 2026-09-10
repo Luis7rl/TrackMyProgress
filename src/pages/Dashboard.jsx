@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { estimateBurn } from '../lib/calorieEstimate'
-import { mondayOf } from '../lib/dates'
+import { mondayOf, toDateKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
 function computeWeekStreak(dates) {
-  const weeks = new Set(dates.map((d) => mondayOf(`${d}T00:00:00`).toISOString().slice(0, 10)))
+  const weeks = new Set(dates.map((d) => toDateKey(mondayOf(`${d}T00:00:00`))))
   let streak = 0
   let cursor = mondayOf(new Date())
   let isCurrentWeek = true
 
   for (;;) {
-    const key = cursor.toISOString().slice(0, 10)
+    const key = toDateKey(cursor)
     if (weeks.has(key)) {
       streak++
     } else if (!isCurrentWeek) {
@@ -34,7 +34,7 @@ export default function Dashboard() {
 
     async function load() {
       try {
-        const mondayKey = mondayOf(new Date()).toISOString().slice(0, 10)
+        const mondayKey = toDateKey(mondayOf(new Date()))
 
         const [
           { data: allWorkouts, error: allWErr },

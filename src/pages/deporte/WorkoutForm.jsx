@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { todayKey } from '../../lib/dates'
 
 function emptySet() {
   return { reps: '', weight: '' }
@@ -17,7 +18,7 @@ export default function WorkoutForm({
   submitLabel,
   onSubmit,
 }) {
-  const [date, setDate] = useState(initialDate ?? new Date().toISOString().slice(0, 10))
+  const [date, setDate] = useState(initialDate ?? todayKey())
   const [notes, setNotes] = useState(initialNotes)
   const [exercises, setExercises] = useState(
     initialExercises?.length ? initialExercises : [emptyExercise()],

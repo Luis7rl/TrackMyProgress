@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_WEIGHT_KG, GYM_SESSION_KCAL, estimateBurn } from '../lib/calorieEstimate'
+import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 function CaloriesChart({ entries }) {
   const width = 600
@@ -51,7 +48,7 @@ export default function Dieta() {
   const [entries, setEntries] = useState(null)
   const [activity, setActivity] = useState(null) // { stepsByDate, kmByDate, gymByDate, weightKg }
   const [expanded, setExpanded] = useState(false)
-  const [date, setDate] = useState(todayISO)
+  const [date, setDate] = useState(todayKey)
   const [calories, setCalories] = useState('')
   const [protein, setProtein] = useState('')
   const [carbs, setCarbs] = useState('')
