@@ -41,9 +41,9 @@ function WeeklyPlan() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="mb-3 text-sm font-medium text-slate-400">Horario semanal</p>
-      {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="mb-3 text-sm font-medium text-slate-600">Horario semanal</p>
+      {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
       {plan === null ? (
         <p className="text-sm text-slate-500">Cargando...</p>
       ) : (
@@ -57,7 +57,7 @@ function WeeklyPlan() {
                 placeholder="Ej. Matemáticas 18:00-20:00"
                 onChange={(e) => updateLocal(i, e.target.value)}
                 onBlur={(e) => saveDay(i, e.target.value)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-sm outline-none focus:border-violet-500"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none focus:border-violet-500"
               />
             </div>
           ))}
@@ -133,11 +133,11 @@ export default function Estudio() {
       <h1 className="mb-6 text-xl font-semibold">Estudio</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-2xl font-semibold">{sessions?.length ?? '—'}</p>
           <p className="text-sm text-slate-500">Sesiones</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-2xl font-semibold">{formatHours(totalMinutes)}</p>
           <p className="text-sm text-slate-500">Horas totales</p>
         </div>
@@ -148,26 +148,26 @@ export default function Estudio() {
       </div>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Fecha
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
           Asignatura (opcional)
           <input
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Ej. Cálculo"
-            className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Minutos
           <input
             type="number"
@@ -176,21 +176,21 @@ export default function Estudio() {
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
             placeholder="90"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar sesión'}
         </button>
       </form>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
+      <h2 className="mb-3 text-sm font-medium text-slate-600">Historial</h2>
 
       {sessions === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
       {sessions?.length === 0 && (
@@ -201,7 +201,7 @@ export default function Estudio() {
         {visible?.map((s) => (
           <li
             key={s.id}
-            className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
           >
             <div>
               <p className="font-medium">
@@ -217,7 +217,7 @@ export default function Estudio() {
               <span>{formatHours(s.duration_minutes)}</span>
               <button
                 onClick={() => handleDelete(s.id)}
-                className="text-slate-500 hover:text-red-400"
+                className="text-slate-500 hover:text-red-600"
                 aria-label="Eliminar sesión"
               >
                 ✕
@@ -230,7 +230,7 @@ export default function Estudio() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mt-4 w-full rounded-lg border border-slate-200 py-2.5 text-sm text-slate-600 hover:border-slate-400 hover:text-slate-800"
         >
           Ver todas ({sessions.length})
         </button>

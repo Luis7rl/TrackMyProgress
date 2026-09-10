@@ -193,41 +193,41 @@ export default function ImportHevy() {
   return (
     <div>
       <h1 className="mb-2 text-xl font-semibold">Importar desde Hevy</h1>
-      <p className="mb-6 text-sm text-slate-400">
+      <p className="mb-6 text-sm text-slate-600">
         Exporta tu historial desde Hevy (Perfil → Configuración → Exportar e importar datos →
         Exportar entrenamientos) y sube aquí el archivo CSV.
       </p>
 
-      <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-700 px-4 py-10 text-center hover:border-slate-500">
-        <span className="text-sm text-slate-300">
+      <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 px-4 py-10 text-center hover:border-slate-500">
+        <span className="text-sm text-slate-700">
           {fileName || 'Toca para seleccionar el CSV'}
         </span>
         <input type="file" accept=".csv" onChange={handleFile} className="hidden" disabled={importing} />
       </label>
 
       {importing && progress && (
-        <p className="mt-4 text-sm text-slate-400">
+        <p className="mt-4 text-sm text-slate-600">
           Importando entrenamiento {progress.current} de {progress.total}…
         </p>
       )}
 
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
 
       {summary && (
-        <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-sm">
+        <div className="mt-6 rounded-xl border border-slate-200 bg-white p-4 text-sm">
           <p className="mb-1">✅ {summary.imported} entrenamientos importados</p>
           {summary.alreadyImported > 0 && (
-            <p className="mb-1 text-slate-400">
+            <p className="mb-1 text-slate-600">
               ⏭ {summary.alreadyImported} ya estaban importados (omitidos)
             </p>
           )}
           {summary.skippedSets > 0 && (
-            <p className="mb-1 text-slate-400">
+            <p className="mb-1 text-slate-600">
               ⚠ {summary.skippedSets} series omitidas (sin ejercicio)
             </p>
           )}
           {summary.errors.length > 0 && (
-            <div className="mt-3 text-red-400">
+            <div className="mt-3 text-red-600">
               <p className="mb-1">{summary.errors.length} entrenamientos con error:</p>
               <ul className="list-disc pl-5">
                 {summary.errors.map((e, i) => (

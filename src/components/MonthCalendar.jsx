@@ -39,11 +39,11 @@ export default function MonthCalendar({ markedDates }) {
   for (let day = 1; day <= daysInMonth; day++) cells.push(day)
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
       <div className="mb-3 flex items-center justify-between">
         <button
           onClick={() => changeMonth(-1)}
-          className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+          className="rounded-lg px-2 py-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           aria-label="Mes anterior"
         >
           ‹
@@ -53,7 +53,7 @@ export default function MonthCalendar({ markedDates }) {
         </p>
         <button
           onClick={() => changeMonth(1)}
-          className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+          className="rounded-lg px-2 py-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           aria-label="Mes siguiente"
         >
           ›
@@ -81,8 +81,8 @@ export default function MonthCalendar({ markedDates }) {
                 trained
                   ? 'bg-violet-600 font-medium text-white'
                   : isToday
-                    ? 'border border-violet-500 text-slate-300'
-                    : 'text-slate-400'
+                    ? 'border border-violet-500 text-slate-700'
+                    : 'text-slate-600'
               }`}
             >
               {day}

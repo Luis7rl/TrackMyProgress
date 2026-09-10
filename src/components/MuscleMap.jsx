@@ -88,8 +88,8 @@ const LEGEND = [
 
 export default function MuscleMap({ volumes }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="mb-4 text-sm font-medium text-slate-400">Grupos musculares trabajados</p>
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="mb-4 text-sm font-medium text-slate-600">Grupos musculares trabajados</p>
       <div className="flex justify-center gap-8">
         <div className="flex flex-col items-center gap-1">
           <BodyFront volumes={volumes} />
@@ -104,7 +104,7 @@ export default function MuscleMap({ volumes }) {
         {LEGEND.map((l) => (
           <div key={l.label} className="flex items-center gap-1.5">
             <span
-              className="h-3 w-3 rounded-sm border border-slate-600"
+              className="h-3 w-3 rounded-sm border border-slate-400"
               style={{ backgroundColor: `rgba(${FILL}, ${levelOpacity(l.level)})` }}
             />
             <span className="text-xs text-slate-500">{l.label}</span>

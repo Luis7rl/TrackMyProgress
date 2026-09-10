@@ -86,13 +86,13 @@ export default function ExerciseProgress() {
 
   return (
     <div>
-      <Link to="/deporte/gimnasio" className="mb-4 inline-block text-sm text-violet-500 hover:underline">
+      <Link to="/deporte/gimnasio" className="mb-4 inline-block text-sm text-violet-600 hover:underline">
         ← Gimnasio
       </Link>
 
       <h1 className="mb-6 text-xl font-semibold">{exerciseName}</h1>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
       {sessions === null ? (
         <p className="text-sm text-slate-500">Cargando...</p>
@@ -101,7 +101,7 @@ export default function ExerciseProgress() {
       ) : (
         <>
           {best && (
-            <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+            <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-2xl font-semibold">
                 {best.weight} kg × {best.reps}
               </p>
@@ -111,8 +111,8 @@ export default function ExerciseProgress() {
             </div>
           )}
 
-          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <p className="mb-2 text-sm font-medium text-slate-400">Evolución (1RM estimado)</p>
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+            <p className="mb-2 text-sm font-medium text-slate-600">Evolución (1RM estimado)</p>
             <ProgressChart points={sessions} />
           </div>
 
@@ -120,7 +120,7 @@ export default function ExerciseProgress() {
             {chronological.map((s) => (
               <li
                 key={s.date}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
               >
                 <span className="text-sm">
                   {new Date(s.date + 'T00:00:00').toLocaleDateString('es-ES', {

@@ -32,14 +32,14 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-center text-slate-100">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-center text-slate-900">
         <div className="max-w-sm">
           <h1 className="mb-2 text-xl font-semibold">Revisa tu email</h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600">
             Te hemos enviado un enlace de confirmación a <b>{email}</b>. Confírmalo y
             luego inicia sesión.
           </p>
-          <Link to="/login" className="mt-6 inline-block text-violet-500 hover:underline">
+          <Link to="/login" className="mt-6 inline-block text-violet-600 hover:underline">
             Ir a iniciar sesión
           </Link>
         </div>
@@ -48,10 +48,10 @@ export default function Register() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-900">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-semibold">Crear cuenta</h1>
-        <p className="mb-8 text-center text-sm text-slate-400">
+        <p className="mb-8 text-center text-sm text-slate-600">
           Empieza a llevar tu progreso
         </p>
 
@@ -62,7 +62,7 @@ export default function Register() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
           <input
             type="password"
@@ -71,23 +71,23 @@ export default function Register() {
             placeholder="Contraseña (mín. 6 caracteres)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-violet-600 py-2.5 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
+            className="rounded-lg bg-violet-600 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
           >
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-slate-600">
           ¿Ya tienes cuenta?{' '}
-          <Link to="/login" className="text-violet-500 hover:underline">
+          <Link to="/login" className="text-violet-600 hover:underline">
             Inicia sesión
           </Link>
         </p>

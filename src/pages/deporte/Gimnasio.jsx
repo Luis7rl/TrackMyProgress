@@ -106,21 +106,21 @@ export default function Gimnasio() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-semibold">Gimnasio</h1>
         <div className="flex items-center gap-4">
-          <Link to="/deporte/gimnasio/importar" className="text-sm text-violet-500 hover:underline">
+          <Link to="/deporte/gimnasio/importar" className="text-sm text-violet-600 hover:underline">
             Importar desde Hevy
           </Link>
           <Link
             to="/deporte/gimnasio/nuevo"
-            className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium hover:bg-violet-500"
+            className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-500"
           >
             + Nuevo
           </Link>
         </div>
       </div>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
         <p className="text-2xl font-semibold">{workouts?.length ?? '—'}</p>
         <p className="text-sm text-slate-500">Entrenamientos totales</p>
       </div>
@@ -132,13 +132,13 @@ export default function Gimnasio() {
 
       {prs.length > 0 && (
         <>
-          <h2 className="mb-3 text-sm font-medium text-slate-400">Récords personales</h2>
+          <h2 className="mb-3 text-sm font-medium text-slate-600">Récords personales</h2>
           <ul className="mb-6 flex flex-col gap-2">
             {visiblePrs.map((pr) => (
               <li key={pr.exercise}>
                 <Link
                   to={`/deporte/gimnasio/ejercicio/${encodeURIComponent(pr.exercise)}`}
-                  className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700"
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300"
                 >
                   <span className="text-sm">{pr.exercise}</span>
                   <div className="flex items-center gap-3 text-sm">
@@ -161,7 +161,7 @@ export default function Gimnasio() {
           {!prsExpanded && remainingPrs > 0 && (
             <button
               onClick={() => setPrsExpanded(true)}
-              className="mb-6 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+              className="mb-6 w-full rounded-lg border border-slate-200 py-2.5 text-sm text-slate-600 hover:border-slate-400 hover:text-slate-800"
             >
               Ver todos ({prs.length})
             </button>
@@ -169,7 +169,7 @@ export default function Gimnasio() {
         </>
       )}
 
-      <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
+      <h2 className="mb-3 text-sm font-medium text-slate-600">Historial</h2>
 
       {workouts === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
 
@@ -182,7 +182,7 @@ export default function Gimnasio() {
           <li key={w.id}>
             <Link
               to={`/deporte/gimnasio/${w.id}`}
-              className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300"
             >
               <div>
                 <p className="font-medium">
@@ -205,7 +205,7 @@ export default function Gimnasio() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mt-4 w-full rounded-lg border border-slate-200 py-2.5 text-sm text-slate-600 hover:border-slate-400 hover:text-slate-800"
         >
           Ver todos ({workouts.length})
         </button>

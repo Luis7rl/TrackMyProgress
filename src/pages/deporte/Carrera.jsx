@@ -51,9 +51,9 @@ function WeeklyPlan() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="mb-3 text-sm font-medium text-slate-400">Plan semanal</p>
-      {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="mb-3 text-sm font-medium text-slate-600">Plan semanal</p>
+      {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
       {plan === null ? (
         <p className="text-sm text-slate-500">Cargando...</p>
       ) : (
@@ -67,7 +67,7 @@ function WeeklyPlan() {
                 placeholder="Ej. 5km ritmo suave"
                 onChange={(e) => updateLocal(i, e.target.value)}
                 onBlur={(e) => saveDay(i, e.target.value)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-sm outline-none focus:border-violet-500"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm outline-none focus:border-violet-500"
               />
             </div>
           ))}
@@ -166,19 +166,19 @@ export default function Carrera() {
       <h1 className="mb-6 text-xl font-semibold">Carrera</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-2xl font-semibold">{sessions?.length ?? '—'}</p>
           <p className="text-sm text-slate-500">Entrenamientos</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-2xl font-semibold">{totalKm.toFixed(1)} km</p>
           <p className="text-sm text-slate-500">Distancia total</p>
         </div>
       </div>
 
-      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-slate-400">Objetivo semanal</span>
+          <span className="text-sm text-slate-600">Objetivo semanal</span>
           <div className="flex items-center gap-1 text-sm">
             <input
               type="number"
@@ -186,7 +186,7 @@ export default function Carrera() {
               defaultValue={goals.target_weekly_km ?? ''}
               key={goals.target_weekly_km}
               onBlur={(e) => handleGoalBlur(e.target.value)}
-              className="w-20 rounded-lg border border-slate-800 bg-slate-900 px-2 py-1 text-right outline-none focus:border-violet-500"
+              className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none focus:border-violet-500"
             />
             <span className="text-slate-500">km</span>
           </div>
@@ -208,16 +208,16 @@ export default function Carrera() {
       </div>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Fecha
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Km
           <input
             type="number"
@@ -227,10 +227,10 @@ export default function Carrera() {
             value={distance}
             onChange={(e) => setDistance(e.target.value)}
             placeholder="5.0"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Minutos
           <input
             type="number"
@@ -240,31 +240,31 @@ export default function Carrera() {
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
             placeholder="28.5"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
           Notas (opcional)
           <input
             type="text"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Ej. rodaje suave"
-            className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
       </form>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
+      <h2 className="mb-3 text-sm font-medium text-slate-600">Historial</h2>
 
       {sessions === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
       {sessions?.length === 0 && (
@@ -275,7 +275,7 @@ export default function Carrera() {
         {visible?.map((s) => (
           <li
             key={s.id}
-            className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
           >
             <div>
               <p className="font-medium">
@@ -293,7 +293,7 @@ export default function Carrera() {
               <span className="text-slate-500">{formatPace(s.distance_km, s.duration_seconds)}</span>
               <button
                 onClick={() => handleDelete(s.id)}
-                className="text-slate-500 hover:text-red-400"
+                className="text-slate-500 hover:text-red-600"
                 aria-label="Eliminar sesión"
               >
                 ✕
@@ -306,7 +306,7 @@ export default function Carrera() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mt-4 w-full rounded-lg border border-slate-200 py-2.5 text-sm text-slate-600 hover:border-slate-400 hover:text-slate-800"
         >
           Ver todos ({sessions.length})
         </button>

@@ -26,12 +26,12 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-900">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-semibold">
-          Track<span className="text-violet-500">MyProgress</span>
+          Track<span className="text-violet-600">MyProgress</span>
         </h1>
-        <p className="mb-8 text-center text-sm text-slate-400">
+        <p className="mb-8 text-center text-sm text-slate-600">
           Inicia sesión para ver tu progreso
         </p>
 
@@ -42,7 +42,7 @@ export default function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
           <input
             type="password"
@@ -50,23 +50,23 @@ export default function Login() {
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-violet-500"
           />
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-violet-600 py-2.5 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
+            className="rounded-lg bg-violet-600 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-slate-600">
           ¿No tienes cuenta?{' '}
-          <Link to="/register" className="text-violet-500 hover:underline">
+          <Link to="/register" className="text-violet-600 hover:underline">
             Regístrate
           </Link>
         </p>

@@ -162,16 +162,16 @@ export default function Dieta() {
       <h1 className="mb-6 text-xl font-semibold">Dieta</h1>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Fecha
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Kcal
           <input
             type="number"
@@ -180,10 +180,10 @@ export default function Dieta() {
             value={calories}
             onChange={(e) => setCalories(e.target.value)}
             placeholder="2200"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Proteína (g)
           <input
             type="number"
@@ -191,10 +191,10 @@ export default function Dieta() {
             value={protein}
             onChange={(e) => setProtein(e.target.value)}
             placeholder="150"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Carbs (g)
           <input
             type="number"
@@ -202,10 +202,10 @@ export default function Dieta() {
             value={carbs}
             onChange={(e) => setCarbs(e.target.value)}
             placeholder="220"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-slate-600">
           Grasa (g)
           <input
             type="number"
@@ -213,19 +213,19 @@ export default function Dieta() {
             value={fat}
             onChange={(e) => setFat(e.target.value)}
             placeholder="70"
-            className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-violet-500"
+            className="w-24 rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none focus:border-violet-500"
           />
         </label>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
         >
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
       </form>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
       {entries === null ? (
         <p className="text-sm text-slate-500">Cargando...</p>
@@ -234,7 +234,7 @@ export default function Dieta() {
       ) : (
         <>
           <div className="mb-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-2xl font-semibold">
                 {sorted[0].calories.toLocaleString('es-ES')} kcal
               </p>
@@ -242,23 +242,23 @@ export default function Dieta() {
                 Consumidas ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-2xl font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'} kcal</p>
               <p className="text-sm text-slate-500">Media últimos {last7.length} días</p>
             </div>
           </div>
 
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-              <p className="text-2xl font-semibold text-violet-400">
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="text-2xl font-semibold text-violet-600">
                 {latestBurn?.toLocaleString('es-ES') ?? '—'} kcal
               </p>
               <p className="text-sm text-slate-500">Quemadas en actividad (pasos + carrera + gimnasio)</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p
                 className={`text-2xl font-semibold ${
-                  latestNet == null ? '' : latestNet > 0 ? 'text-amber-400' : 'text-emerald-400'
+                  latestNet == null ? '' : latestNet > 0 ? 'text-amber-600' : 'text-emerald-600'
                 }`}
               >
                 {latestNet == null ? '—' : `${latestNet > 0 ? '+' : ''}${latestNet.toLocaleString('es-ES')}`} kcal
@@ -267,13 +267,13 @@ export default function Dieta() {
             </div>
           </div>
 
-          <p className="mb-6 text-xs text-slate-600">
+          <p className="mb-6 text-xs text-slate-400">
             Las kcal quemadas son una estimación (pasos, distancia de carrera y ~{GYM_SESSION_KCAL} kcal por
             sesión de gimnasio) y no incluyen el metabolismo basal, así que el "neto" no es tu balance
             calórico real — sirve solo como referencia relativa día a día.
           </p>
 
-          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
             <CaloriesChart entries={entries} />
           </div>
 
@@ -281,7 +281,7 @@ export default function Dieta() {
             {visible.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
               >
                 <span className="text-sm">
                   {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {
@@ -300,7 +300,7 @@ export default function Dieta() {
                   )}
                   <button
                     onClick={() => handleDelete(entry.id)}
-                    className="text-slate-500 hover:text-red-400"
+                    className="text-slate-500 hover:text-red-600"
                     aria-label="Eliminar registro"
                   >
                     ✕
@@ -313,7 +313,7 @@ export default function Dieta() {
           {!expanded && remaining > 0 && (
             <button
               onClick={() => setExpanded(true)}
-              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+              className="mt-4 w-full rounded-lg border border-slate-200 py-2.5 text-sm text-slate-600 hover:border-slate-400 hover:text-slate-800"
             >
               Ver todos ({sorted.length})
             </button>
