@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import ProgressBar from '../../components/ProgressBar'
 import { mondayOf, toDateKey, todayKey } from '../../lib/dates'
-import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
+import { DEFAULT_GOALS, fetchGoals } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
 
 // Estimación aproximada, no personalizada por peso/altura.
@@ -71,25 +70,29 @@ const VIEWS = [
   { id: 'month', label: 'Mes', build: monthlyPoints },
 ]
 
-function BarChart({ points, unit }) {
+function BarChart({ points, unit, goalLine }) {
   const width = 600
   const height = 220
   const padding = 20
   const labelHeight = 24
 
-  const bars = useMemo(() => {
-    if (points.length === 0) return []
-    const max = Math.max(...points.map((p) => p.value), 1)
+  const { bars, goalY } = useMemo(() => {
+    if (points.length === 0) return { bars: [], goalY: null }
+    const max = Math.max(...points.map((p) => p.value), goalLine ?? 0, 1)
     const chartHeight = height - padding - labelHeight
     const barWidth = (width - padding * 2) / points.length
 
-    return points.map((p, i) => {
+    const bars = points.map((p, i) => {
       const barHeight = (p.value / max) * chartHeight
       const x = padding + i * barWidth
       const y = padding + (chartHeight - barHeight)
       return { x, y, height: barHeight, width: barWidth * 0.6, ...p }
     })
-  }, [points])
+
+    const goalY = goalLine ? padding + (chartHeight - (goalLine / max) * chartHeight) : null
+
+    return { bars, goalY }
+  }, [points, goalLine])
 
   if (bars.length === 0) {
     return (
@@ -124,6 +127,24 @@ function BarChart({ points, unit }) {
           )}
         </g>
       ))}
+      {goalY != null && (
+        <g>
+          <line
+            x1={padding}
+            y1={goalY}
+            x2={width - padding}
+            y2={goalY}
+            stroke="#facc15"
+            strokeWidth="1"
+            strokeDasharray="4 3"
+          >
+            <title>Objetivo: {goalLine.toLocaleString('es-ES')} {unit}</title>
+          </line>
+          <text x={width - padding} y={goalY - 4} textAnchor="end" fontSize="9" fill="#facc15">
+            {goalLine.toLocaleString('es-ES')}
+          </text>
+        </g>
+      )}
     </svg>
   )
 }
@@ -157,16 +178,6 @@ export default function Steps() {
       .catch((err) => setError(err.message))
   }, [])
 
-  async function handleGoalBlur(value) {
-    const num = value === '' ? null : parseInt(value, 10)
-    setGoals((g) => ({ ...g, target_daily_steps: num }))
-    try {
-      await saveGoal('target_daily_steps', num)
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
@@ -199,10 +210,6 @@ export default function Steps() {
   const last7 = sorted.slice(0, 7)
   const avg7 = last7.length ? Math.round(last7.reduce((sum, e) => sum + e.steps, 0) / last7.length) : null
   const totalSteps = entries?.reduce((sum, e) => sum + e.steps, 0) ?? 0
-  const todayEntry = entries?.find((e) => e.date === todayKey())
-  const relevantSteps = todayEntry?.steps ?? 0
-  const goalPercent =
-    goals.target_daily_steps ? Math.max(0, Math.min(100, (relevantSteps / goals.target_daily_steps) * 100)) : null
 
   const chartPoints = useMemo(() => {
     if (!entries) return []
@@ -253,33 +260,6 @@ export default function Steps() {
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-slate-400">Objetivo diario</span>
-          <div className="flex items-center gap-1 text-sm">
-            <input
-              type="number"
-              step="500"
-              defaultValue={goals.target_daily_steps ?? ''}
-              key={goals.target_daily_steps}
-              onBlur={(e) => handleGoalBlur(e.target.value)}
-              className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
-            />
-            <span className="text-slate-500">pasos</span>
-          </div>
-        </div>
-        {goalPercent != null ? (
-          <>
-            <ProgressBar percent={goalPercent} />
-            <p className="mt-2 text-xs text-slate-500">
-              {relevantSteps.toLocaleString('es-ES')} / {goals.target_daily_steps.toLocaleString('es-ES')} hoy
-            </p>
-          </>
-        ) : (
-          <p className="text-xs text-slate-500">Sin objetivo definido.</p>
-        )}
-      </div>
-
       {entries === null ? (
         <p className="text-sm text-slate-500">Cargando...</p>
       ) : entries.length === 0 ? (
@@ -329,7 +309,11 @@ export default function Steps() {
                 ))}
               </div>
             </div>
-            <BarChart points={chartPoints} unit="pasos" />
+            <BarChart
+              points={chartPoints}
+              unit="pasos"
+              goalLine={chartView === 'day' ? goals.target_daily_steps : null}
+            />
           </div>
 
           <ul className="flex flex-col gap-2">
