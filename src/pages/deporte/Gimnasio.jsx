@@ -173,7 +173,6 @@ export default function Gimnasio() {
                   <p className="font-medium capitalize">
                     {date.toLocaleDateString('es-ES', { weekday: 'long' })}
                   </p>
-                  {w.notes && <p className="truncate text-sm text-white">{w.notes}</p>}
                   {groups.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1">
                       {groups.map((g) => (

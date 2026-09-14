@@ -352,37 +352,55 @@ export default function Dieta() {
             <NetChart entries={entries} burnForDate={burnForDate} target={TARGET_CALORIES} />
           </div>
 
-          <ul className="flex flex-col gap-2">
-            {visible.map((entry) => (
-              <li
-                key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
-              >
-                <span className="text-sm">
-                  {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short',
-                  })}
-                </span>
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="font-medium">{entry.calories} kcal</span>
-                  <span className="text-white">−{burnForDate(entry.date)}</span>
-                  {(entry.protein_g || entry.carbs_g || entry.fat_g) && (
-                    <span className="hidden text-white sm:inline">
-                      P {entry.protein_g ?? '—'} · C {entry.carbs_g ?? '—'} · G {entry.fat_g ?? '—'}
+          <ul className="flex flex-col gap-3">
+            {visible.map((entry) => {
+              const date = new Date(entry.date + 'T00:00:00')
+              const net = entry.calories - burnForDate(entry.date)
+              const delta = Math.round(net - TARGET_CALORIES)
+              const over = delta > 0
+              return (
+                <li
+                  key={entry.id}
+                  className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
+                >
+                  <div className="flex w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-violet-500/30 bg-violet-600/10 py-1.5">
+                    <span className="text-lg font-bold leading-none text-violet-300">{date.getDate()}</span>
+                    <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white">
+                      {date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')}
                     </span>
-                  )}
-                  <button
-                    onClick={() => handleDelete(entry.id)}
-                    className="text-white hover:text-red-400"
-                    aria-label="Eliminar registro"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </li>
-            ))}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium capitalize">{date.toLocaleDateString('es-ES', { weekday: 'long' })}</p>
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[11px] ${
+                          over ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-300'
+                        }`}
+                      >
+                        {over ? `+${delta}` : delta} kcal neto
+                      </span>
+                      {(entry.protein_g || entry.carbs_g || entry.fat_g) && (
+                        <span className="rounded-full bg-violet-500/15 px-2 py-0.5 text-[11px] text-violet-300">
+                          P {entry.protein_g ?? '—'} · C {entry.carbs_g ?? '—'} · G {entry.fat_g ?? '—'}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-3 text-sm">
+                    <span className="font-medium">{entry.calories} kcal</span>
+                    <button
+                      onClick={() => handleDelete(entry.id)}
+                      className="text-white hover:text-red-400"
+                      aria-label="Eliminar registro"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
           </ul>
 
           {remaining > 0 && (

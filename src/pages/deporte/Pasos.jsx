@@ -322,31 +322,50 @@ export default function Steps() {
             />
           </div>
 
-          <ul className="flex flex-col gap-2">
-            {sorted.map((entry) => (
-              <li
-                key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
-              >
-                <span className="text-sm">
-                  {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short',
-                  })}
-                </span>
-                <div className="flex items-center gap-3">
-                  <span className="font-medium">{entry.steps.toLocaleString('es-ES')}</span>
-                  <button
-                    onClick={() => handleDelete(entry.id)}
-                    className="text-white hover:text-red-400"
-                    aria-label="Eliminar registro"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </li>
-            ))}
+          <ul className="flex flex-col gap-3">
+            {sorted.map((entry) => {
+              const date = new Date(entry.date + 'T00:00:00')
+              const goalMet = goals.target_daily_steps ? entry.steps >= goals.target_daily_steps : null
+              return (
+                <li
+                  key={entry.id}
+                  className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
+                >
+                  <div className="flex w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-violet-500/30 bg-violet-600/10 py-1.5">
+                    <span className="text-lg font-bold leading-none text-violet-300">{date.getDate()}</span>
+                    <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white">
+                      {date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium capitalize">{date.toLocaleDateString('es-ES', { weekday: 'long' })}</p>
+                    {goalMet != null && (
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[11px] ${
+                            goalMet ? 'bg-emerald-500/15 text-emerald-300' : 'bg-violet-500/15 text-violet-300'
+                          }`}
+                        >
+                          {goalMet ? '🎯 Objetivo cumplido' : `${Math.round((entry.steps / goals.target_daily_steps) * 100)}% del objetivo`}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="font-medium">{entry.steps.toLocaleString('es-ES')}</span>
+                    <button
+                      onClick={() => handleDelete(entry.id)}
+                      className="text-white hover:text-red-400"
+                      aria-label="Eliminar registro"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
           </ul>
         </>
       )}
