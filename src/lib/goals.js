@@ -9,7 +9,11 @@ export const DEFAULT_GOALS = {
 export async function fetchGoals() {
   const { data, error } = await supabase.from('user_goals').select('*').maybeSingle()
   if (error) throw error
-  return { ...DEFAULT_GOALS, ...data }
+  // Un upsert parcial (ej. al guardar solo el objetivo de peso) puede dejar
+  // el resto de columnas a NULL en la fila; no dejamos que un NULL explícito
+  // pise el valor por defecto de un objetivo que el usuario no ha tocado.
+  const cleaned = Object.fromEntries(Object.entries(data ?? {}).filter(([, v]) => v != null))
+  return { ...DEFAULT_GOALS, ...cleaned }
 }
 
 export async function saveGoal(field, value) {
