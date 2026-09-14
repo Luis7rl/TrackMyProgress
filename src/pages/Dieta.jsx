@@ -4,25 +4,52 @@ import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
+const TARGET_CALORIES = 2200
 
-function CaloriesChart({ entries }) {
+function NetChart({ entries, burnForDate, target }) {
   const width = 600
-  const height = 180
-  const padding = 24
+  const height = 210
+  const sidePad = 24
+  const topPad = 22
+  const bottomLabelHeight = 22
 
   const points = useMemo(() => {
     if (entries.length < 2) return []
-    const values = entries.map((e) => e.calories)
-    const min = Math.min(...values)
-    const max = Math.max(...values)
-    const range = max - min || 1
 
-    return entries.map((e, i) => {
-      const x = padding + (i / (entries.length - 1)) * (width - padding * 2)
-      const y = height - padding - ((e.calories - min) / range) * (height - padding * 2)
-      return { x, y, ...e }
+    const raw = entries.map((e) => {
+      const net = e.calories - burnForDate(e.date)
+      return {
+        key: e.date,
+        label: new Date(`${e.date}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+        fullLabel: new Date(`${e.date}T00:00:00`).toLocaleDateString('es-ES', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+        }),
+        value: net,
+        delta: Math.round(net - target),
+      }
     })
-  }, [entries])
+
+    const values = raw.map((p) => p.value)
+    const min = Math.min(...values, target)
+    const max = Math.max(...values, target)
+    const range = max - min || 1
+    const chartHeight = height - topPad - bottomLabelHeight
+    // margen para que los puntos extremos no toquen los bordes
+    const pad = range * 0.15
+
+    function toY(value) {
+      return topPad + chartHeight - ((value - min + pad) / (range + pad * 2)) * chartHeight
+    }
+
+    return raw.map((p, i) => ({
+      ...p,
+      x: sidePad + (i / (raw.length - 1)) * (width - sidePad * 2),
+      y: toY(p.value),
+      goalY: toY(target),
+    }))
+  }, [entries, burnForDate, target])
 
   if (points.length === 0) {
     return (
@@ -33,13 +60,58 @@ function CaloriesChart({ entries }) {
   }
 
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+  const goalY = points[0].goalY
+  const labelEvery = Math.max(1, Math.ceil(points.length / 8))
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full">
-      <path d={path} fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      {points.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r="3" fill="#8b5cf6" />
-      ))}
+      <line
+        x1={sidePad}
+        y1={goalY}
+        x2={width - sidePad}
+        y2={goalY}
+        stroke="#facc15"
+        strokeWidth="1"
+        strokeDasharray="4 3"
+      >
+        <title>Objetivo: {target.toLocaleString('es-ES')} kcal</title>
+      </line>
+      <text x={width - sidePad} y={goalY - 5} textAnchor="end" fontSize="9" fill="#facc15">
+        {target.toLocaleString('es-ES')}
+      </text>
+
+      <path d={path} fill="none" stroke="#475569" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+      {points.map((p, i) => {
+        const over = p.delta > 0
+        const color = over ? '#f87171' : '#34d399'
+        return (
+          <g key={p.key}>
+            <circle cx={p.x} cy={p.y} r="3.5" fill={color}>
+              <title>
+                {p.fullLabel}: {p.value.toLocaleString('es-ES')} kcal netas ({over ? '+' : ''}
+                {p.delta.toLocaleString('es-ES')} vs objetivo)
+              </title>
+            </circle>
+            <text
+              x={p.x}
+              y={over ? p.y - 8 : p.y + 13}
+              textAnchor="middle"
+              fontSize="8"
+              fontWeight="600"
+              fill={color}
+            >
+              {over ? '+' : ''}
+              {p.delta}
+            </text>
+            {i % labelEvery === 0 && (
+              <text x={p.x} y={height - 6} textAnchor="middle" fontSize="9" fill="#94a3b8">
+                {p.label}
+              </text>
+            )}
+          </g>
+        )
+      })}
     </svg>
   )
 }
@@ -155,7 +227,7 @@ export default function Dieta() {
   const remaining = sorted.length - VISIBLE_LIMIT
 
   const latestBurn = sorted[0] ? burnForDate(sorted[0].date) : null
-  const latestNet = sorted[0] ? sorted[0].calories - latestBurn : null
+  const latestNet = sorted[0] ? sorted[0].calories - latestBurn - TARGET_CALORIES : null
 
   return (
     <div>
@@ -258,23 +330,26 @@ export default function Dieta() {
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p
                 className={`text-2xl font-semibold ${
-                  latestNet == null ? '' : latestNet > 0 ? 'text-amber-400' : 'text-emerald-400'
+                  latestNet == null ? '' : latestNet > 0 ? 'text-red-400' : 'text-emerald-400'
                 }`}
               >
                 {latestNet == null ? '—' : `${latestNet > 0 ? '+' : ''}${latestNet.toLocaleString('es-ES')}`} kcal
               </p>
-              <p className="text-sm text-slate-500">Neto (consumidas − actividad)</p>
+              <p className="text-sm text-slate-500">Neto (consumidas − actividad − objetivo {TARGET_CALORIES})</p>
             </div>
           </div>
 
           <p className="mb-6 text-xs text-slate-600">
             Las kcal quemadas son una estimación (pasos, distancia de carrera y ~{GYM_SESSION_KCAL} kcal por
-            sesión de gimnasio) y no incluyen el metabolismo basal, así que el "neto" no es tu balance
-            calórico real — sirve solo como referencia relativa día a día.
+            sesión de gimnasio) y no incluyen el metabolismo basal. El objetivo diario está fijado en{' '}
+            {TARGET_CALORIES.toLocaleString('es-ES')} kcal.
           </p>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-            <CaloriesChart entries={entries} />
+            <p className="mb-2 text-sm font-medium text-slate-400">
+              Consumidas − actividad, frente al objetivo
+            </p>
+            <NetChart entries={entries} burnForDate={burnForDate} target={TARGET_CALORIES} />
           </div>
 
           <ul className="flex flex-col gap-2">
