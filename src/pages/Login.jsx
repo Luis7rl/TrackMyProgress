@@ -26,7 +26,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-900">
+    <div className="flex min-h-screen items-center justify-center bg-violet-50 px-4 text-slate-900">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-bold tracking-tight text-slate-900">
           Track<span className="text-violet-600">MyProgress</span>

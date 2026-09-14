@@ -32,7 +32,7 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-center text-slate-900">
+      <div className="flex min-h-screen items-center justify-center bg-violet-50 px-4 text-center text-slate-900">
         <div className="max-w-sm">
           <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">Revisa tu email</h1>
           <p className="text-sm text-slate-600">
@@ -48,7 +48,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-900">
+    <div className="flex min-h-screen items-center justify-center bg-violet-50 px-4 text-slate-900">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-bold tracking-tight text-slate-900">Crear cuenta</h1>
         <p className="mb-8 text-center text-sm text-slate-600">
