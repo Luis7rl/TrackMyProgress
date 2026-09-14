@@ -119,7 +119,7 @@ export default function Calendario() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">Calendario</h1>
+      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">🗓️ Calendario</h1>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 

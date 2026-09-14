@@ -120,7 +120,7 @@ export default function Gimnasio() {
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
+      <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
         <p className="text-2xl font-semibold">{workouts?.length ?? '—'}</p>
         <p className="text-sm text-slate-500">Entrenamientos totales</p>
       </div>

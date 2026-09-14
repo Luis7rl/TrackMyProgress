@@ -90,7 +90,7 @@ export default function ExerciseProgress() {
         ← Gimnasio
       </Link>
 
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">{exerciseName}</h1>
+      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">📈 {exerciseName}</h1>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
@@ -101,7 +101,7 @@ export default function ExerciseProgress() {
       ) : (
         <>
           {best && (
-            <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
+            <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
               <p className="text-2xl font-semibold">
                 {best.weight} kg × {best.reps}
               </p>

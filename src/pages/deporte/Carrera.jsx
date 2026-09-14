@@ -163,7 +163,7 @@ export default function Carrera() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">Carrera</h1>
+      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">🏃 Carrera</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
@@ -176,7 +176,7 @@ export default function Carrera() {
         </div>
       </div>
 
-      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
+      <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-sm text-slate-400">Objetivo semanal</span>
           <div className="flex items-center gap-1 text-sm">

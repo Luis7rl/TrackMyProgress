@@ -91,7 +91,7 @@ export default function WorkoutForm({
 
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">{title}</h1>
+      <h1 className="mb-2 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">🏋️ {title}</h1>
       {warning && <p className="mb-6 text-xs text-amber-400">{warning}</p>}
 
       <form onSubmit={handleSubmit} className={`flex flex-col gap-6 ${warning ? '' : 'mt-4'}`}>

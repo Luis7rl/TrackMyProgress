@@ -219,7 +219,7 @@ export default function Steps() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">Pasos</h1>
+      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">👟 Pasos</h1>
 
       <p className="mb-6 text-sm text-slate-500">
         Se rellena solo cada día si configuras el Atajo de iPhone, pero también puedes
@@ -285,7 +285,7 @@ export default function Steps() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
+          <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
             <p className="text-lg font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'}</p>
             <p className="text-sm text-slate-500">Media de los últimos {last7.length} días</p>
           </div>
@@ -312,7 +312,13 @@ export default function Steps() {
             <BarChart
               points={chartPoints}
               unit="pasos"
-              goalLine={chartView === 'day' ? goals.target_daily_steps : null}
+              goalLine={
+                chartView === 'day'
+                  ? goals.target_daily_steps
+                  : chartView === 'week'
+                    ? goals.target_daily_steps * 7
+                    : goals.target_daily_steps * 30
+              }
             />
           </div>
 

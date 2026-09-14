@@ -78,7 +78,7 @@ export default function WorkoutDetail() {
 
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-100">
+          <h1 className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">
             {new Date(workout.date + 'T00:00:00').toLocaleDateString('es-ES', {
               weekday: 'long',
               day: 'numeric',

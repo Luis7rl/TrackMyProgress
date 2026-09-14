@@ -192,7 +192,7 @@ export default function ImportHevy() {
 
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">Importar desde Hevy</h1>
+      <h1 className="mb-2 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">📥 Importar desde Hevy</h1>
       <p className="mb-6 text-sm text-slate-400">
         Exporta tu historial desde Hevy (Perfil → Configuración → Exportar e importar datos →
         Exportar entrenamientos) y sube aquí el archivo CSV.
