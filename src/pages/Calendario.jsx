@@ -119,15 +119,15 @@ export default function Calendario() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Calendario</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">Calendario</h1>
 
-      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
         <div className="mb-3 flex items-center justify-between">
           <button
             onClick={() => changeMonth(-1)}
-            className="rounded-lg px-2 py-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
             aria-label="Mes anterior"
           >
             ‹
@@ -137,7 +137,7 @@ export default function Calendario() {
           </p>
           <button
             onClick={() => changeMonth(1)}
-            className="rounded-lg px-2 py-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
             aria-label="Mes siguiente"
           >
             ›
@@ -167,8 +167,8 @@ export default function Calendario() {
                   isSelected
                     ? 'bg-violet-600 font-medium text-white'
                     : isToday
-                      ? 'border border-violet-500 text-slate-700'
-                      : 'text-slate-600 hover:bg-slate-100'
+                      ? 'border border-violet-500 text-slate-300'
+                      : 'text-slate-400 hover:bg-slate-800'
                 }`}
               >
                 {day}
@@ -192,10 +192,10 @@ export default function Calendario() {
         </div>
       </div>
 
-      <p className="mb-3 text-sm font-medium capitalize text-slate-600">{selectedLabel}</p>
+      <p className="mb-3 text-sm font-medium capitalize text-slate-400">{selectedLabel}</p>
 
       <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap items-end gap-3">
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
           Título
           <input
             type="text"
@@ -203,15 +203,15 @@ export default function Calendario() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Ej. Entrega proyecto"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+            className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-600">
+        <label className="flex flex-col gap-1 text-sm text-slate-400">
           Tipo
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+            className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           >
             {TYPE_OPTIONS.map((t) => (
               <option key={t.value} value={t.value}>
@@ -238,7 +238,7 @@ export default function Calendario() {
             return (
               <li
                 key={e.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${opt?.dot ?? 'bg-violet-500'}`} />
@@ -247,7 +247,7 @@ export default function Calendario() {
                 </div>
                 <button
                   onClick={() => handleDelete(e.id)}
-                  className="text-slate-500 hover:text-red-600"
+                  className="text-slate-500 hover:text-red-400"
                   aria-label="Eliminar evento"
                 >
                   ✕

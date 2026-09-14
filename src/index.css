@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html, body, #root {
@@ -10,8 +10,8 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: #f5f3ff;
-  color: #0f172a;
+  background: #0b0a14;
+  color: #e5e7eb;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }

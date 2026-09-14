@@ -93,45 +93,45 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col items-center pt-10 text-center">
-      <h1 className="mb-8 text-2xl font-bold tracking-tight text-slate-900">Hola 👋</h1>
+      <h1 className="mb-8 text-2xl font-bold tracking-tight text-slate-100">Hola 👋</h1>
 
-      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white px-10 py-8 shadow-sm">
+      <div className="flex flex-col items-center rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-8 shadow-sm">
         <span className="text-5xl">🔥</span>
-        <p className="mt-3 text-5xl font-bold text-violet-600">
+        <p className="mt-3 text-5xl font-bold text-violet-500">
           {streak === null ? '—' : streak}
         </p>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-slate-400">
           {streak === 1 ? 'semana seguida entrenando' : 'semanas seguidas entrenando'}
         </p>
       </div>
 
-      <Link to="/deporte/gimnasio" className="mt-6 text-sm text-violet-600 hover:underline">
+      <Link to="/deporte/gimnasio" className="mt-6 text-sm text-violet-500 hover:underline">
         Ir a Deporte →
       </Link>
 
       {weekly && (
         <div className="mt-10 w-full text-left">
-          <p className="mb-3 text-sm font-medium text-slate-600">Esta semana</p>
+          <p className="mb-3 text-sm font-medium text-slate-400">Esta semana</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.gymCount}</p>
               <p className="text-sm text-slate-500">Entrenamientos</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.totalKm.toFixed(1)} km</p>
               <p className="text-sm text-slate-500">Corridos</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.totalSteps.toLocaleString('es-ES')}</p>
               <p className="text-sm text-slate-500">Pasos</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.studyHours}h</p>
               <p className="text-sm text-slate-500">Estudio</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:col-span-2 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:col-span-2 shadow-sm">
               {weekly.hasDiet ? (
                 <>
                   <p className="text-xl font-semibold">

@@ -123,7 +123,7 @@ export default function Steps() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">Pasos</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-100">Pasos</h1>
 
       <p className="mb-6 text-sm text-slate-500">
         Se rellena solo cada día si configuras el Atajo de iPhone, pero también puedes
@@ -131,16 +131,16 @@ export default function Steps() {
       </p>
 
       <form onSubmit={handleSubmit} className="mb-6 flex items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-600">
+        <label className="flex flex-col gap-1 text-sm text-slate-400">
           Fecha
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+            className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-600">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
           Pasos
           <input
             type="number"
@@ -150,7 +150,7 @@ export default function Steps() {
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
             placeholder="Ej. 8500"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+            className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
         <button
@@ -162,11 +162,11 @@ export default function Steps() {
         </button>
       </form>
 
-      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-slate-600">Objetivo diario</span>
+          <span className="text-sm text-slate-400">Objetivo diario</span>
           <div className="flex items-center gap-1 text-sm">
             <input
               type="number"
@@ -174,7 +174,7 @@ export default function Steps() {
               defaultValue={goals.target_daily_steps ?? ''}
               key={goals.target_daily_steps}
               onBlur={(e) => handleGoalBlur(e.target.value)}
-              className="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+              className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
             />
             <span className="text-slate-500">pasos</span>
           </div>
@@ -198,30 +198,30 @@ export default function Steps() {
       ) : (
         <>
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{sorted[0].steps.toLocaleString('es-ES')}</p>
               <p className="text-sm text-slate-500">
                 Último registro ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
-              <p className="mt-1 text-xs text-violet-600">
+              <p className="mt-1 text-xs text-violet-500">
                 ≈ {estimateKcal(sorted[0].steps).toLocaleString('es-ES')} kcal
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{totalSteps.toLocaleString('es-ES')}</p>
               <p className="text-sm text-slate-500">Total acumulado</p>
-              <p className="mt-1 text-xs text-violet-600">
+              <p className="mt-1 text-xs text-violet-500">
                 ≈ {estimateKcal(totalSteps).toLocaleString('es-ES')} kcal
               </p>
             </div>
           </div>
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
             <p className="text-lg font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'}</p>
             <p className="text-sm text-slate-500">Media de los últimos {last7.length} días</p>
           </div>
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
             <StepsChart entries={entries} />
           </div>
 
@@ -229,7 +229,7 @@ export default function Steps() {
             {sorted.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
               >
                 <span className="text-sm">
                   {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {
@@ -242,7 +242,7 @@ export default function Steps() {
                   <span className="font-medium">{entry.steps.toLocaleString('es-ES')}</span>
                   <button
                     onClick={() => handleDelete(entry.id)}
-                    className="text-slate-500 hover:text-red-600"
+                    className="text-slate-500 hover:text-red-400"
                     aria-label="Eliminar registro"
                   >
                     ✕

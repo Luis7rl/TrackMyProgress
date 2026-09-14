@@ -62,7 +62,7 @@ export default function WorkoutDetail() {
     navigate('/deporte/gimnasio')
   }
 
-  if (error) return <p className="text-sm text-red-600">{error}</p>
+  if (error) return <p className="text-sm text-red-400">{error}</p>
   if (!workout) return <p className="text-sm text-slate-500">Cargando...</p>
 
   const grouped = sets.reduce((acc, s) => {
@@ -72,13 +72,13 @@ export default function WorkoutDetail() {
 
   return (
     <div>
-      <Link to="/deporte/gimnasio" className="mb-4 inline-block text-sm text-violet-600 hover:underline">
+      <Link to="/deporte/gimnasio" className="mb-4 inline-block text-sm text-violet-500 hover:underline">
         ← Gimnasio
       </Link>
 
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-100">
             {new Date(workout.date + 'T00:00:00').toLocaleDateString('es-ES', {
               weekday: 'long',
               day: 'numeric',
@@ -86,19 +86,19 @@ export default function WorkoutDetail() {
               year: 'numeric',
             })}
           </h1>
-          {workout.notes && <p className="mt-1 text-sm text-slate-600">{workout.notes}</p>}
+          {workout.notes && <p className="mt-1 text-sm text-slate-400">{workout.notes}</p>}
         </div>
         <div className="flex items-center gap-2">
           <Link
             to={`/deporte/gimnasio/${id}/editar`}
-            className="rounded-lg px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
           >
             Editar
           </Link>
           <button
             onClick={handleDelete}
             disabled={deleting}
-            className="rounded-lg px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+            className="rounded-lg px-3 py-1.5 text-sm text-red-400 hover:bg-red-950 disabled:opacity-50"
           >
             Eliminar
           </button>
@@ -107,7 +107,7 @@ export default function WorkoutDetail() {
 
       <div className="flex flex-col gap-4">
         {Object.entries(grouped).map(([exerciseName, exSets]) => (
-          <div key={exerciseName} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div key={exerciseName} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
             <h2 className="mb-3 font-medium">{exerciseName}</h2>
             <table className="w-full text-sm">
               <thead>
@@ -122,7 +122,7 @@ export default function WorkoutDetail() {
                 {exSets.map((s) => {
                   const isCardio = s.reps == null && s.weight_kg == null
                   return (
-                    <tr key={s.id} className="border-t border-slate-200/60">
+                    <tr key={s.id} className="border-t border-slate-800/60">
                       <td className="py-1.5 text-slate-500">{s.set_number}</td>
                       <td className="py-1.5">
                         {isCardio
@@ -143,12 +143,12 @@ export default function WorkoutDetail() {
                       <td className="py-1.5 text-slate-500">
                         <div className="flex flex-wrap gap-1">
                           {s.set_type && s.set_type !== 'normal' && (
-                            <span className="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">
+                            <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs font-medium text-violet-300">
                               {SET_TYPE_LABELS[s.set_type] ?? s.set_type}
                             </span>
                           )}
                           {s.rpe != null && (
-                            <span className="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">
+                            <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs font-medium text-violet-300">
                               RPE {s.rpe}
                             </span>
                           )}

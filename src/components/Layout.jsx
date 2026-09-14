@@ -60,8 +60,8 @@ function NavItems({ orientation }) {
       className={({ isActive }) =>
         `${base} transition-colors ${
           isActive
-            ? 'text-violet-600 font-medium'
-            : 'text-slate-600 hover:text-slate-800'
+            ? 'text-violet-500 font-medium'
+            : 'text-slate-400 hover:text-slate-200'
         }`
       }
     >
@@ -71,7 +71,7 @@ function NavItems({ orientation }) {
             aria-hidden="true"
             className={
               orientation === 'bottom' && isActive
-                ? 'rounded-full bg-violet-100 px-2.5 py-0.5'
+                ? 'rounded-full bg-violet-500/20 px-2.5 py-0.5'
                 : undefined
             }
           >
@@ -114,12 +114,12 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-violet-50 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
       {/* Cabecera + submenú de Deporte (si aplica): fijos juntos arriba, no se pierden al hacer scroll */}
       <div className="sticky top-0 z-10">
-        <header className="safe-top flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
-          <span className="text-xl font-bold tracking-tight text-slate-900">
-            Track<span className="text-violet-600">MyProgress</span>
+        <header className="safe-top flex items-center justify-between border-b border-slate-800 bg-slate-950/95 px-4 py-3 shadow-sm backdrop-blur">
+          <span className="text-xl font-bold tracking-tight text-slate-100">
+            Track<span className="text-violet-500">MyProgress</span>
           </span>
           <nav className="hidden gap-1 md:flex">
             <NavItems orientation="top" />
@@ -129,13 +129,13 @@ export default function Layout() {
               onClick={handleExport}
               disabled={exporting}
               title="Exportar todos tus datos en un archivo JSON"
-              className="rounded-lg px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50"
+              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
             >
               {exporting ? 'Exportando...' : 'Exportar'}
             </button>
             <button
               onClick={signOut}
-              className="rounded-lg px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
             >
               Cerrar sesión
             </button>
@@ -143,7 +143,7 @@ export default function Layout() {
         </header>
 
         {inDeporte && (
-          <nav className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white/90 px-4 py-2 backdrop-blur">
+          <nav className="flex gap-2 overflow-x-auto border-b border-slate-800 bg-slate-950/95 px-4 py-2 backdrop-blur">
             {deporteTabs.map((tab) => (
               <NavLink
                 key={tab.to}
@@ -151,8 +151,8 @@ export default function Layout() {
                 className={({ isActive }) =>
                   `flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'border-violet-500 bg-violet-500/10 text-violet-600 shadow-sm'
-                      : 'border-slate-200 text-slate-600 hover:border-slate-400 hover:text-slate-800'
+                      ? 'border-violet-500 bg-violet-500/10 text-violet-500 shadow-sm'
+                      : 'border-slate-800 text-slate-400 hover:border-slate-600 hover:text-slate-200'
                   }`
                 }
               >
@@ -171,7 +171,7 @@ export default function Layout() {
       </main>
 
       {/* Bottom tab bar: mobile only */}
-      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-10 flex border-t border-slate-200 bg-white/90 backdrop-blur md:hidden">
+      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-10 flex border-t border-slate-800 bg-slate-950/95 backdrop-blur md:hidden">
         <NavItems orientation="bottom" />
       </nav>
     </div>
