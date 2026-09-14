@@ -36,7 +36,7 @@ export default function Register() {
       <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-center text-slate-100">
         <div className="max-w-sm">
           <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">Revisa tu email</h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-white">
             Te hemos enviado un enlace de confirmación a <b>{email}</b>. Confírmalo y
             luego inicia sesión.
           </p>
@@ -52,7 +52,7 @@ export default function Register() {
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-center text-2xl font-bold tracking-tight text-slate-100">Crear cuenta</h1>
-        <p className="mb-8 text-center text-sm text-slate-400">
+        <p className="mb-8 text-center text-sm text-white">
           Empieza a llevar tu progreso
         </p>
 
@@ -78,7 +78,7 @@ export default function Register() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-sm text-slate-500 hover:text-slate-200"
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-sm text-white hover:text-slate-200"
               aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
               {showPassword ? '🙈' : '👁️'}
@@ -96,7 +96,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-white">
           ¿Ya tienes cuenta?{' '}
           <Link to="/login" className="text-violet-500 hover:underline">
             Inicia sesión

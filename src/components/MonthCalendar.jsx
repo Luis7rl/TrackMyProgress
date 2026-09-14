@@ -43,7 +43,7 @@ export default function MonthCalendar({ markedDates }) {
       <div className="mb-3 flex items-center justify-between">
         <button
           onClick={() => changeMonth(-1)}
-          className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+          className="rounded-lg px-2 py-1 text-white hover:bg-slate-800 hover:text-slate-100"
           aria-label="Mes anterior"
         >
           ‹
@@ -53,14 +53,14 @@ export default function MonthCalendar({ markedDates }) {
         </p>
         <button
           onClick={() => changeMonth(1)}
-          className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+          className="rounded-lg px-2 py-1 text-white hover:bg-slate-800 hover:text-slate-100"
           aria-label="Mes siguiente"
         >
           ›
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs text-slate-500">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs text-white">
         {WEEKDAYS.map((d) => (
           <div key={d} className="py-1">
             {d}
@@ -81,8 +81,8 @@ export default function MonthCalendar({ markedDates }) {
                 trained
                   ? 'bg-violet-600 font-medium text-white'
                   : isToday
-                    ? 'border border-violet-500 text-slate-300'
-                    : 'text-slate-400'
+                    ? 'border border-violet-500 text-white'
+                    : 'text-white'
               }`}
             >
               {day}

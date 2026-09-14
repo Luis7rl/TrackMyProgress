@@ -96,7 +96,7 @@ export default function WorkoutForm({
 
       <form onSubmit={handleSubmit} className={`flex flex-col gap-6 ${warning ? '' : 'mt-4'}`}>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+          <label className="flex flex-1 flex-col gap-1 text-sm text-white">
             Fecha
             <input
               type="date"
@@ -105,7 +105,7 @@ export default function WorkoutForm({
               className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
             />
           </label>
-          <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+          <label className="flex flex-1 flex-col gap-1 text-sm text-white">
             Notas (opcional)
             <input
               type="text"
@@ -133,7 +133,7 @@ export default function WorkoutForm({
                   <button
                     type="button"
                     onClick={() => removeExercise(exIdx)}
-                    className="rounded-lg px-2 py-1 text-sm text-slate-500 hover:text-red-400"
+                    className="rounded-lg px-2 py-1 text-sm text-white hover:text-red-400"
                     aria-label="Eliminar ejercicio"
                   >
                     ✕
@@ -144,7 +144,7 @@ export default function WorkoutForm({
               <div className="flex flex-col gap-2">
                 {ex.sets.map((s, setIdx) => (
                   <div key={setIdx} className="flex items-center gap-2">
-                    <span className="w-6 text-center text-xs text-slate-500">{setIdx + 1}</span>
+                    <span className="w-6 text-center text-xs text-white">{setIdx + 1}</span>
                     <input
                       type="number"
                       min="0"
@@ -166,7 +166,7 @@ export default function WorkoutForm({
                       <button
                         type="button"
                         onClick={() => removeSet(exIdx, setIdx)}
-                        className="px-1 text-slate-500 hover:text-red-400"
+                        className="px-1 text-white hover:text-red-400"
                         aria-label="Eliminar serie"
                       >
                         ✕
@@ -190,7 +190,7 @@ export default function WorkoutForm({
         <button
           type="button"
           onClick={addExercise}
-          className="rounded-lg border border-dashed border-slate-700 py-2.5 text-sm text-slate-400 hover:border-slate-500 hover:text-slate-200"
+          className="rounded-lg border border-dashed border-slate-700 py-2.5 text-sm text-white hover:border-slate-500 hover:text-slate-200"
         >
           + Añadir ejercicio
         </button>

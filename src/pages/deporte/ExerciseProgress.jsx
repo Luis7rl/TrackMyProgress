@@ -23,7 +23,7 @@ function ProgressChart({ points }) {
 
   if (scaled.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-slate-500">
+      <p className="py-8 text-center text-sm text-white">
         Añade al menos dos sesiones con este ejercicio para ver la gráfica.
       </p>
     )
@@ -95,9 +95,9 @@ export default function ExerciseProgress() {
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {sessions === null ? (
-        <p className="text-sm text-slate-500">Cargando...</p>
+        <p className="text-sm text-white">Cargando...</p>
       ) : sessions.length === 0 ? (
-        <p className="text-sm text-slate-500">No hay series registradas de este ejercicio.</p>
+        <p className="text-sm text-white">No hay series registradas de este ejercicio.</p>
       ) : (
         <>
           {best && (
@@ -105,14 +105,14 @@ export default function ExerciseProgress() {
               <p className="text-2xl font-semibold">
                 {best.weight} kg × {best.reps}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-white">
                 Récord ({new Date(best.date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
           )}
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-            <p className="mb-2 text-sm font-medium text-slate-400">Evolución (1RM estimado)</p>
+            <p className="mb-2 text-sm font-medium text-white">Evolución (1RM estimado)</p>
             <ProgressChart points={sessions} />
           </div>
 

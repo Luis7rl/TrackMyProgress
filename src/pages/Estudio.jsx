@@ -42,15 +42,15 @@ function WeeklyPlan() {
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-      <p className="mb-3 text-sm font-medium text-slate-400">Horario semanal</p>
+      <p className="mb-3 text-sm font-medium text-white">Horario semanal</p>
       {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
       {plan === null ? (
-        <p className="text-sm text-slate-500">Cargando...</p>
+        <p className="text-sm text-white">Cargando...</p>
       ) : (
         <div className="flex flex-col gap-2">
           {WEEKDAY_LABELS.map((label, i) => (
             <div key={label} className="flex items-center gap-3">
-              <span className="w-20 shrink-0 text-sm text-slate-500">{label}</span>
+              <span className="w-20 shrink-0 text-sm text-white">{label}</span>
               <input
                 type="text"
                 value={plan[i]}
@@ -135,11 +135,11 @@ export default function Estudio() {
       <div className="mb-6 grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
           <p className="text-2xl font-semibold">{sessions?.length ?? '—'}</p>
-          <p className="text-sm text-slate-500">Sesiones</p>
+          <p className="text-sm text-white">Sesiones</p>
         </div>
         <div className="rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
           <p className="text-2xl font-semibold">{formatHours(totalMinutes)}</p>
-          <p className="text-sm text-slate-500">Horas totales</p>
+          <p className="text-sm text-white">Horas totales</p>
         </div>
       </div>
 
@@ -148,7 +148,7 @@ export default function Estudio() {
       </div>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Fecha
           <input
             type="date"
@@ -157,7 +157,7 @@ export default function Estudio() {
             className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-white">
           Asignatura (opcional)
           <input
             type="text"
@@ -167,7 +167,7 @@ export default function Estudio() {
             className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Minutos
           <input
             type="number"
@@ -190,11 +190,11 @@ export default function Estudio() {
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
+      <h2 className="mb-3 text-sm font-medium text-white">Historial</h2>
 
-      {sessions === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
+      {sessions === null && !error && <p className="text-sm text-white">Cargando...</p>}
       {sessions?.length === 0 && (
-        <p className="text-sm text-slate-500">Todavía no has registrado ninguna sesión.</p>
+        <p className="text-sm text-white">Todavía no has registrado ninguna sesión.</p>
       )}
 
       <ul className="flex flex-col gap-2">
@@ -211,13 +211,13 @@ export default function Estudio() {
                   month: 'short',
                 })}
               </p>
-              {s.subject && <p className="text-sm text-slate-500">{s.subject}</p>}
+              {s.subject && <p className="text-sm text-white">{s.subject}</p>}
             </div>
             <div className="flex items-center gap-3 text-sm">
               <span>{formatHours(s.duration_minutes)}</span>
               <button
                 onClick={() => handleDelete(s.id)}
-                className="text-slate-500 hover:text-red-400"
+                className="text-white hover:text-red-400"
                 aria-label="Eliminar sesión"
               >
                 ✕
@@ -230,7 +230,7 @@ export default function Estudio() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
         >
           Ver todas ({sessions.length})
         </button>

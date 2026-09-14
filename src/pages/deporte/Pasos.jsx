@@ -96,7 +96,7 @@ function BarChart({ points, unit, goalLine }) {
 
   if (bars.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-slate-500">
+      <p className="py-8 text-center text-sm text-white">
         Añade al menos un registro para ver la gráfica.
       </p>
     )
@@ -221,13 +221,13 @@ export default function Steps() {
     <div>
       <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">👟 Pasos</h1>
 
-      <p className="mb-6 text-sm text-slate-500">
+      <p className="mb-6 text-sm text-white">
         Se rellena solo cada día si configuras el Atajo de iPhone, pero también puedes
         añadir o corregir un registro a mano.
       </p>
 
       <form onSubmit={handleSubmit} className="mb-6 flex items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Fecha
           <input
             type="date"
@@ -236,7 +236,7 @@ export default function Steps() {
             className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-white">
           Pasos
           <input
             type="number"
@@ -261,15 +261,15 @@ export default function Steps() {
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {entries === null ? (
-        <p className="text-sm text-slate-500">Cargando...</p>
+        <p className="text-sm text-white">Cargando...</p>
       ) : entries.length === 0 ? (
-        <p className="text-sm text-slate-500">Todavía no has registrado ningún día.</p>
+        <p className="text-sm text-white">Todavía no has registrado ningún día.</p>
       ) : (
         <>
           <div className="mb-6 grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{sorted[0].steps.toLocaleString('es-ES')}</p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-white">
                 Último registro ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
               <p className="mt-1 text-xs text-violet-500">
@@ -278,7 +278,7 @@ export default function Steps() {
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{totalSteps.toLocaleString('es-ES')}</p>
-              <p className="text-sm text-slate-500">Total acumulado</p>
+              <p className="text-sm text-white">Total acumulado</p>
               <p className="mt-1 text-xs text-violet-500">
                 ≈ {estimateKcal(totalSteps).toLocaleString('es-ES')} kcal
               </p>
@@ -287,12 +287,12 @@ export default function Steps() {
 
           <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
             <p className="text-lg font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'}</p>
-            <p className="text-sm text-slate-500">Media de los últimos {last7.length} días</p>
+            <p className="text-sm text-white">Media de los últimos {last7.length} días</p>
           </div>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-400">Evolución</p>
+              <p className="text-sm font-medium text-white">Evolución</p>
               <div className="flex gap-1">
                 {VIEWS.map((v) => (
                   <button
@@ -301,7 +301,7 @@ export default function Steps() {
                     className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                       chartView === v.id
                         ? 'bg-violet-500/20 text-violet-300'
-                        : 'text-slate-500 hover:text-slate-300'
+                        : 'text-white hover:text-white'
                     }`}
                   >
                     {v.label}
@@ -339,7 +339,7 @@ export default function Steps() {
                   <span className="font-medium">{entry.steps.toLocaleString('es-ES')}</span>
                   <button
                     onClick={() => handleDelete(entry.id)}
-                    className="text-slate-500 hover:text-red-400"
+                    className="text-white hover:text-red-400"
                     aria-label="Eliminar registro"
                   >
                     ✕

@@ -83,7 +83,7 @@ export default function WorkoutEdit() {
   }
 
   if (error) return <p className="text-sm text-red-400">{error}</p>
-  if (!initial) return <p className="text-sm text-slate-500">Cargando...</p>
+  if (!initial) return <p className="text-sm text-white">Cargando...</p>
 
   return (
     <WorkoutForm

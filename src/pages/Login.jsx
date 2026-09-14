@@ -32,7 +32,7 @@ export default function Login() {
         <h1 className="mb-1 text-center text-2xl font-bold tracking-tight text-slate-100">
           Track<span className="text-violet-500">MyProgress</span>
         </h1>
-        <p className="mb-8 text-center text-sm text-slate-400">
+        <p className="mb-8 text-center text-sm text-white">
           Inicia sesión para ver tu progreso
         </p>
 
@@ -57,7 +57,7 @@ export default function Login() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-sm text-slate-500 hover:text-slate-200"
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-sm text-white hover:text-slate-200"
               aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
               {showPassword ? '🙈' : '👁️'}
@@ -75,7 +75,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-white">
           ¿No tienes cuenta?{' '}
           <Link to="/register" className="text-violet-500 hover:underline">
             Regístrate

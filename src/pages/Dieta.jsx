@@ -53,7 +53,7 @@ function NetChart({ entries, burnForDate, target }) {
 
   if (points.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-slate-500">
+      <p className="py-8 text-center text-sm text-white">
         Añade al menos dos registros para ver la gráfica.
       </p>
     )
@@ -234,7 +234,7 @@ export default function Dieta() {
       <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">🍎 Dieta</h1>
 
       <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Fecha
           <input
             type="date"
@@ -243,7 +243,7 @@ export default function Dieta() {
             className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Kcal
           <input
             type="number"
@@ -255,7 +255,7 @@ export default function Dieta() {
             className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Proteína (g)
           <input
             type="number"
@@ -266,7 +266,7 @@ export default function Dieta() {
             className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Carbs (g)
           <input
             type="number"
@@ -277,7 +277,7 @@ export default function Dieta() {
             className="w-24 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Grasa (g)
           <input
             type="number"
@@ -300,9 +300,9 @@ export default function Dieta() {
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {entries === null ? (
-        <p className="text-sm text-slate-500">Cargando...</p>
+        <p className="text-sm text-white">Cargando...</p>
       ) : entries.length === 0 ? (
-        <p className="text-sm text-slate-500">Todavía no has registrado ningún día.</p>
+        <p className="text-sm text-white">Todavía no has registrado ningún día.</p>
       ) : (
         <>
           <div className="mb-3 grid grid-cols-2 gap-3">
@@ -310,13 +310,13 @@ export default function Dieta() {
               <p className="text-2xl font-semibold">
                 {sorted[0].calories.toLocaleString('es-ES')} kcal
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-white">
                 Consumidas ({new Date(sorted[0].date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{avg7?.toLocaleString('es-ES') ?? '—'} kcal</p>
-              <p className="text-sm text-slate-500">Media últimos {last7.length} días</p>
+              <p className="text-sm text-white">Media últimos {last7.length} días</p>
             </div>
           </div>
 
@@ -325,7 +325,7 @@ export default function Dieta() {
               <p className="text-2xl font-semibold text-violet-500">
                 {latestBurn?.toLocaleString('es-ES') ?? '—'} kcal
               </p>
-              <p className="text-sm text-slate-500">Quemadas en actividad (pasos + carrera + gimnasio)</p>
+              <p className="text-sm text-white">Quemadas en actividad (pasos + carrera + gimnasio)</p>
             </div>
             <div className="rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
               <p
@@ -335,18 +335,18 @@ export default function Dieta() {
               >
                 {latestNet == null ? '—' : `${latestNet > 0 ? '+' : ''}${latestNet.toLocaleString('es-ES')}`} kcal
               </p>
-              <p className="text-sm text-slate-500">Neto (consumidas − actividad − objetivo {TARGET_CALORIES})</p>
+              <p className="text-sm text-white">Neto (consumidas − actividad − objetivo {TARGET_CALORIES})</p>
             </div>
           </div>
 
-          <p className="mb-6 text-xs text-slate-600">
+          <p className="mb-6 text-xs text-white">
             Las kcal quemadas son una estimación (pasos, distancia de carrera y ~{GYM_SESSION_KCAL} kcal por
             sesión de gimnasio) y no incluyen el metabolismo basal. El objetivo diario está fijado en{' '}
             {TARGET_CALORIES.toLocaleString('es-ES')} kcal.
           </p>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-            <p className="mb-2 text-sm font-medium text-slate-400">
+            <p className="mb-2 text-sm font-medium text-white">
               Consumidas − actividad, frente al objetivo
             </p>
             <NetChart entries={entries} burnForDate={burnForDate} target={TARGET_CALORIES} />
@@ -367,15 +367,15 @@ export default function Dieta() {
                 </span>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="font-medium">{entry.calories} kcal</span>
-                  <span className="text-slate-500">−{burnForDate(entry.date)}</span>
+                  <span className="text-white">−{burnForDate(entry.date)}</span>
                   {(entry.protein_g || entry.carbs_g || entry.fat_g) && (
-                    <span className="hidden text-slate-500 sm:inline">
+                    <span className="hidden text-white sm:inline">
                       P {entry.protein_g ?? '—'} · C {entry.carbs_g ?? '—'} · G {entry.fat_g ?? '—'}
                     </span>
                   )}
                   <button
                     onClick={() => handleDelete(entry.id)}
-                    className="text-slate-500 hover:text-red-400"
+                    className="text-white hover:text-red-400"
                     aria-label="Eliminar registro"
                   >
                     ✕
@@ -388,7 +388,7 @@ export default function Dieta() {
           {!expanded && remaining > 0 && (
             <button
               onClick={() => setExpanded(true)}
-              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
             >
               Ver todos ({sorted.length})
             </button>

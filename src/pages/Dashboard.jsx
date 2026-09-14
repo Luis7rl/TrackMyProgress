@@ -115,33 +115,33 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.gymCount}</p>
-              <p className="text-sm text-slate-500">Entrenamientos</p>
+              <p className="text-sm text-white">Entrenamientos</p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.totalKm.toFixed(1)} km</p>
-              <p className="text-sm text-slate-500">Corridos</p>
+              <p className="text-sm text-white">Corridos</p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.totalSteps.toLocaleString('es-ES')}</p>
-              <p className="text-sm text-slate-500">Pasos</p>
+              <p className="text-sm text-white">Pasos</p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.studyHours}h</p>
-              <p className="text-sm text-slate-500">Estudio</p>
+              <p className="text-sm text-white">Estudio</p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:col-span-2 shadow-sm">
               {weekly.hasDiet ? (
                 <>
                   <p className="text-xl font-semibold">
-                    {weekly.consumed.toLocaleString('es-ES')} <span className="text-slate-500">/</span>{' '}
+                    {weekly.consumed.toLocaleString('es-ES')} <span className="text-white">/</span>{' '}
                     {weekly.burn.toLocaleString('es-ES')} kcal
                   </p>
-                  <p className="text-sm text-slate-500">Consumidas / quemadas en actividad</p>
+                  <p className="text-sm text-white">Consumidas / quemadas en actividad</p>
                 </>
               ) : (
                 <>
                   <p className="text-xl font-semibold">{weekly.burn.toLocaleString('es-ES')} kcal</p>
-                  <p className="text-sm text-slate-500">Quemadas en actividad</p>
+                  <p className="text-sm text-white">Quemadas en actividad</p>
                 </>
               )}
             </div>

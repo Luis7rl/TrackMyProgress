@@ -28,7 +28,7 @@ function WeightChart({ entries }) {
 
   if (points.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-slate-500">
+      <p className="py-8 text-center text-sm text-white">
         Añade al menos dos registros para ver la gráfica.
       </p>
     )
@@ -63,7 +63,7 @@ function PhotoComparator({ photoEntries, photoUrls }) {
 
   return (
     <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-      <p className="mb-3 text-sm font-medium text-slate-400">Comparar fotos</p>
+      <p className="mb-3 text-sm font-medium text-white">Comparar fotos</p>
       <div className="mb-3 grid grid-cols-2 gap-3">
         <select
           value={dateA}
@@ -98,11 +98,11 @@ function PhotoComparator({ photoEntries, photoUrls }) {
                   alt={`Progreso ${entry.date}`}
                   className="aspect-[3/4] w-full rounded-lg border border-slate-800 object-cover"
                 />
-                <p className="mt-2 text-sm text-slate-400">{formatLabel(entry.date)}</p>
+                <p className="mt-2 text-sm text-white">{formatLabel(entry.date)}</p>
                 <p className="text-sm font-medium">{entry.weight_kg} kg</p>
               </>
             ) : (
-              <div className="flex aspect-[3/4] items-center justify-center rounded-lg border border-dashed border-slate-800 text-sm text-slate-600">
+              <div className="flex aspect-[3/4] items-center justify-center rounded-lg border border-dashed border-slate-800 text-sm text-white">
                 Sin foto
               </div>
             )}
@@ -246,7 +246,7 @@ export default function Fisico() {
       <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">📸 Físico</h1>
 
       <form onSubmit={handleSubmit} className="mb-3 flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Fecha
           <input
             type="date"
@@ -255,7 +255,7 @@ export default function Fisico() {
             className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Peso (kg)
           <input
             type="number"
@@ -268,13 +268,13 @@ export default function Fisico() {
             className="w-32 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-white">
           Foto (opcional)
           <input
             type="file"
             accept="image/*"
             onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-            className="w-full text-sm text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:text-slate-200"
+            className="w-full text-sm text-white file:mr-3 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:text-slate-200"
           />
         </label>
         <button
@@ -296,7 +296,7 @@ export default function Fisico() {
 
       {showMeasurements && (
         <div className="-mt-4 mb-6 flex flex-wrap gap-3">
-          <label className="flex flex-col gap-1 text-sm text-slate-400">
+          <label className="flex flex-col gap-1 text-sm text-white">
             Cintura (cm)
             <input
               type="number"
@@ -307,7 +307,7 @@ export default function Fisico() {
               className="w-28 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-slate-400">
+          <label className="flex flex-col gap-1 text-sm text-white">
             Brazo (cm)
             <input
               type="number"
@@ -318,7 +318,7 @@ export default function Fisico() {
               className="w-28 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-slate-400">
+          <label className="flex flex-col gap-1 text-sm text-white">
             Pecho (cm)
             <input
               type="number"
@@ -336,7 +336,7 @@ export default function Fisico() {
 
       <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-slate-400">Objetivo de peso</span>
+          <span className="text-sm text-white">Objetivo de peso</span>
           <div className="flex items-center gap-1 text-sm">
             <input
               type="number"
@@ -346,44 +346,44 @@ export default function Fisico() {
               onBlur={(e) => handleGoalBlur(e.target.value)}
               className="w-20 rounded-lg border border-slate-800 bg-slate-900 px-2 py-1 text-right outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
             />
-            <span className="text-slate-500">kg</span>
+            <span className="text-white">kg</span>
           </div>
         </div>
         {goalPercent != null ? (
           <>
             <ProgressBar percent={goalPercent} />
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-white">
               {Math.abs(Math.round((latest.weight_kg - goals.target_weight_kg) * 10) / 10)} kg{' '}
               {latest.weight_kg > goals.target_weight_kg ? 'por encima' : 'por debajo'} del objetivo
             </p>
           </>
         ) : (
-          <p className="text-xs text-slate-500">Registra al menos un peso para ver el progreso.</p>
+          <p className="text-xs text-white">Registra al menos un peso para ver el progreso.</p>
         )}
       </div>
 
       {entries === null ? (
-        <p className="text-sm text-slate-500">Cargando...</p>
+        <p className="text-sm text-white">Cargando...</p>
       ) : entries.length === 0 ? (
-        <p className="text-sm text-slate-500">Todavía no has registrado ningún peso.</p>
+        <p className="text-sm text-white">Todavía no has registrado ningún peso.</p>
       ) : (
         <>
           <div className="mb-6 grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-2xl font-semibold">{latest.weight_kg} kg</p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-white">
                 Último registro ({new Date(latest.date + 'T00:00:00').toLocaleDateString('es-ES')})
               </p>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p
                 className={`text-2xl font-semibold ${
-                  delta == null ? 'text-slate-500' : delta > 0 ? 'text-amber-400' : delta < 0 ? 'text-emerald-400' : ''
+                  delta == null ? 'text-white' : delta > 0 ? 'text-amber-400' : delta < 0 ? 'text-emerald-400' : ''
                 }`}
               >
                 {delta == null ? '—' : `${delta > 0 ? '+' : ''}${delta} kg`}
               </p>
-              <p className="text-sm text-slate-500">Respecto al registro anterior</p>
+              <p className="text-sm text-white">Respecto al registro anterior</p>
             </div>
           </div>
 
@@ -393,7 +393,7 @@ export default function Fisico() {
 
           {photoEntries.length > 0 && (
             <div className="mb-6">
-              <p className="mb-3 text-sm font-medium text-slate-400">Fotos de progreso</p>
+              <p className="mb-3 text-sm font-medium text-white">Fotos de progreso</p>
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {photoEntries.map((entry) => (
                   <div key={entry.id} className="shrink-0 text-center">
@@ -402,7 +402,7 @@ export default function Fisico() {
                       alt={`Progreso ${entry.date}`}
                       className="h-40 w-32 rounded-lg border border-slate-800 object-cover"
                     />
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-white">
                       {new Date(entry.date + 'T00:00:00').toLocaleDateString('es-ES', {
                         day: 'numeric',
                         month: 'short',
@@ -432,7 +432,7 @@ export default function Fisico() {
                     {photoUrls[entry.id] && <span className="ml-1.5">📷</span>}
                   </span>
                   {(entry.waist_cm || entry.arm_cm || entry.chest_cm) && (
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-white">
                       {entry.waist_cm && `Cintura ${entry.waist_cm}cm `}
                       {entry.arm_cm && `Brazo ${entry.arm_cm}cm `}
                       {entry.chest_cm && `Pecho ${entry.chest_cm}cm`}
@@ -443,7 +443,7 @@ export default function Fisico() {
                   <span className="font-medium">{entry.weight_kg} kg</span>
                   <button
                     onClick={() => handleDelete(entry)}
-                    className="text-slate-500 hover:text-red-400"
+                    className="text-white hover:text-red-400"
                     aria-label="Eliminar registro"
                   >
                     ✕

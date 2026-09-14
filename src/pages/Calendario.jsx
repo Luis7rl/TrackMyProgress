@@ -127,7 +127,7 @@ export default function Calendario() {
         <div className="mb-3 flex items-center justify-between">
           <button
             onClick={() => changeMonth(-1)}
-            className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            className="rounded-lg px-2 py-1 text-white hover:bg-slate-800 hover:text-slate-100"
             aria-label="Mes anterior"
           >
             ‹
@@ -137,14 +137,14 @@ export default function Calendario() {
           </p>
           <button
             onClick={() => changeMonth(1)}
-            className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            className="rounded-lg px-2 py-1 text-white hover:bg-slate-800 hover:text-slate-100"
             aria-label="Mes siguiente"
           >
             ›
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center text-xs text-slate-500">
+        <div className="grid grid-cols-7 gap-1 text-center text-xs text-white">
           {WEEKDAYS.map((d) => (
             <div key={d} className="py-1">
               {d}
@@ -167,8 +167,8 @@ export default function Calendario() {
                   isSelected
                     ? 'bg-violet-600 font-medium text-white'
                     : isToday
-                      ? 'border border-violet-500 text-slate-300'
-                      : 'text-slate-400 hover:bg-slate-800'
+                      ? 'border border-violet-500 text-white'
+                      : 'text-white hover:bg-slate-800'
                 }`}
               >
                 {day}
@@ -192,10 +192,10 @@ export default function Calendario() {
         </div>
       </div>
 
-      <p className="mb-3 text-sm font-medium capitalize text-slate-400">{selectedLabel}</p>
+      <p className="mb-3 text-sm font-medium capitalize text-white">{selectedLabel}</p>
 
       <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap items-end gap-3">
-        <label className="flex flex-1 flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-1 flex-col gap-1 text-sm text-white">
           Título
           <input
             type="text"
@@ -206,7 +206,7 @@ export default function Calendario() {
             className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-slate-400">
+        <label className="flex flex-col gap-1 text-sm text-white">
           Tipo
           <select
             value={type}
@@ -230,7 +230,7 @@ export default function Calendario() {
       </form>
 
       {selectedEvents.length === 0 ? (
-        <p className="text-sm text-slate-500">Sin eventos este día.</p>
+        <p className="text-sm text-white">Sin eventos este día.</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {selectedEvents.map((e) => {
@@ -243,11 +243,11 @@ export default function Calendario() {
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${opt?.dot ?? 'bg-violet-500'}`} />
                   <span className="text-sm">{e.title}</span>
-                  <span className="text-xs text-slate-500">{opt?.label}</span>
+                  <span className="text-xs text-white">{opt?.label}</span>
                 </div>
                 <button
                   onClick={() => handleDelete(e.id)}
-                  className="text-slate-500 hover:text-red-400"
+                  className="text-white hover:text-red-400"
                   aria-label="Eliminar evento"
                 >
                   ✕

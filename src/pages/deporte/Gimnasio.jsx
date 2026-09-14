@@ -122,7 +122,7 @@ export default function Gimnasio() {
 
       <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
         <p className="text-2xl font-semibold">{workouts?.length ?? '—'}</p>
-        <p className="text-sm text-slate-500">Entrenamientos totales</p>
+        <p className="text-sm text-white">Entrenamientos totales</p>
       </div>
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2">
@@ -130,12 +130,12 @@ export default function Gimnasio() {
         {sets && <MuscleMap volumes={volumes} />}
       </div>
 
-      <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
+      <h2 className="mb-3 text-sm font-medium text-white">Historial</h2>
 
-      {workouts === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
+      {workouts === null && !error && <p className="text-sm text-white">Cargando...</p>}
 
       {workouts?.length === 0 && (
-        <p className="text-sm text-slate-500">Todavía no has registrado ningún entrenamiento.</p>
+        <p className="text-sm text-white">Todavía no has registrado ningún entrenamiento.</p>
       )}
 
       <ul className="mb-6 flex flex-col gap-3">
@@ -153,9 +153,9 @@ export default function Gimnasio() {
                     month: 'short',
                   })}
                 </p>
-                {w.notes && <p className="text-sm text-slate-500">{w.notes}</p>}
+                {w.notes && <p className="text-sm text-white">{w.notes}</p>}
               </div>
-              <span className="text-sm text-slate-500">
+              <span className="text-sm text-white">
                 {w.workout_sets?.[0]?.count ?? 0} series
               </span>
             </Link>
@@ -166,7 +166,7 @@ export default function Gimnasio() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mb-8 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mb-8 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
         >
           Ver todos ({workouts.length})
         </button>
@@ -174,7 +174,7 @@ export default function Gimnasio() {
 
       {prs.length > 0 && (
         <>
-          <h2 className="mb-3 text-sm font-medium text-slate-400">Récords personales</h2>
+          <h2 className="mb-3 text-sm font-medium text-white">Récords personales</h2>
           <ul className="flex flex-col gap-2">
             {visiblePrs.map((pr, i) => (
               <li key={pr.exercise}>
@@ -191,7 +191,7 @@ export default function Gimnasio() {
                       {pr.weight} kg × {pr.reps}
                     </span>
                     {pr.date && (
-                      <span className="text-slate-500">
+                      <span className="text-white">
                         {new Date(pr.date + 'T00:00:00').toLocaleDateString('es-ES', {
                           day: 'numeric',
                           month: 'short',
@@ -206,7 +206,7 @@ export default function Gimnasio() {
           {!prsExpanded && remainingPrs > 0 && (
             <button
               onClick={() => setPrsExpanded(true)}
-              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
             >
               Ver todos ({prs.length})
             </button>

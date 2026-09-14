@@ -109,15 +109,15 @@ export default function MuscleMap({ volumes }) {
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-      <p className="mb-4 text-sm font-medium text-slate-400">Grupos musculares trabajados</p>
+      <p className="mb-4 text-sm font-medium text-white">Grupos musculares trabajados</p>
       <div className="flex justify-center gap-8">
         <div className="flex flex-col items-center gap-1">
           <BodyFront volumes={volumes} maxCount={maxCount} />
-          <span className="text-xs text-slate-500">Frontal</span>
+          <span className="text-xs text-white">Frontal</span>
         </div>
         <div className="flex flex-col items-center gap-1">
           <BodyBack volumes={volumes} maxCount={maxCount} />
-          <span className="text-xs text-slate-500">Trasera</span>
+          <span className="text-xs text-white">Trasera</span>
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -126,7 +126,7 @@ export default function MuscleMap({ volumes }) {
             key={group}
             className="flex flex-col items-center rounded-lg border border-slate-800 bg-slate-950/40 px-2 py-1.5"
           >
-            <span className="text-xs text-slate-500">{label}</span>
+            <span className="text-xs text-white">{label}</span>
             <span className="text-sm font-semibold text-violet-300">{volumes[group] ?? 0}</span>
           </div>
         ))}
@@ -139,7 +139,7 @@ export default function MuscleMap({ volumes }) {
               className="h-3 w-3 rounded-sm border border-slate-600"
               style={{ backgroundColor: `rgba(${FILL}, ${levelOpacity(l.level)})` }}
             />
-            <span className="text-xs text-slate-500">{l.label}</span>
+            <span className="text-xs text-white">{l.label}</span>
           </div>
         ))}
       </div>

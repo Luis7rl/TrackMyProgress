@@ -63,7 +63,7 @@ export default function WorkoutDetail() {
   }
 
   if (error) return <p className="text-sm text-red-400">{error}</p>
-  if (!workout) return <p className="text-sm text-slate-500">Cargando...</p>
+  if (!workout) return <p className="text-sm text-white">Cargando...</p>
 
   const grouped = sets.reduce((acc, s) => {
     ;(acc[s.exercise_name] ??= []).push(s)
@@ -86,12 +86,12 @@ export default function WorkoutDetail() {
               year: 'numeric',
             })}
           </h1>
-          {workout.notes && <p className="mt-1 text-sm text-slate-400">{workout.notes}</p>}
+          {workout.notes && <p className="mt-1 text-sm text-white">{workout.notes}</p>}
         </div>
         <div className="flex items-center gap-2">
           <Link
             to={`/deporte/gimnasio/${id}/editar`}
-            className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100"
           >
             Editar
           </Link>
@@ -111,7 +111,7 @@ export default function WorkoutDetail() {
             <h2 className="mb-3 font-medium">{exerciseName}</h2>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-slate-500">
+                <tr className="text-left text-white">
                   <th className="w-10 font-normal">Serie</th>
                   <th className="font-normal">Reps</th>
                   <th className="font-normal">Peso</th>
@@ -123,7 +123,7 @@ export default function WorkoutDetail() {
                   const isCardio = s.reps == null && s.weight_kg == null
                   return (
                     <tr key={s.id} className="border-t border-slate-800/60">
-                      <td className="py-1.5 text-slate-500">{s.set_number}</td>
+                      <td className="py-1.5 text-white">{s.set_number}</td>
                       <td className="py-1.5">
                         {isCardio
                           ? s.duration_seconds
@@ -140,7 +140,7 @@ export default function WorkoutDetail() {
                             ? `${s.weight_kg} kg`
                             : '—'}
                       </td>
-                      <td className="py-1.5 text-slate-500">
+                      <td className="py-1.5 text-white">
                         <div className="flex flex-wrap gap-1">
                           {s.set_type && s.set_type !== 'normal' && (
                             <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs font-medium text-violet-300">

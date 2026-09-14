@@ -61,7 +61,7 @@ function NavItems({ orientation }) {
         `${base} transition-colors ${
           isActive
             ? 'text-violet-500 font-medium'
-            : 'text-slate-400 hover:text-slate-200'
+            : 'text-white hover:text-slate-200'
         }`
       }
     >
@@ -129,13 +129,13 @@ export default function Layout() {
               onClick={handleExport}
               disabled={exporting}
               title="Exportar todos tus datos en un archivo JSON"
-              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
+              className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
             >
               {exporting ? 'Exportando...' : 'Exportar'}
             </button>
             <button
               onClick={signOut}
-              className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+              className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100"
             >
               Cerrar sesión
             </button>
@@ -152,7 +152,7 @@ export default function Layout() {
                   `flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
                     isActive
                       ? 'border-violet-500 bg-violet-500/10 text-violet-500 shadow-sm'
-                      : 'border-slate-800 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                      : 'border-slate-800 text-white hover:border-slate-600 hover:text-slate-200'
                   }`
                 }
               >

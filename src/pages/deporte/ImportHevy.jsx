@@ -193,20 +193,20 @@ export default function ImportHevy() {
   return (
     <div>
       <h1 className="mb-2 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">📥 Importar desde Hevy</h1>
-      <p className="mb-6 text-sm text-slate-400">
+      <p className="mb-6 text-sm text-white">
         Exporta tu historial desde Hevy (Perfil → Configuración → Exportar e importar datos →
         Exportar entrenamientos) y sube aquí el archivo CSV.
       </p>
 
       <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-700 px-4 py-10 text-center hover:border-slate-500">
-        <span className="text-sm text-slate-300">
+        <span className="text-sm text-white">
           {fileName || 'Toca para seleccionar el CSV'}
         </span>
         <input type="file" accept=".csv" onChange={handleFile} className="hidden" disabled={importing} />
       </label>
 
       {importing && progress && (
-        <p className="mt-4 text-sm text-slate-400">
+        <p className="mt-4 text-sm text-white">
           Importando entrenamiento {progress.current} de {progress.total}…
         </p>
       )}
@@ -217,12 +217,12 @@ export default function ImportHevy() {
         <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-sm shadow-sm">
           <p className="mb-1">✅ {summary.imported} entrenamientos importados</p>
           {summary.alreadyImported > 0 && (
-            <p className="mb-1 text-slate-400">
+            <p className="mb-1 text-white">
               ⏭ {summary.alreadyImported} ya estaban importados (omitidos)
             </p>
           )}
           {summary.skippedSets > 0 && (
-            <p className="mb-1 text-slate-400">
+            <p className="mb-1 text-white">
               ⚠ {summary.skippedSets} series omitidas (sin ejercicio)
             </p>
           )}
