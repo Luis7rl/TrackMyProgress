@@ -94,6 +94,16 @@ const LEGEND = [
   { label: 'El más trabajado', level: 4 },
 ]
 
+const GROUP_LABELS = [
+  { group: 'Pecho', label: 'Pecho' },
+  { group: 'Espalda', label: 'Espalda' },
+  { group: 'Hombros', label: 'Hombro' },
+  { group: 'Brazos', label: 'Brazo' },
+  { group: 'Abdomen', label: 'Abdomen' },
+  { group: 'Gluteos', label: 'Glúteo' },
+  { group: 'Piernas', label: 'Piernas' },
+]
+
 export default function MuscleMap({ volumes }) {
   const maxCount = Math.max(0, ...Object.values(volumes))
 
@@ -110,6 +120,18 @@ export default function MuscleMap({ volumes }) {
           <span className="text-xs text-slate-500">Trasera</span>
         </div>
       </div>
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {GROUP_LABELS.map(({ group, label }) => (
+          <div
+            key={group}
+            className="flex flex-col items-center rounded-lg border border-slate-800 bg-slate-950/40 px-2 py-1.5"
+          >
+            <span className="text-xs text-slate-500">{label}</span>
+            <span className="text-sm font-semibold text-violet-300">{volumes[group] ?? 0}</span>
+          </div>
+        ))}
+      </div>
+
       <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
         {LEGEND.map((l) => (
           <div key={l.label} className="flex items-center gap-1.5">
