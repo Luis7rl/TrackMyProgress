@@ -385,12 +385,12 @@ export default function Dieta() {
             ))}
           </ul>
 
-          {!expanded && remaining > 0 && (
+          {remaining > 0 && (
             <button
-              onClick={() => setExpanded(true)}
+              onClick={() => setExpanded((e) => !e)}
               className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
             >
-              Ver todos ({sorted.length})
+              {expanded ? 'Ver menos' : `Ver todos (${sorted.length})`}
             </button>
           )}
         </>

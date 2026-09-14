@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import MonthCalendar from '../../components/MonthCalendar'
 import MuscleMap from '../../components/MuscleMap'
 import { supabase } from '../../lib/supabaseClient'
-import { classifyExercise, MUSCLE_GROUPS } from '../../lib/muscleGroups'
+import { classifyExercise, GROUP_SHORT_LABELS, MUSCLE_GROUPS } from '../../lib/muscleGroups'
 
 const VISIBLE_LIMIT = 10
 const PR_VISIBLE_LIMIT = 3
@@ -76,6 +76,20 @@ export default function Gimnasio() {
     return counts
   }, [sets])
 
+  // Grupos musculares trabajados cada día, para mostrar chips en el historial.
+  const groupsByDate = useMemo(() => {
+    const map = {}
+    sets?.forEach((s) => {
+      const date = s.workouts?.date
+      if (!date) return
+      const group = classifyExercise(s.exercise_name)
+      if (!group) return
+      if (!map[date]) map[date] = new Set()
+      map[date].add(group)
+    })
+    return map
+  }, [sets])
+
   // Récord por ejercicio: la serie con más volumen (peso × reps), no la más
   // pesada en bruto, para que series pesadas de pocas reps no gasten a
   // series realmente más exigentes.
@@ -139,36 +153,56 @@ export default function Gimnasio() {
       )}
 
       <ul className="mb-6 flex flex-col gap-3">
-        {visible?.map((w) => (
-          <li key={w.id}>
-            <Link
-              to={`/deporte/gimnasio/${w.id}`}
-              className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700 shadow-sm"
-            >
-              <div>
-                <p className="font-medium">
-                  {new Date(w.date + 'T00:00:00').toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short',
-                  })}
-                </p>
-                {w.notes && <p className="text-sm text-white">{w.notes}</p>}
-              </div>
-              <span className="text-sm text-white">
-                {w.workout_sets?.[0]?.count ?? 0} series
-              </span>
-            </Link>
-          </li>
-        ))}
+        {visible?.map((w) => {
+          const date = new Date(w.date + 'T00:00:00')
+          const groups = [...(groupsByDate[w.date] ?? [])]
+          return (
+            <li key={w.id}>
+              <Link
+                to={`/deporte/gimnasio/${w.id}`}
+                className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-violet-500/50 shadow-sm"
+              >
+                <div className="flex w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-violet-500/30 bg-violet-600/10 py-1.5">
+                  <span className="text-lg font-bold leading-none text-violet-300">{date.getDate()}</span>
+                  <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white">
+                    {date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')}
+                  </span>
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium capitalize">
+                    {date.toLocaleDateString('es-ES', { weekday: 'long' })}
+                  </p>
+                  {w.notes && <p className="truncate text-sm text-white">{w.notes}</p>}
+                  {groups.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {groups.map((g) => (
+                        <span
+                          key={g}
+                          className="rounded-full bg-violet-500/15 px-2 py-0.5 text-[11px] text-violet-300"
+                        >
+                          {GROUP_SHORT_LABELS[g]}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <span className="shrink-0 text-sm font-medium text-white">
+                  {w.workout_sets?.[0]?.count ?? 0} series
+                </span>
+              </Link>
+            </li>
+          )
+        })}
       </ul>
 
-      {!expanded && remaining > 0 && (
+      {remaining > 0 && (
         <button
-          onClick={() => setExpanded(true)}
+          onClick={() => setExpanded((e) => !e)}
           className="mb-8 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
         >
-          Ver todos ({workouts.length})
+          {expanded ? 'Ver menos' : `Ver todos (${workouts.length})`}
         </button>
       )}
 
@@ -203,12 +237,12 @@ export default function Gimnasio() {
               </li>
             ))}
           </ul>
-          {!prsExpanded && remainingPrs > 0 && (
+          {remainingPrs > 0 && (
             <button
-              onClick={() => setPrsExpanded(true)}
+              onClick={() => setPrsExpanded((e) => !e)}
               className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
             >
-              Ver todos ({prs.length})
+              {prsExpanded ? 'Ver menos' : `Ver todos (${prs.length})`}
             </button>
           )}
         </>

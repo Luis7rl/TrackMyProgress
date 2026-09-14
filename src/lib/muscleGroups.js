@@ -12,6 +12,17 @@ const RULES = [
 
 export const MUSCLE_GROUPS = ['Pecho', 'Espalda', 'Hombros', 'Brazos', 'Abdomen', 'Piernas', 'Gluteos']
 
+// Etiquetas cortas para chips compactos (ej. resumen del historial).
+export const GROUP_SHORT_LABELS = {
+  Pecho: 'Pecho',
+  Espalda: 'Espalda',
+  Hombros: 'Hombro',
+  Brazos: 'Brazo',
+  Abdomen: 'Abdomen',
+  Piernas: 'Piernas',
+  Gluteos: 'Glúteo',
+}
+
 function normalize(text) {
   return text
     .toLowerCase()

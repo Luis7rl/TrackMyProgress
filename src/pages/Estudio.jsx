@@ -227,12 +227,12 @@ export default function Estudio() {
         ))}
       </ul>
 
-      {!expanded && remaining > 0 && (
+      {remaining > 0 && (
         <button
-          onClick={() => setExpanded(true)}
+          onClick={() => setExpanded((e) => !e)}
           className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-white hover:border-slate-600 hover:text-slate-200"
         >
-          Ver todas ({sessions.length})
+          {expanded ? 'Ver menos' : `Ver todas (${sessions.length})`}
         </button>
       )}
     </div>
