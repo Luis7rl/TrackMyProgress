@@ -2,15 +2,15 @@ import { intensityLevel, levelOpacity } from '../lib/muscleGroups'
 
 const FILL = '139, 92, 246' // violet-500 en rgb, para poder variar la opacidad
 
-function Region({ shape, group, count, children }) {
-  const level = intensityLevel(count)
+function Region({ shape, group, count, maxCount, children }) {
+  const level = intensityLevel(count, maxCount)
   const opacity = levelOpacity(level)
   const Tag = shape
   return (
     <Tag
       {...children}
       fill={`rgba(${FILL}, ${opacity})`}
-      stroke="#475569"
+      stroke="#64748b"
       strokeWidth="1.5"
     >
       <title>
@@ -20,87 +20,97 @@ function Region({ shape, group, count, children }) {
   )
 }
 
-function BodyFront({ volumes }) {
+function BodyFront({ volumes, maxCount }) {
   return (
     <svg viewBox="0 0 120 300" className="w-full max-w-[140px]">
-      <circle cx="60" cy="25" r="16" fill="#334155" />
-      <Region shape="ellipse" group="Hombros" count={volumes.Hombros ?? 0}>
-        {{ cx: 32, cy: 56, rx: 13, ry: 10 }}
+      <circle cx="60" cy="24" r="15" fill="#334155" />
+      <rect x="53" y="36" width="14" height="14" rx="5" fill="#334155" />
+      <Region shape="ellipse" group="Hombros" count={volumes.Hombros ?? 0} maxCount={maxCount}>
+        {{ cx: 34, cy: 54, rx: 15, ry: 11 }}
       </Region>
-      <Region shape="ellipse" group="Hombros" count={volumes.Hombros ?? 0}>
-        {{ cx: 88, cy: 56, rx: 13, ry: 10 }}
+      <Region shape="ellipse" group="Hombros" count={volumes.Hombros ?? 0} maxCount={maxCount}>
+        {{ cx: 86, cy: 54, rx: 15, ry: 11 }}
       </Region>
-      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0}>
-        {{ x: 10, y: 58, width: 17, height: 85, rx: 8 }}
+      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0} maxCount={maxCount}>
+        {{ x: 11, y: 58, width: 16, height: 88, rx: 8 }}
       </Region>
-      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0}>
-        {{ x: 93, y: 58, width: 17, height: 85, rx: 8 }}
+      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0} maxCount={maxCount}>
+        {{ x: 93, y: 58, width: 16, height: 88, rx: 8 }}
       </Region>
-      <Region shape="rect" group="Pecho" count={volumes.Pecho ?? 0}>
-        {{ x: 35, y: 48, width: 50, height: 42, rx: 8 }}
+      <Region shape="rect" group="Pecho" count={volumes.Pecho ?? 0} maxCount={maxCount}>
+        {{ x: 34, y: 46, width: 52, height: 44, rx: 10 }}
       </Region>
-      <Region shape="rect" group="Abdomen" count={volumes.Abdomen ?? 0}>
-        {{ x: 39, y: 92, width: 42, height: 40, rx: 6 }}
+      <Region shape="rect" group="Abdomen" count={volumes.Abdomen ?? 0} maxCount={maxCount}>
+        {{ x: 40, y: 93, width: 40, height: 40, rx: 8 }}
       </Region>
-      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0}>
-        {{ x: 36, y: 136, width: 20, height: 115, rx: 8 }}
+      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0} maxCount={maxCount}>
+        {{ x: 37, y: 137, width: 20, height: 118, rx: 9 }}
       </Region>
-      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0}>
-        {{ x: 64, y: 136, width: 20, height: 115, rx: 8 }}
+      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0} maxCount={maxCount}>
+        {{ x: 63, y: 137, width: 20, height: 118, rx: 9 }}
       </Region>
     </svg>
   )
 }
 
-function BodyBack({ volumes }) {
+function BodyBack({ volumes, maxCount }) {
   return (
     <svg viewBox="0 0 120 300" className="w-full max-w-[140px]">
-      <circle cx="60" cy="25" r="16" fill="#334155" />
-      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0}>
-        {{ x: 10, y: 58, width: 17, height: 85, rx: 8 }}
+      <circle cx="60" cy="24" r="15" fill="#334155" />
+      <rect x="53" y="36" width="14" height="14" rx="5" fill="#334155" />
+      <Region shape="ellipse" group="Espalda" count={volumes.Espalda ?? 0} maxCount={maxCount}>
+        {{ cx: 34, cy: 54, rx: 15, ry: 11 }}
       </Region>
-      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0}>
-        {{ x: 93, y: 58, width: 17, height: 85, rx: 8 }}
+      <Region shape="ellipse" group="Espalda" count={volumes.Espalda ?? 0} maxCount={maxCount}>
+        {{ cx: 86, cy: 54, rx: 15, ry: 11 }}
       </Region>
-      <Region shape="rect" group="Espalda" count={volumes.Espalda ?? 0}>
-        {{ x: 33, y: 48, width: 54, height: 68, rx: 8 }}
+      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0} maxCount={maxCount}>
+        {{ x: 11, y: 58, width: 16, height: 88, rx: 8 }}
       </Region>
-      <Region shape="rect" group="Gluteos" count={volumes.Gluteos ?? 0}>
-        {{ x: 37, y: 118, width: 46, height: 26, rx: 8 }}
+      <Region shape="rect" group="Brazos" count={volumes.Brazos ?? 0} maxCount={maxCount}>
+        {{ x: 93, y: 58, width: 16, height: 88, rx: 8 }}
       </Region>
-      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0}>
-        {{ x: 36, y: 146, width: 20, height: 105, rx: 8 }}
+      <Region shape="rect" group="Espalda" count={volumes.Espalda ?? 0} maxCount={maxCount}>
+        {{ x: 32, y: 46, width: 56, height: 71, rx: 10 }}
       </Region>
-      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0}>
-        {{ x: 64, y: 146, width: 20, height: 105, rx: 8 }}
+      <Region shape="rect" group="Gluteos" count={volumes.Gluteos ?? 0} maxCount={maxCount}>
+        {{ x: 36, y: 119, width: 48, height: 27, rx: 9 }}
+      </Region>
+      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0} maxCount={maxCount}>
+        {{ x: 37, y: 148, width: 20, height: 107, rx: 9 }}
+      </Region>
+      <Region shape="rect" group="Piernas" count={volumes.Piernas ?? 0} maxCount={maxCount}>
+        {{ x: 63, y: 148, width: 20, height: 107, rx: 9 }}
       </Region>
     </svg>
   )
 }
 
 const LEGEND = [
-  { label: '0', level: 0 },
-  { label: '1-30', level: 1 },
-  { label: '31-60', level: 2 },
-  { label: '61-200', level: 3 },
-  { label: '200+', level: 4 },
+  { label: 'Sin trabajar', level: 0 },
+  { label: 'Poco', level: 1 },
+  { label: 'Medio', level: 2 },
+  { label: 'Bastante', level: 3 },
+  { label: 'El más trabajado', level: 4 },
 ]
 
 export default function MuscleMap({ volumes }) {
+  const maxCount = Math.max(0, ...Object.values(volumes))
+
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
       <p className="mb-4 text-sm font-medium text-slate-400">Grupos musculares trabajados</p>
       <div className="flex justify-center gap-8">
         <div className="flex flex-col items-center gap-1">
-          <BodyFront volumes={volumes} />
+          <BodyFront volumes={volumes} maxCount={maxCount} />
           <span className="text-xs text-slate-500">Frontal</span>
         </div>
         <div className="flex flex-col items-center gap-1">
-          <BodyBack volumes={volumes} />
+          <BodyBack volumes={volumes} maxCount={maxCount} />
           <span className="text-xs text-slate-500">Trasera</span>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
         {LEGEND.map((l) => (
           <div key={l.label} className="flex items-center gap-1.5">
             <span

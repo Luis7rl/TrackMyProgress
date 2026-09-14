@@ -6,6 +6,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { classifyExercise, MUSCLE_GROUPS } from '../../lib/muscleGroups'
 
 const VISIBLE_LIMIT = 10
+const PR_VISIBLE_LIMIT = 3
+const MEDALS = ['🥇', '🥈', '🥉']
 const PAGE_SIZE = 1000
 
 // Supabase limita cada select a 1000 filas por defecto: paginamos para no
@@ -74,48 +76,46 @@ export default function Gimnasio() {
     return counts
   }, [sets])
 
-  // Récord por ejercicio: el set con mejor 1RM estimado (fórmula de Epley),
-  // para poder comparar de forma justa series con distinto número de reps.
+  // Récord por ejercicio: la serie con más volumen (peso × reps), no la más
+  // pesada en bruto, para que series pesadas de pocas reps no gasten a
+  // series realmente más exigentes.
   const prs = useMemo(() => {
     if (!sets) return []
     const best = {}
     sets.forEach((s) => {
       if (s.weight_kg == null || !s.reps) return
-      const oneRM = s.weight_kg * (1 + s.reps / 30)
+      const volume = s.weight_kg * s.reps
       const current = best[s.exercise_name]
-      if (!current || oneRM > current.oneRM) {
+      if (!current || volume > current.volume) {
         best[s.exercise_name] = {
           exercise: s.exercise_name,
           weight: s.weight_kg,
           reps: s.reps,
           date: s.workouts?.date,
-          oneRM,
+          volume,
         }
       }
     })
-    return Object.values(best).sort((a, b) => b.oneRM - a.oneRM)
+    return Object.values(best).sort((a, b) => b.volume - a.volume)
   }, [sets])
 
   const visible = expanded ? workouts : workouts?.slice(0, VISIBLE_LIMIT)
   const remaining = workouts ? workouts.length - VISIBLE_LIMIT : 0
-  const visiblePrs = prsExpanded ? prs : prs.slice(0, VISIBLE_LIMIT)
-  const remainingPrs = prs.length - VISIBLE_LIMIT
+  const visiblePrs = prsExpanded ? prs : prs.slice(0, PR_VISIBLE_LIMIT)
+  const remainingPrs = prs.length - PR_VISIBLE_LIMIT
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-100">Gimnasio</h1>
-        <div className="flex items-center gap-4">
-          <Link to="/deporte/gimnasio/importar" className="text-sm text-violet-500 hover:underline">
-            Importar desde Hevy
-          </Link>
-          <Link
-            to="/deporte/gimnasio/nuevo"
-            className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-500"
-          >
-            + Nuevo
-          </Link>
-        </div>
+        <h1 className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">
+          🏋️ Gimnasio
+        </h1>
+        <Link
+          to="/deporte/gimnasio/importar"
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-500"
+        >
+          Importar desde Hevy
+        </Link>
       </div>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
@@ -130,45 +130,6 @@ export default function Gimnasio() {
         {sets && <MuscleMap volumes={volumes} />}
       </div>
 
-      {prs.length > 0 && (
-        <>
-          <h2 className="mb-3 text-sm font-medium text-slate-400">Récords personales</h2>
-          <ul className="mb-6 flex flex-col gap-2">
-            {visiblePrs.map((pr) => (
-              <li key={pr.exercise}>
-                <Link
-                  to={`/deporte/gimnasio/ejercicio/${encodeURIComponent(pr.exercise)}`}
-                  className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700 shadow-sm"
-                >
-                  <span className="text-sm">{pr.exercise}</span>
-                  <div className="flex items-center gap-3 text-sm">
-                    <span className="font-medium">
-                      {pr.weight} kg × {pr.reps}
-                    </span>
-                    {pr.date && (
-                      <span className="text-slate-500">
-                        {new Date(pr.date + 'T00:00:00').toLocaleDateString('es-ES', {
-                          day: 'numeric',
-                          month: 'short',
-                        })}
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {!prsExpanded && remainingPrs > 0 && (
-            <button
-              onClick={() => setPrsExpanded(true)}
-              className="mb-6 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
-            >
-              Ver todos ({prs.length})
-            </button>
-          )}
-        </>
-      )}
-
       <h2 className="mb-3 text-sm font-medium text-slate-400">Historial</h2>
 
       {workouts === null && !error && <p className="text-sm text-slate-500">Cargando...</p>}
@@ -177,7 +138,7 @@ export default function Gimnasio() {
         <p className="text-sm text-slate-500">Todavía no has registrado ningún entrenamiento.</p>
       )}
 
-      <ul className="flex flex-col gap-3">
+      <ul className="mb-6 flex flex-col gap-3">
         {visible?.map((w) => (
           <li key={w.id}>
             <Link
@@ -205,10 +166,52 @@ export default function Gimnasio() {
       {!expanded && remaining > 0 && (
         <button
           onClick={() => setExpanded(true)}
-          className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+          className="mb-8 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
         >
           Ver todos ({workouts.length})
         </button>
+      )}
+
+      {prs.length > 0 && (
+        <>
+          <h2 className="mb-3 text-sm font-medium text-slate-400">Récords personales</h2>
+          <ul className="flex flex-col gap-2">
+            {visiblePrs.map((pr, i) => (
+              <li key={pr.exercise}>
+                <Link
+                  to={`/deporte/gimnasio/ejercicio/${encodeURIComponent(pr.exercise)}`}
+                  className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 hover:border-slate-700 shadow-sm"
+                >
+                  <span className="flex items-center gap-2 text-sm">
+                    {i < 3 && <span className="text-lg">{MEDALS[i]}</span>}
+                    {pr.exercise}
+                  </span>
+                  <div className="flex items-center gap-3 text-sm">
+                    <span className="font-medium">
+                      {pr.weight} kg × {pr.reps}
+                    </span>
+                    {pr.date && (
+                      <span className="text-slate-500">
+                        {new Date(pr.date + 'T00:00:00').toLocaleDateString('es-ES', {
+                          day: 'numeric',
+                          month: 'short',
+                        })}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {!prsExpanded && remainingPrs > 0 && (
+            <button
+              onClick={() => setPrsExpanded(true)}
+              className="mt-4 w-full rounded-lg border border-slate-800 py-2.5 text-sm text-slate-400 hover:border-slate-600 hover:text-slate-200"
+            >
+              Ver todos ({prs.length})
+            </button>
+          )}
+        </>
       )}
     </div>
   )

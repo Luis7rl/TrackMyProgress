@@ -92,18 +92,16 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center pt-10 text-center">
-      <h1 className="mb-8 text-2xl font-bold tracking-tight text-slate-100">Hola 👋</h1>
-
+    <div className="flex flex-col items-center pt-6 text-center">
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
-      <div className="flex flex-col items-center rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-8 shadow-sm">
-        <span className="text-5xl">🔥</span>
-        <p className="mt-3 text-5xl font-bold text-violet-500">
+      <div className="flex w-full flex-col items-center rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 px-10 py-10 shadow-lg shadow-violet-600/10">
+        <span className="text-6xl drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">🔥</span>
+        <p className="mt-3 text-6xl font-extrabold text-violet-400">
           {streak === null ? '—' : streak}
         </p>
-        <p className="mt-1 text-sm text-slate-400">
-          {streak === 1 ? 'semana seguida entrenando' : 'semanas seguidas entrenando'}
+        <p className="mt-2 text-sm font-bold uppercase tracking-wider text-violet-300">
+          {streak === 1 ? 'Semana seguida entrenando' : 'Semanas seguidas entrenando'}
         </p>
       </div>
 
@@ -113,7 +111,7 @@ export default function Dashboard() {
 
       {weekly && (
         <div className="mt-10 w-full text-left">
-          <p className="mb-3 text-sm font-medium text-slate-400">Esta semana</p>
+          <p className="mb-3 text-base font-bold uppercase tracking-wider text-slate-200">Esta semana</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
               <p className="text-xl font-semibold">{weekly.gymCount}</p>

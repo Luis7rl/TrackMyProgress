@@ -29,13 +29,12 @@ export function classifyExercise(exerciseName) {
   return null // sin clasificar
 }
 
-// 0 · 1-30 · 31-60 · 61-200 · 200+
-export function intensityLevel(count) {
-  if (count <= 0) return 0
-  if (count <= 30) return 1
-  if (count <= 60) return 2
-  if (count <= 200) return 3
-  return 4
+// Nivel relativo al grupo muscular más trabajado (no un umbral fijo de
+// series): así el mapa siempre se reparte bien sin importar si llevas 20 o
+// 2000 series registradas. El grupo con más volumen siempre es nivel 4.
+export function intensityLevel(count, maxCount) {
+  if (count <= 0 || !maxCount) return 0
+  return Math.max(1, Math.ceil((count / maxCount) * 4))
 }
 
 const LEVEL_OPACITY = [0, 0.25, 0.5, 0.75, 1]

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
-import { todayKey } from '../../lib/dates'
+import { mondayOf, toDateKey, todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
 
@@ -11,23 +11,85 @@ function estimateKcal(steps) {
   return Math.round(steps * KCAL_PER_STEP)
 }
 
-function StepsChart({ entries }) {
+function dailyPoints(entries) {
+  return entries.map((e) => ({
+    key: e.date,
+    label: new Date(`${e.date}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+    fullLabel: new Date(`${e.date}T00:00:00`).toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    }),
+    value: e.steps,
+  }))
+}
+
+function weeklyPoints(entries) {
+  const map = new Map()
+  entries.forEach((e) => {
+    const weekStart = toDateKey(mondayOf(`${e.date}T00:00:00`))
+    map.set(weekStart, (map.get(weekStart) ?? 0) + e.steps)
+  })
+  return [...map.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([weekStart, value]) => {
+      const start = new Date(`${weekStart}T00:00:00`)
+      const end = new Date(start)
+      end.setDate(end.getDate() + 6)
+      return {
+        key: weekStart,
+        label: start.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+        fullLabel: `Semana del ${start.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} al ${end.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`,
+        value,
+      }
+    })
+}
+
+function monthlyPoints(entries) {
+  const map = new Map()
+  entries.forEach((e) => {
+    const monthKey = e.date.slice(0, 7)
+    map.set(monthKey, (map.get(monthKey) ?? 0) + e.steps)
+  })
+  return [...map.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([monthKey, value]) => {
+      const [y, m] = monthKey.split('-').map(Number)
+      const d = new Date(y, m - 1, 1)
+      return {
+        key: monthKey,
+        label: d.toLocaleDateString('es-ES', { month: 'short' }),
+        fullLabel: d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }),
+        value,
+      }
+    })
+}
+
+const VIEWS = [
+  { id: 'day', label: 'Día', build: dailyPoints },
+  { id: 'week', label: 'Semana', build: weeklyPoints },
+  { id: 'month', label: 'Mes', build: monthlyPoints },
+]
+
+function BarChart({ points, unit }) {
   const width = 600
-  const height = 180
-  const padding = 24
+  const height = 220
+  const padding = 20
+  const labelHeight = 24
 
   const bars = useMemo(() => {
-    if (entries.length === 0) return []
-    const max = Math.max(...entries.map((e) => e.steps), 1)
-    const barWidth = (width - padding * 2) / entries.length
+    if (points.length === 0) return []
+    const max = Math.max(...points.map((p) => p.value), 1)
+    const chartHeight = height - padding - labelHeight
+    const barWidth = (width - padding * 2) / points.length
 
-    return entries.map((e, i) => {
-      const barHeight = (e.steps / max) * (height - padding * 2)
+    return points.map((p, i) => {
+      const barHeight = (p.value / max) * chartHeight
       const x = padding + i * barWidth
-      const y = height - padding - barHeight
-      return { x, y, height: barHeight, width: barWidth * 0.7, ...e }
+      const y = padding + (chartHeight - barHeight)
+      return { x, y, height: barHeight, width: barWidth * 0.6, ...p }
     })
-  }, [entries])
+  }, [points])
 
   if (bars.length === 0) {
     return (
@@ -37,10 +99,30 @@ function StepsChart({ entries }) {
     )
   }
 
+  // Evita amontonar etiquetas: muestra como mucho ~8 en el eje.
+  const labelEvery = Math.max(1, Math.ceil(points.length / 8))
+
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full">
       {bars.map((b, i) => (
-        <rect key={i} x={b.x} y={b.y} width={b.width} height={b.height} rx="2" fill="#8b5cf6" />
+        <g key={b.key}>
+          <rect x={b.x} y={b.y} width={b.width} height={Math.max(b.height, 1)} rx="3" fill="#8b5cf6">
+            <title>
+              {b.fullLabel}: {b.value.toLocaleString('es-ES')} {unit}
+            </title>
+          </rect>
+          {i % labelEvery === 0 && (
+            <text
+              x={b.x + b.width / 2}
+              y={height - 6}
+              textAnchor="middle"
+              fontSize="9"
+              fill="#94a3b8"
+            >
+              {b.label}
+            </text>
+          )}
+        </g>
       ))}
     </svg>
   )
@@ -49,6 +131,7 @@ function StepsChart({ entries }) {
 export default function Steps() {
   const [entries, setEntries] = useState(null)
   const [goals, setGoals] = useState(DEFAULT_GOALS)
+  const [chartView, setChartView] = useState('day')
   const [date, setDate] = useState(todayKey)
   const [steps, setSteps] = useState('')
   const [saving, setSaving] = useState(false)
@@ -120,6 +203,12 @@ export default function Steps() {
   const relevantSteps = todayEntry?.steps ?? 0
   const goalPercent =
     goals.target_daily_steps ? Math.max(0, Math.min(100, (relevantSteps / goals.target_daily_steps) * 100)) : null
+
+  const chartPoints = useMemo(() => {
+    if (!entries) return []
+    const view = VIEWS.find((v) => v.id === chartView)
+    return view.build(entries)
+  }, [entries, chartView])
 
   return (
     <div>
@@ -222,7 +311,25 @@ export default function Steps() {
           </div>
 
           <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-            <StepsChart entries={entries} />
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-400">Evolución</p>
+              <div className="flex gap-1">
+                {VIEWS.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => setChartView(v.id)}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                      chartView === v.id
+                        ? 'bg-violet-500/20 text-violet-300'
+                        : 'text-slate-500 hover:text-slate-300'
+                    }`}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <BarChart points={chartPoints} unit="pasos" />
           </div>
 
           <ul className="flex flex-col gap-2">
