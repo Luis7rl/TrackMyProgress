@@ -10,6 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: false,
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
         name: 'TrackMyProgress',
