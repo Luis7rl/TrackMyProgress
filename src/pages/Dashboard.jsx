@@ -149,7 +149,9 @@ export default function Dashboard() {
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       <div className="flex w-full flex-col items-center rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 px-10 py-10 shadow-lg shadow-violet-600/10">
-        {username && <p className="mb-4 text-base font-medium text-white">Hola, {username}</p>}
+        {username && (
+          <p className="mb-4 text-sm font-bold uppercase tracking-wider text-violet-300">Hola, {username}</p>
+        )}
         <span className={`${flame.size} drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]`} style={{ filter: flame.filter }}>
           🔥
         </span>
