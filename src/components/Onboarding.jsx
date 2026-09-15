@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DEFAULT_MODULES, MODULE_INFO, saveModuleSettings } from '../lib/moduleSettings'
+import { fetchProfile } from '../lib/profile'
 
 const DEPORTE_MODULES = MODULE_INFO.filter((m) => m.group === 'deporte')
 
@@ -13,10 +14,18 @@ const YES_NO_STEPS = [
 const TOTAL_STEPS = 1 + YES_NO_STEPS.length
 
 export default function Onboarding({ onDone }) {
+  const [started, setStarted] = useState(false)
+  const [username, setUsername] = useState(null)
   const [step, setStep] = useState(0)
   const [modules, setModules] = useState(DEFAULT_MODULES)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetchProfile()
+      .then((p) => setUsername(p?.username ?? null))
+      .catch(() => {})
+  }, [])
 
   async function finish(finalModules) {
     setSaving(true)
@@ -48,6 +57,29 @@ export default function Onboarding({ onDone }) {
 
   function setYesNo(key, value) {
     setModules((m) => ({ ...m, [key]: value }))
+  }
+
+  if (!started) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-center text-slate-100">
+        <div className="w-full max-w-sm">
+          <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">
+            Bienvenido/a{username ? `, ${username}` : ''}
+          </h1>
+          <p className="mb-8 text-sm text-white">
+            Track<span className="text-violet-500">MyProgress</span> se adapta a ti: vamos a elegir
+            qué secciones quieres ver.
+          </p>
+          <button
+            type="button"
+            onClick={() => setStarted(true)}
+            className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-6 py-2.5 text-sm font-medium text-white hover:bg-violet-500"
+          >
+            Empezar
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
