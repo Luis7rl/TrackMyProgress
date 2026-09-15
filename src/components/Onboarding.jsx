@@ -135,10 +135,10 @@ export default function Onboarding({ onDone }) {
             <p className="text-sm text-white">Cargando...</p>
           ) : username ? (
             <>
-              <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">
-                Bienvenido/a, <span className="text-violet-400">{username}</span>
-              </h1>
-              <p className="mb-8 text-sm text-white">
+              <span className="text-6xl drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">🎉</span>
+              <h1 className="mt-3 text-3xl font-extrabold text-violet-400">¡Bienvenido/a!</h1>
+              <p className="mt-1 text-lg font-bold text-slate-100">{username}</p>
+              <p className="mb-8 mt-3 text-sm text-white">
                 Track<span className="text-violet-500">MyProgress</span> se adapta a ti: vamos a
                 elegir qué secciones quieres ver.
               </p>
@@ -152,7 +152,8 @@ export default function Onboarding({ onDone }) {
             </>
           ) : (
             <>
-              <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-100">Bienvenido/a</h1>
+              <span className="text-6xl drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">👋</span>
+              <h1 className="mb-6 mt-3 text-3xl font-extrabold text-violet-400">¡Bienvenido/a!</h1>
               <p className="mb-6 text-sm text-white">
                 Track<span className="text-violet-500">MyProgress</span> se adapta a ti.
               </p>
