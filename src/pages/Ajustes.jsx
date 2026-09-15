@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { DEFAULT_MODULES, fetchModuleSettings, MODULE_INFO, saveModuleSettings } from '../lib/moduleSettings'
-import { fetchProfile } from '../lib/profile'
+import { createProfile, fetchProfile, USERNAME_PATTERN } from '../lib/profile'
 import { supabase } from '../lib/supabaseClient'
 
 function EmailForm({ currentEmail }) {
@@ -155,6 +155,71 @@ function PasswordForm() {
   )
 }
 
+function UsernameForm({ username, onCreated }) {
+  const [value, setValue] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  if (username) {
+    return (
+      <div className="flex flex-col gap-2">
+        <label className="text-sm text-white">Nombre de usuario</label>
+        <p className="rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2 text-sm text-white">
+          {username}
+        </p>
+      </div>
+    )
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+
+    if (!USERNAME_PATTERN.test(value)) {
+      setError('Debe tener entre 3 y 20 caracteres (letras, números o "_").')
+      return
+    }
+
+    setLoading(true)
+    try {
+      await createProfile(value)
+      onCreated(value)
+    } catch (err) {
+      setError(
+        err.message.includes('duplicate') ? 'Ese nombre de usuario ya está en uso.' : err.message,
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+      <label className="text-sm text-white">Nombre de usuario</label>
+      <p className="text-xs text-white">
+        Tu cuenta no tiene nombre de usuario todavía. Elige uno: no podrás cambiarlo después.
+      </p>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          required
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="flex-1 rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+        >
+          {loading ? 'Guardando...' : 'Guardar'}
+        </button>
+      </div>
+      {error && <p className="text-sm text-red-400">{error}</p>}
+    </form>
+  )
+}
+
 function VisibleSectionsForm() {
   const [modules, setModules] = useState(null)
   const [error, setError] = useState('')
@@ -252,12 +317,7 @@ export default function Ajustes() {
       <h2 className="mb-3 text-sm font-medium text-white">Mi cuenta</h2>
 
       <div className="flex flex-col gap-6 rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-        <div className="flex flex-col gap-2">
-          <label className="text-sm text-white">Nombre de usuario</label>
-          <p className="rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2 text-sm text-white">
-            {username ?? '—'}
-          </p>
-        </div>
+        <UsernameForm username={username} onCreated={setUsername} />
 
         <EmailForm currentEmail={user.email} />
 
