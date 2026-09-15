@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { resolveLoginEmail } from '../lib/usernameAuth'
 
 export default function Login() {
   const { user, signIn } = useAuth()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -17,7 +18,7 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const { error } = await signIn(email, password)
+    const { error } = await signIn(resolveLoginEmail(identifier), password)
     setLoading(false)
     if (error) {
       setError(error.message)
@@ -38,11 +39,11 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-            type="email"
+            type="text"
             required
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Usuario o email"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
             className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
           <div className="relative">

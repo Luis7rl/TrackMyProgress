@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { createProfile, USERNAME_PATTERN } from '../lib/profile'
+import { usernameToEmail } from '../lib/usernameAuth'
 
 export default function Register() {
   const { user, signUp } = useAuth()
@@ -25,10 +26,15 @@ export default function Register() {
     }
 
     setLoading(true)
-    const { data, error } = await signUp(email, password)
+    const signUpEmail = email.trim() || usernameToEmail(username)
+    const { data, error } = await signUp(signUpEmail, password)
     if (error) {
       setLoading(false)
-      setError(error.message)
+      setError(
+        error.message.includes('already registered')
+          ? 'Ese nombre de usuario (o email) ya está en uso.'
+          : error.message,
+      )
       return
     }
 
@@ -92,12 +98,16 @@ export default function Register() {
           <p className="-mt-2 text-xs text-white">No podrás cambiarlo después.</p>
           <input
             type="email"
-            required
-            placeholder="Email"
+            placeholder="Email (opcional, para recuperar la contraseña)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
           />
+          {!email && (
+            <p className="-mt-2 text-xs text-white">
+              Sin email no podrás recuperar la contraseña tú solo/a si la olvidas.
+            </p>
+          )}
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
