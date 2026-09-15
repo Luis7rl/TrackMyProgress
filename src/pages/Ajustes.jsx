@@ -55,6 +55,7 @@ function EmailForm({ currentEmail }) {
 
 function PasswordForm() {
   const { user, updatePassword } = useAuth()
+  const [expanded, setExpanded] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -62,6 +63,18 @@ function PasswordForm() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+
+  if (!expanded) {
+    return (
+      <button
+        type="button"
+        onClick={() => setExpanded(true)}
+        className="self-start rounded-lg border border-slate-800 px-4 py-2 text-sm text-white hover:border-slate-600 hover:text-slate-200"
+      >
+        Cambiar contraseña
+      </button>
+    )
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -96,6 +109,7 @@ function PasswordForm() {
     setNewPassword('')
     setConfirmPassword('')
     setSuccess('Contraseña actualizada.')
+    setExpanded(false)
   }
 
   const inputType = showPasswords ? 'text' : 'password'
@@ -144,13 +158,22 @@ function PasswordForm() {
       {error && <p className="text-sm text-red-400">{error}</p>}
       {success && <p className="text-sm text-emerald-400">{success}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50 self-start"
-      >
-        {loading ? 'Guardando...' : 'Actualizar contraseña'}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+        >
+          {loading ? 'Guardando...' : 'Actualizar contraseña'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setExpanded(false)}
+          className="rounded-lg px-4 py-2 text-sm text-white hover:text-slate-200"
+        >
+          Cancelar
+        </button>
+      </div>
     </form>
   )
 }
