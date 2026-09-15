@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { estimateBurn } from '../lib/calorieEstimate'
 import { mondayOf, toDateKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
@@ -104,10 +103,6 @@ export default function Dashboard() {
           {streak === 1 ? 'Semana seguida entrenando' : 'Semanas seguidas entrenando'}
         </p>
       </div>
-
-      <Link to="/deporte/gimnasio" className="mt-6 text-sm text-violet-500 hover:underline">
-        Ir a Deporte →
-      </Link>
 
       {weekly && (
         <div className="mt-10 w-full text-left">
