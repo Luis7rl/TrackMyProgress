@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useConfirm } from '../context/ConfirmContext'
 import { DEFAULT_MODULES, fetchModuleSettings } from '../lib/moduleSettings'
 
 const ALL_NAV_ITEMS = [
@@ -58,6 +59,7 @@ function NavItems({ orientation, items }) {
 
 export default function Layout() {
   const { signOut } = useAuth()
+  const confirm = useConfirm()
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
   const [modules, setModules] = useState(DEFAULT_MODULES)
@@ -73,8 +75,8 @@ export default function Layout() {
     (item) => !item.moduleKey || modules[item.moduleKey],
   ).filter((item) => item.to !== '/deporte' || deporteTabs.length > 0)
 
-  function handleSignOut() {
-    if (confirm('¿Cerrar sesión?')) signOut()
+  async function handleSignOut() {
+    if (await confirm('¿Cerrar sesión?')) signOut()
   }
 
   return (

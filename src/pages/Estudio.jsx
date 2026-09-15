@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useConfirm } from '../context/ConfirmContext'
 import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
@@ -68,6 +69,7 @@ function WeeklyPlan() {
 }
 
 export default function Estudio() {
+  const confirm = useConfirm()
   const [sessions, setSessions] = useState(null)
   const [expanded, setExpanded] = useState(false)
   const [date, setDate] = useState(todayKey)
@@ -115,7 +117,7 @@ export default function Estudio() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('¿Eliminar esta sesión?')) return
+    if (!(await confirm('¿Eliminar esta sesión?'))) return
     const { error } = await supabase.from('study_sessions').delete().eq('id', id)
     if (error) {
       setError(error.message)

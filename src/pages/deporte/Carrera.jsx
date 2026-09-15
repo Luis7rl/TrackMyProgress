@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
+import { useConfirm } from '../../context/ConfirmContext'
 import { mondayOf, toDateKey, todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
@@ -78,6 +79,7 @@ function WeeklyPlan() {
 }
 
 export default function Carrera() {
+  const confirm = useConfirm()
   const [sessions, setSessions] = useState(null)
   const [goals, setGoals] = useState(DEFAULT_GOALS)
   const [expanded, setExpanded] = useState(false)
@@ -142,7 +144,7 @@ export default function Carrera() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('¿Eliminar esta sesión?')) return
+    if (!(await confirm('¿Eliminar esta sesión?'))) return
     const { error } = await supabase.from('running_sessions').delete().eq('id', id)
     if (error) {
       setError(error.message)

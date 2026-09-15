@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useConfirm } from '../../context/ConfirmContext'
 import { mondayOf, toDateKey, todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals } from '../../lib/goals'
 import { supabase } from '../../lib/supabaseClient'
@@ -150,6 +151,7 @@ function BarChart({ points, unit, goalLine }) {
 }
 
 export default function Steps() {
+  const confirm = useConfirm()
   const [entries, setEntries] = useState(null)
   const [goals, setGoals] = useState(DEFAULT_GOALS)
   const [chartView, setChartView] = useState('day')
@@ -197,7 +199,7 @@ export default function Steps() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('¿Eliminar este registro de pasos?')) return
+    if (!(await confirm('¿Eliminar este registro de pasos?'))) return
     const { error } = await supabase.from('step_logs').delete().eq('id', id)
     if (error) {
       setError(error.message)

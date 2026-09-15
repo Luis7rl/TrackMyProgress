@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProgressBar from '../../components/ProgressBar'
 import { useAuth } from '../../context/AuthContext'
+import { useConfirm } from '../../context/ConfirmContext'
 import { todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
 import { compressImage } from '../../lib/imageCompression'
@@ -116,6 +117,7 @@ function PhotoComparator({ photoEntries, photoUrls }) {
 
 export default function Fisico() {
   const { user } = useAuth()
+  const confirm = useConfirm()
   const [entries, setEntries] = useState(null)
   const [photoUrls, setPhotoUrls] = useState({})
   const [goals, setGoals] = useState(DEFAULT_GOALS)
@@ -216,7 +218,7 @@ export default function Fisico() {
   }
 
   async function handleDelete(entry) {
-    if (!confirm('¿Eliminar este registro?')) return
+    if (!(await confirm('¿Eliminar este registro?'))) return
     if (entry.photo_path) {
       await supabase.storage.from(BUCKET).remove([entry.photo_path])
     }

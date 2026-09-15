@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_WEIGHT_KG, GYM_SESSION_KCAL, estimateBurn } from '../lib/calorieEstimate'
+import { useConfirm } from '../context/ConfirmContext'
 import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
 
@@ -117,6 +118,7 @@ function NetChart({ entries, burnForDate, target }) {
 }
 
 export default function Dieta() {
+  const confirm = useConfirm()
   const [entries, setEntries] = useState(null)
   const [activity, setActivity] = useState(null) // { stepsByDate, kmByDate, gymByDate, weightKg }
   const [expanded, setExpanded] = useState(false)
@@ -209,7 +211,7 @@ export default function Dieta() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('¿Eliminar este registro?')) return
+    if (!(await confirm('¿Eliminar este registro?'))) return
     const { error } = await supabase.from('diet_logs').delete().eq('id', id)
     if (error) {
       setError(error.message)

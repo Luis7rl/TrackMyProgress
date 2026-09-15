@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useConfirm } from '../../context/ConfirmContext'
 import { supabase } from '../../lib/supabaseClient'
 
 const SET_TYPE_LABELS = {
@@ -17,6 +18,7 @@ function formatDuration(totalSeconds) {
 export default function WorkoutDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const confirm = useConfirm()
   const [workout, setWorkout] = useState(null)
   const [sets, setSets] = useState([])
   const [error, setError] = useState('')
@@ -51,7 +53,7 @@ export default function WorkoutDetail() {
   }, [id])
 
   async function handleDelete() {
-    if (!confirm('¿Eliminar este entrenamiento? No se puede deshacer.')) return
+    if (!(await confirm('¿Eliminar este entrenamiento? No se puede deshacer.'))) return
     setDeleting(true)
     const { error } = await supabase.from('workouts').delete().eq('id', id)
     setDeleting(false)
