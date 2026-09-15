@@ -1,36 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { todayKey } from '../lib/dates'
 import { DEFAULT_MODULES, fetchModuleSettings } from '../lib/moduleSettings'
-import { supabase } from '../lib/supabaseClient'
-
-const EXPORT_TABLES = [
-  'workouts',
-  'workout_sets',
-  'body_weight_logs',
-  'step_logs',
-  'running_sessions',
-  'running_plan_days',
-  'diet_logs',
-  'study_sessions',
-  'study_plan_days',
-  'calendar_events',
-]
-
-async function fetchAllRows(table) {
-  const pageSize = 1000
-  let from = 0
-  let all = []
-  for (;;) {
-    const { data, error } = await supabase.from(table).select('*').range(from, from + pageSize - 1)
-    if (error) throw error
-    all = all.concat(data)
-    if (data.length < pageSize) break
-    from += pageSize
-  }
-  return all
-}
 
 const ALL_NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
@@ -89,7 +60,6 @@ export default function Layout() {
   const { signOut } = useAuth()
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
-  const [exporting, setExporting] = useState(false)
   const [modules, setModules] = useState(DEFAULT_MODULES)
 
   useEffect(() => {
@@ -103,27 +73,8 @@ export default function Layout() {
     (item) => !item.moduleKey || modules[item.moduleKey],
   ).filter((item) => item.to !== '/deporte' || deporteTabs.length > 0)
 
-  async function handleExport() {
-    setExporting(true)
-    try {
-      const result = {}
-      for (const table of EXPORT_TABLES) {
-        result[table] = await fetchAllRows(table)
-      }
-      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `trackmyprogress-export-${todayKey()}.json`
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      URL.revokeObjectURL(url)
-    } catch (err) {
-      alert(`Error al exportar: ${err.message}`)
-    } finally {
-      setExporting(false)
-    }
+  function handleSignOut() {
+    if (confirm('¿Cerrar sesión?')) signOut()
   }
 
   return (
@@ -147,15 +98,7 @@ export default function Layout() {
               ⚙️
             </Link>
             <button
-              onClick={handleExport}
-              disabled={exporting}
-              title="Exportar todos tus datos en un archivo JSON"
-              className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
-            >
-              {exporting ? 'Exportando...' : 'Exportar'}
-            </button>
-            <button
-              onClick={signOut}
+              onClick={handleSignOut}
               className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100"
             >
               Cerrar sesión
