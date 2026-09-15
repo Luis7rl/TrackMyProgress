@@ -255,12 +255,15 @@ function VisibleSectionsForm() {
 
   async function toggle(key) {
     const next = { ...(modules ?? DEFAULT_MODULES), [key]: !modules?.[key] }
-    setModules(next)
     try {
       await saveModuleSettings(next)
     } catch (err) {
       setError(err.message)
+      return
     }
+    // El menú (Layout) solo lee las secciones activas al cargar la página,
+    // así que recargamos para que el cambio se refleje ahí al momento.
+    window.location.reload()
   }
 
   const deporteModules = MODULE_INFO.filter((m) => m.group === 'deporte')
