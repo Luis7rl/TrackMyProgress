@@ -9,9 +9,12 @@ const WEEKDAY_LABELS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'S
 
 function PhotoSchedule() {
   const { user } = useAuth()
+  const confirm = useConfirm()
+  const [photoPath, setPhotoPath] = useState(null)
   const [photoUrl, setPhotoUrl] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
 
   async function load() {
@@ -24,6 +27,7 @@ function PhotoSchedule() {
       return
     }
     if (!data?.photo_path) {
+      setPhotoPath(null)
       setPhotoUrl(null)
       return
     }
@@ -34,6 +38,7 @@ function PhotoSchedule() {
       setError(signedError.message)
       return
     }
+    setPhotoPath(data.photo_path)
     setPhotoUrl(signed.signedUrl)
   }
 
@@ -68,6 +73,30 @@ function PhotoSchedule() {
     }
   }
 
+  async function handleDeletePhoto() {
+    if (!(await confirm('¿Eliminar la foto del horario?'))) return
+    setError('')
+    setDeleting(true)
+    try {
+      if (photoPath) {
+        const { error: removeError } = await supabase.storage.from(BUCKET).remove([photoPath])
+        if (removeError) throw removeError
+      }
+      const { error: updateError } = await supabase
+        .from('study_schedule_photo')
+        .update({ photo_path: null })
+        .eq('user_id', user.id)
+      if (updateError) throw updateError
+
+      setPhotoPath(null)
+      setPhotoUrl(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   return (
     <div>
       {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
@@ -80,21 +109,34 @@ function PhotoSchedule() {
         />
       )}
 
-      <form onSubmit={handleUpload} className="flex flex-wrap items-center gap-3">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-          className="text-sm text-white file:mr-3 file:rounded-lg file:border-0 file:bg-violet-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-violet-500"
-        />
-        <button
-          type="submit"
-          disabled={saving || !photoFile}
-          className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
-        >
-          {saving ? 'Subiendo...' : photoUrl ? 'Cambiar foto' : 'Subir foto'}
-        </button>
-      </form>
+      <div className="flex flex-wrap items-center gap-3">
+        <form onSubmit={handleUpload} className="flex flex-wrap items-center gap-3">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
+            className="text-sm text-white file:mr-3 file:rounded-lg file:border-0 file:bg-violet-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-violet-500"
+          />
+          <button
+            type="submit"
+            disabled={saving || !photoFile}
+            className="rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+          >
+            {saving ? 'Subiendo...' : photoUrl ? 'Cambiar foto' : 'Subir foto'}
+          </button>
+        </form>
+
+        {photoUrl && (
+          <button
+            type="button"
+            onClick={handleDeletePhoto}
+            disabled={deleting}
+            className="rounded-lg bg-red-600 shadow-sm shadow-red-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-red-500 disabled:opacity-50"
+          >
+            {deleting ? 'Eliminando...' : 'Eliminar foto'}
+          </button>
+        )}
+      </div>
     </div>
   )
 }
