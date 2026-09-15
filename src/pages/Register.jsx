@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { createProfile, USERNAME_PATTERN } from '../lib/profile'
 
 export default function Register() {
   const { user, signUp } = useAuth()
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -16,19 +18,41 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+
+    if (!USERNAME_PATTERN.test(username)) {
+      setError('El nombre de usuario debe tener entre 3 y 20 caracteres (letras, números o "_").')
+      return
+    }
+
     setLoading(true)
     const { data, error } = await signUp(email, password)
-    setLoading(false)
     if (error) {
+      setLoading(false)
       setError(error.message)
       return
     }
+
     // Si la confirmación por email está desactivada, Supabase ya devuelve
     // sesión activa: el AuthContext la recoge solo y el guard de arriba
     // (if (user) ...) redirige a "/". Si no hay sesión, sí hace falta confirmar.
     if (!data.session) {
+      setLoading(false)
       setDone(true)
+      return
     }
+
+    try {
+      await createProfile(username)
+    } catch (err) {
+      setLoading(false)
+      setError(
+        err.message.includes('duplicate')
+          ? 'Ese nombre de usuario ya está en uso.'
+          : err.message,
+      )
+      return
+    }
+    setLoading(false)
   }
 
   if (done) {
@@ -57,6 +81,15 @@ export default function Register() {
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="text"
+            required
+            placeholder="Nombre de usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
+          />
+          <p className="-mt-2 text-xs text-white">No podrás cambiarlo después.</p>
           <input
             type="email"
             required

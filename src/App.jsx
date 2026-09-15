@@ -13,10 +13,13 @@ import Pasos from './pages/deporte/Pasos'
 import WorkoutDetail from './pages/deporte/WorkoutDetail'
 import WorkoutEdit from './pages/deporte/WorkoutEdit'
 import WorkoutNew from './pages/deporte/WorkoutNew'
+import Ajustes from './pages/Ajustes'
 import Dieta from './pages/Dieta'
 import Estudio from './pages/Estudio'
+import ForgotPassword from './pages/ForgotPassword'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ResetPassword from './pages/ResetPassword'
 
 export default function App() {
   return (
@@ -24,6 +27,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
@@ -45,6 +50,7 @@ export default function App() {
             <Route path="/dieta" element={<Dieta />} />
             <Route path="/estudio" element={<Estudio />} />
             <Route path="/calendario" element={<Calendario />} />
+            <Route path="/ajustes" element={<Ajustes />} />
           </Route>
         </Route>
       </Routes>

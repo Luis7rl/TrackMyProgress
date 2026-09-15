@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { todayKey } from '../lib/dates'
 import { supabase } from '../lib/supabaseClient'
@@ -125,6 +125,14 @@ export default function Layout() {
             <NavItems orientation="top" />
           </nav>
           <div className="flex items-center gap-1">
+            <Link
+              to="/ajustes"
+              title="Ajustes"
+              aria-label="Ajustes"
+              className="rounded-lg px-3 py-1.5 text-sm text-white hover:bg-slate-800 hover:text-slate-100"
+            >
+              ⚙️
+            </Link>
             <button
               onClick={handleExport}
               disabled={exporting}
