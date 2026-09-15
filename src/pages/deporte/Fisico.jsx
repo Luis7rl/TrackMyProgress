@@ -3,6 +3,7 @@ import ProgressBar from '../../components/ProgressBar'
 import { useAuth } from '../../context/AuthContext'
 import { todayKey } from '../../lib/dates'
 import { DEFAULT_GOALS, fetchGoals, saveGoal } from '../../lib/goals'
+import { compressImage } from '../../lib/imageCompression'
 import { supabase } from '../../lib/supabaseClient'
 
 const BUCKET = 'progress-photos'
@@ -187,11 +188,11 @@ export default function Fisico() {
       }
 
       if (photoFile) {
-        const ext = photoFile.name.split('.').pop()
-        const photoPath = `${user.id}/${date}.${ext}`
+        const compressed = await compressImage(photoFile)
+        const photoPath = `${user.id}/${date}.jpg`
         const { error: uploadError } = await supabase.storage
           .from(BUCKET)
-          .upload(photoPath, photoFile, { upsert: true })
+          .upload(photoPath, compressed, { upsert: true })
         if (uploadError) throw uploadError
         payload.photo_path = photoPath
       }

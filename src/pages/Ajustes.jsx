@@ -69,7 +69,7 @@ function PasswordForm() {
       <button
         type="button"
         onClick={() => setExpanded(true)}
-        className="self-start rounded-lg border border-slate-800 px-4 py-2 text-sm text-white hover:border-slate-600 hover:text-slate-200"
+        className="self-start rounded-lg bg-violet-600 shadow-sm shadow-violet-600/20 transition-colors px-4 py-2 text-sm font-medium text-white hover:bg-violet-500"
       >
         Cambiar contraseña
       </button>
