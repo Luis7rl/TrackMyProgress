@@ -4,6 +4,7 @@ import { registerSW } from 'virtual:pwa-register'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ConfirmProvider } from './context/ConfirmContext.jsx'
+import './lib/installPrompt.js'
 import './index.css'
 
 // Comprueba si hay una versión nueva desplegada y, si la hay, la activa y
