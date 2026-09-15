@@ -21,6 +21,15 @@ export async function fetchModuleSettings() {
   return { ...DEFAULT_MODULES, ...(data?.modules ?? {}) }
 }
 
+// Distingue "todavía no ha configurado nada" (fila inexistente, primer inicio
+// de sesión de la cuenta) de "ha guardado ajustes" (aunque sean los que
+// vienen por defecto). Usado para decidir si mostrar el asistente inicial.
+export async function fetchModuleSettingsRow() {
+  const { data, error } = await supabase.from('user_module_settings').select('modules').maybeSingle()
+  if (error) throw error
+  return data
+}
+
 export async function saveModuleSettings(modules) {
   const { error } = await supabase
     .from('user_module_settings')

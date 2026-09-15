@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useConfirm } from '../context/ConfirmContext'
-import { DEFAULT_MODULES, fetchModuleSettings } from '../lib/moduleSettings'
+import { DEFAULT_MODULES, fetchModuleSettingsRow } from '../lib/moduleSettings'
+import Onboarding from './Onboarding'
 
 const ALL_NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
@@ -70,11 +71,20 @@ export default function Layout() {
   const inDeporte = location.pathname.startsWith('/deporte')
   const inEstudio = location.pathname.startsWith('/estudio')
   const [modules, setModules] = useState(DEFAULT_MODULES)
+  const [checkingOnboarding, setCheckingOnboarding] = useState(true)
+  const [needsOnboarding, setNeedsOnboarding] = useState(false)
 
   useEffect(() => {
-    fetchModuleSettings()
-      .then(setModules)
+    fetchModuleSettingsRow()
+      .then((row) => {
+        if (row) {
+          setModules({ ...DEFAULT_MODULES, ...row.modules })
+        } else {
+          setNeedsOnboarding(true)
+        }
+      })
       .catch(() => {})
+      .finally(() => setCheckingOnboarding(false))
   }, [])
 
   const deporteTabs = ALL_DEPORTE_TABS.filter((tab) => modules[tab.moduleKey])
@@ -84,6 +94,19 @@ export default function Layout() {
 
   async function handleSignOut() {
     if (await confirm('¿Cerrar sesión?')) signOut()
+  }
+
+  if (checkingOnboarding) return null
+
+  if (needsOnboarding) {
+    return (
+      <Onboarding
+        onDone={(finalModules) => {
+          setModules(finalModules)
+          setNeedsOnboarding(false)
+        }}
+      />
+    )
   }
 
   return (
