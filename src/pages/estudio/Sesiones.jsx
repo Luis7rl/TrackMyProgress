@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useConfirm } from '../context/ConfirmContext'
-import { todayKey } from '../lib/dates'
-import { supabase } from '../lib/supabaseClient'
+import { useConfirm } from '../../context/ConfirmContext'
+import { todayKey } from '../../lib/dates'
+import { fetchSubjects } from '../../lib/studySubjects'
+import { supabase } from '../../lib/supabaseClient'
 
 const VISIBLE_LIMIT = 10
 const WEEKDAY_LABELS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+const OTHER_VALUE = '__other__'
 
 function formatHours(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60)
@@ -43,7 +45,7 @@ function WeeklyPlan() {
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
-      <p className="mb-3 text-sm font-medium text-white">Horario semanal</p>
+      <p className="mb-3 text-sm font-medium text-white">Plan semanal</p>
       {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
       {plan === null ? (
         <p className="text-sm text-white">Cargando...</p>
@@ -55,7 +57,7 @@ function WeeklyPlan() {
               <input
                 type="text"
                 value={plan[i]}
-                placeholder="Ej. Matemáticas 18:00-20:00"
+                placeholder="Ej. Repasar Matemáticas"
                 onChange={(e) => updateLocal(i, e.target.value)}
                 onBlur={(e) => saveDay(i, e.target.value)}
                 className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-sm outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
@@ -68,12 +70,14 @@ function WeeklyPlan() {
   )
 }
 
-export default function Estudio() {
+export default function Sesiones() {
   const confirm = useConfirm()
   const [sessions, setSessions] = useState(null)
+  const [subjects, setSubjects] = useState([])
   const [expanded, setExpanded] = useState(false)
   const [date, setDate] = useState(todayKey)
-  const [subject, setSubject] = useState('')
+  const [subjectChoice, setSubjectChoice] = useState('')
+  const [customSubject, setCustomSubject] = useState('')
   const [minutes, setMinutes] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -93,6 +97,9 @@ export default function Estudio() {
 
   useEffect(() => {
     load()
+    fetchSubjects()
+      .then(setSubjects)
+      .catch((err) => setError(err.message))
   }, [])
 
   async function handleSubmit(e) {
@@ -100,9 +107,11 @@ export default function Estudio() {
     setError('')
     setSaving(true)
 
+    const subject = subjectChoice === OTHER_VALUE ? customSubject.trim() : subjectChoice
+
     const { error } = await supabase.from('study_sessions').insert({
       date,
-      subject: subject.trim() || null,
+      subject: subject || null,
       duration_minutes: parseInt(minutes, 10),
     })
 
@@ -111,7 +120,8 @@ export default function Estudio() {
       setError(error.message)
       return
     }
-    setSubject('')
+    setSubjectChoice('')
+    setCustomSubject('')
     setMinutes('')
     load()
   }
@@ -132,7 +142,9 @@ export default function Estudio() {
 
   return (
     <div>
-      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">📚 Estudio</h1>
+      <h1 className="mb-6 flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-violet-500">
+        ⏱️ Sesiones
+      </h1>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
@@ -161,14 +173,32 @@ export default function Estudio() {
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm text-white">
           Asignatura (opcional)
-          <input
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            placeholder="Ej. Cálculo"
+          <select
+            value={subjectChoice}
+            onChange={(e) => setSubjectChoice(e.target.value)}
             className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
-          />
+          >
+            <option value="">Sin especificar</option>
+            {subjects.map((s) => (
+              <option key={s.id} value={s.name}>
+                {s.name}
+              </option>
+            ))}
+            <option value={OTHER_VALUE}>Otra (escribir)...</option>
+          </select>
         </label>
+        {subjectChoice === OTHER_VALUE && (
+          <label className="flex flex-col gap-1 text-sm text-white">
+            Nombre
+            <input
+              type="text"
+              value={customSubject}
+              onChange={(e) => setCustomSubject(e.target.value)}
+              placeholder="Ej. Cálculo"
+              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-violet-500 focus:ring-4 focus:ring-violet-500/30"
+            />
+          </label>
+        )}
         <label className="flex flex-col gap-1 text-sm text-white">
           Minutos
           <input

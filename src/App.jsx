@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import DeporteLayout from './components/DeporteLayout'
+import EstudioLayout from './components/EstudioLayout'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Calendario from './pages/Calendario'
@@ -15,7 +16,9 @@ import WorkoutEdit from './pages/deporte/WorkoutEdit'
 import WorkoutNew from './pages/deporte/WorkoutNew'
 import Ajustes from './pages/Ajustes'
 import Dieta from './pages/Dieta'
-import Estudio from './pages/Estudio'
+import Horario from './pages/estudio/Horario'
+import Notas from './pages/estudio/Notas'
+import Sesiones from './pages/estudio/Sesiones'
 import ForgotPassword from './pages/ForgotPassword'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -48,7 +51,14 @@ export default function App() {
             </Route>
 
             <Route path="/dieta" element={<Dieta />} />
-            <Route path="/estudio" element={<Estudio />} />
+
+            <Route path="/estudio" element={<EstudioLayout />}>
+              <Route index element={<Navigate to="horario" replace />} />
+              <Route path="horario" element={<Horario />} />
+              <Route path="notas" element={<Notas />} />
+              <Route path="sesiones" element={<Sesiones />} />
+            </Route>
+
             <Route path="/calendario" element={<Calendario />} />
             <Route path="/ajustes" element={<Ajustes />} />
           </Route>

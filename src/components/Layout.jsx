@@ -19,6 +19,12 @@ const ALL_DEPORTE_TABS = [
   { to: '/deporte/fisico', label: 'Físico', icon: '📸', moduleKey: 'fisico' },
 ]
 
+const ESTUDIO_TABS = [
+  { to: '/estudio/horario', label: 'Horario', icon: '🗓️' },
+  { to: '/estudio/notas', label: 'Notas', icon: '📝' },
+  { to: '/estudio/sesiones', label: 'Sesiones', icon: '⏱️' },
+]
+
 function NavItems({ orientation, items }) {
   const base =
     orientation === 'bottom'
@@ -62,6 +68,7 @@ export default function Layout() {
   const confirm = useConfirm()
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
+  const inEstudio = location.pathname.startsWith('/estudio')
   const [modules, setModules] = useState(DEFAULT_MODULES)
 
   useEffect(() => {
@@ -108,9 +115,9 @@ export default function Layout() {
           </div>
         </header>
 
-        {inDeporte && (
+        {(inDeporte || inEstudio) && (
           <nav className="flex gap-2 overflow-x-auto border-b border-slate-800 bg-slate-950/95 px-4 py-2 backdrop-blur">
-            {deporteTabs.map((tab) => (
+            {(inDeporte ? deporteTabs : ESTUDIO_TABS).map((tab) => (
               <NavLink
                 key={tab.to}
                 to={tab.to}
