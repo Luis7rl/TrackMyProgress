@@ -11,7 +11,8 @@ alter table profiles enable row level security;
 
 -- Solo lectura/creación del propio perfil. Sin política de update: el
 -- nombre de usuario es inmutable una vez creado (a propósito, de cara a
--- perfiles públicos en el futuro).
+-- poder compartir progreso con contactos concretos más adelante —
+-- nunca perfiles públicos abiertos a cualquiera).
 create policy "profiles_select_own" on profiles
   for select using (auth.uid() = user_id);
 create policy "profiles_insert_own" on profiles
