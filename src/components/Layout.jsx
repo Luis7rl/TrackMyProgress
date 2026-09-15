@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { todayKey } from '../lib/dates'
+import { DEFAULT_MODULES, fetchModuleSettings } from '../lib/moduleSettings'
 import { supabase } from '../lib/supabaseClient'
 
 const EXPORT_TABLES = [
@@ -31,28 +32,28 @@ async function fetchAllRows(table) {
   return all
 }
 
-const navItems = [
+const ALL_NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: '🏠', end: true },
   { to: '/deporte', label: 'Deporte', icon: '🏋️' },
-  { to: '/dieta', label: 'Dieta', icon: '🍎' },
-  { to: '/estudio', label: 'Estudio', icon: '📚' },
-  { to: '/calendario', label: 'Calendario', icon: '🗓️' },
+  { to: '/dieta', label: 'Dieta', icon: '🍎', moduleKey: 'dieta' },
+  { to: '/estudio', label: 'Estudio', icon: '📚', moduleKey: 'estudio' },
+  { to: '/calendario', label: 'Calendario', icon: '🗓️', moduleKey: 'calendario' },
 ]
 
-const deporteTabs = [
-  { to: '/deporte/gimnasio', label: 'Gimnasio', icon: '🏋️' },
-  { to: '/deporte/carrera', label: 'Carrera', icon: '🏃' },
-  { to: '/deporte/pasos', label: 'Pasos', icon: '👟' },
-  { to: '/deporte/fisico', label: 'Físico', icon: '📸' },
+const ALL_DEPORTE_TABS = [
+  { to: '/deporte/gimnasio', label: 'Gimnasio', icon: '🏋️', moduleKey: 'gimnasio' },
+  { to: '/deporte/carrera', label: 'Carrera', icon: '🏃', moduleKey: 'carrera' },
+  { to: '/deporte/pasos', label: 'Pasos', icon: '👟', moduleKey: 'pasos' },
+  { to: '/deporte/fisico', label: 'Físico', icon: '📸', moduleKey: 'fisico' },
 ]
 
-function NavItems({ orientation }) {
+function NavItems({ orientation, items }) {
   const base =
     orientation === 'bottom'
       ? 'flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs'
       : 'flex items-center gap-2 rounded-lg px-3 py-2 text-sm'
 
-  return navItems.map((item) => (
+  return items.map((item) => (
     <NavLink
       key={item.to}
       to={item.to}
@@ -89,6 +90,18 @@ export default function Layout() {
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
   const [exporting, setExporting] = useState(false)
+  const [modules, setModules] = useState(DEFAULT_MODULES)
+
+  useEffect(() => {
+    fetchModuleSettings()
+      .then(setModules)
+      .catch(() => {})
+  }, [])
+
+  const deporteTabs = ALL_DEPORTE_TABS.filter((tab) => modules[tab.moduleKey])
+  const navItems = ALL_NAV_ITEMS.filter(
+    (item) => !item.moduleKey || modules[item.moduleKey],
+  ).filter((item) => item.to !== '/deporte' || deporteTabs.length > 0)
 
   async function handleExport() {
     setExporting(true)
@@ -122,7 +135,7 @@ export default function Layout() {
             Track<span className="text-violet-500">MyProgress</span>
           </span>
           <nav className="hidden gap-1 md:flex">
-            <NavItems orientation="top" />
+            <NavItems orientation="top" items={navItems} />
           </nav>
           <div className="flex items-center gap-1">
             <Link
@@ -180,7 +193,7 @@ export default function Layout() {
 
       {/* Bottom tab bar: mobile only */}
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-10 flex border-t border-slate-800 bg-slate-950/95 backdrop-blur md:hidden">
-        <NavItems orientation="bottom" />
+        <NavItems orientation="bottom" items={navItems} />
       </nav>
     </div>
   )

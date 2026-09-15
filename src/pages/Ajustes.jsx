@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { DEFAULT_MODULES, fetchModuleSettings, MODULE_INFO, saveModuleSettings } from '../lib/moduleSettings'
 import { fetchProfile } from '../lib/profile'
 import { supabase } from '../lib/supabaseClient'
 
@@ -154,6 +155,81 @@ function PasswordForm() {
   )
 }
 
+function VisibleSectionsForm() {
+  const [modules, setModules] = useState(null)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetchModuleSettings()
+      .then(setModules)
+      .catch((err) => setError(err.message))
+  }, [])
+
+  async function toggle(key) {
+    const next = { ...(modules ?? DEFAULT_MODULES), [key]: !modules?.[key] }
+    setModules(next)
+    try {
+      await saveModuleSettings(next)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  const deporteModules = MODULE_INFO.filter((m) => m.group === 'deporte')
+  const topModules = MODULE_INFO.filter((m) => m.group === 'top')
+
+  return (
+    <div>
+      <h2 className="mb-3 text-sm font-medium text-white">Secciones visibles</h2>
+      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 shadow-sm">
+        <p className="mb-3 text-sm text-white">
+          🏠 Inicio siempre está visible. Desactiva lo que no vayas a usar.
+        </p>
+
+        {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
+
+        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-white">
+          Deporte (se oculta entera si desactivas todo)
+        </p>
+        <div className="mb-4 flex flex-col gap-2">
+          {deporteModules.map((m) => (
+            <label key={m.key} className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-2">
+                <span aria-hidden="true">{m.icon}</span>
+                {m.label}
+              </span>
+              <input
+                type="checkbox"
+                checked={modules?.[m.key] ?? true}
+                onChange={() => toggle(m.key)}
+                className="h-4 w-4 accent-violet-500"
+              />
+            </label>
+          ))}
+        </div>
+
+        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-white">Otras secciones</p>
+        <div className="flex flex-col gap-2">
+          {topModules.map((m) => (
+            <label key={m.key} className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-2">
+                <span aria-hidden="true">{m.icon}</span>
+                {m.label}
+              </span>
+              <input
+                type="checkbox"
+                checked={modules?.[m.key] ?? true}
+                onChange={() => toggle(m.key)}
+                className="h-4 w-4 accent-violet-500"
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Ajustes() {
   const { user } = useAuth()
   const [username, setUsername] = useState(null)
@@ -186,6 +262,10 @@ export default function Ajustes() {
         <EmailForm currentEmail={user.email} />
 
         <PasswordForm />
+      </div>
+
+      <div className="mt-6">
+        <VisibleSectionsForm />
       </div>
     </div>
   )
