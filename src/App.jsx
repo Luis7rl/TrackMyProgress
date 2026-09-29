@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import AdminRoute from './components/AdminRoute'
 import DeporteLayout from './components/DeporteLayout'
 import EstudioLayout from './components/EstudioLayout'
 import Layout from './components/Layout'
@@ -16,6 +17,7 @@ import WorkoutEdit from './pages/deporte/WorkoutEdit'
 import WorkoutNew from './pages/deporte/WorkoutNew'
 import Ajustes from './pages/Ajustes'
 import Dieta from './pages/Dieta'
+import Recompensas from './pages/Recompensas'
 import Horario from './pages/estudio/Horario'
 import Notas from './pages/estudio/Notas'
 import Sesiones from './pages/estudio/Sesiones'
@@ -61,6 +63,10 @@ export default function App() {
 
             <Route path="/calendario" element={<Calendario />} />
             <Route path="/ajustes" element={<Ajustes />} />
+
+            <Route element={<AdminRoute />}>
+              <Route path="/recompensas" element={<Recompensas />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

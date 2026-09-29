@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useConfirm } from '../context/ConfirmContext'
+import { isAdmin } from '../lib/adminUser'
 import { DEFAULT_MODULES, fetchModuleSettingsRow } from '../lib/moduleSettings'
 import Onboarding from './Onboarding'
 
@@ -11,6 +12,7 @@ const ALL_NAV_ITEMS = [
   { to: '/dieta', label: 'Dieta', icon: '🍎', moduleKey: 'dieta' },
   { to: '/estudio', label: 'Estudio', icon: '📚', moduleKey: 'estudio' },
   { to: '/calendario', label: 'Calendario', icon: '🗓️', moduleKey: 'calendario' },
+  { to: '/recompensas', label: 'Recompensas', icon: '🏆', adminOnly: true },
 ]
 
 const ALL_DEPORTE_TABS = [
@@ -65,7 +67,7 @@ function NavItems({ orientation, items }) {
 }
 
 export default function Layout() {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
   const confirm = useConfirm()
   const location = useLocation()
   const inDeporte = location.pathname.startsWith('/deporte')
@@ -90,7 +92,9 @@ export default function Layout() {
   const deporteTabs = ALL_DEPORTE_TABS.filter((tab) => modules[tab.moduleKey])
   const navItems = ALL_NAV_ITEMS.filter(
     (item) => !item.moduleKey || modules[item.moduleKey],
-  ).filter((item) => item.to !== '/deporte' || deporteTabs.length > 0)
+  )
+    .filter((item) => item.to !== '/deporte' || deporteTabs.length > 0)
+    .filter((item) => !item.adminOnly || isAdmin(user))
 
   async function handleSignOut() {
     if (await confirm('¿Cerrar sesión?')) signOut()
