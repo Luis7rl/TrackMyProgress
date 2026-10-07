@@ -77,3 +77,10 @@ export async function redeemReward(name, pointCost) {
     .insert({ reward_name: name, points_spent: pointCost })
   if (error) throw error
 }
+
+export const CANCEL_WINDOW_MS = 24 * 60 * 60 * 1000
+
+export async function cancelRedemption(id) {
+  const { error } = await supabase.from('reward_redemptions').delete().eq('id', id)
+  if (error) throw error
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useConfirm } from '../context/ConfirmContext'
 import {
+  CANCEL_WINDOW_MS,
+  cancelRedemption,
   fetchPointsSummary,
   fetchRedemptions,
   POINTS,
@@ -48,6 +50,17 @@ export default function Recompensas() {
       setError(err.message)
     } finally {
       setBusyId(null)
+    }
+  }
+
+  async function handleCancel(redemption) {
+    const msg = `¿Cancelar el canje de "${redemption.reward_name}"? Recuperas ${redemption.points_spent} puntos.`
+    if (!(await confirm(msg))) return
+    try {
+      await cancelRedemption(redemption.id)
+      await load()
+    } catch (err) {
+      setError(err.message)
     }
   }
 
@@ -131,10 +144,20 @@ export default function Recompensas() {
                 className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 shadow-sm"
               >
                 <span className="text-sm">{r.reward_name}</span>
-                <span className="text-sm text-white">
-                  −{r.points_spent} ·{' '}
-                  {new Date(r.redeemed_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-white">
+                    −{r.points_spent} ·{' '}
+                    {new Date(r.redeemed_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                  </span>
+                  {Date.now() - new Date(r.redeemed_at).getTime() < CANCEL_WINDOW_MS && (
+                    <button
+                      onClick={() => handleCancel(r)}
+                      className="rounded-lg border border-red-500/50 px-2.5 py-1 text-xs font-medium text-red-300 hover:bg-red-500/10"
+                    >
+                      Cancelar
+                    </button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
