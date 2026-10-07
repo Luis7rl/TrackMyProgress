@@ -71,21 +71,6 @@ export default function Recompensas() {
         )}
       </div>
 
-      <h2 className="mb-3 text-sm font-medium text-white">Cómo se ganan puntos</h2>
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {EARN_TILES.map((t) => (
-          <div key={t.key} className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 shadow-sm">
-            <p className="text-2xl" aria-hidden="true">
-              {t.icon}
-            </p>
-            <p className="mt-1 text-xs text-white">{t.rate}</p>
-            <p className="mt-1 text-sm font-semibold text-violet-300">
-              {summary ? `+${summary.breakdown[t.key].points}` : '—'}
-            </p>
-          </div>
-        ))}
-      </div>
-
       <h2 className="mb-3 text-sm font-medium text-white">Canjear</h2>
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {REWARDS.map((r) => {
@@ -118,6 +103,22 @@ export default function Recompensas() {
             </div>
           )
         })}
+      </div>
+
+      <h2 className="mb-3 text-sm font-medium text-white">Cómo se ganan puntos</h2>
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {EARN_TILES.map((t) => (
+          <div key={t.key} className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 shadow-sm">
+            <p className="text-2xl" aria-hidden="true">
+              {t.icon}
+            </p>
+            <p className="mt-1 text-xs text-white">{t.rate}</p>
+            <p className="mt-2 text-xl font-semibold text-violet-300">
+              {summary ? summary.breakdown[t.key].points.toLocaleString('es-ES') : '—'}
+            </p>
+            <p className="text-xs text-white">puntos generados</p>
+          </div>
+        ))}
       </div>
 
       {redemptions && redemptions.length > 0 && (
