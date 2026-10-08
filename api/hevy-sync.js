@@ -147,22 +147,34 @@ async function upsertWorkout(db, userId, workout) {
   return existingId ? 'updated' : 'created'
 }
 
-async function resolveUser(db, req) {
+// Devuelve { user } o { reason } con el motivo del rechazo, para poder diagnosticarlo.
+async function resolveUser(db, req, supabaseUrl) {
   const auth = req.headers.authorization || ''
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : ''
-  if (!token) return null
+  if (!token) return { reason: 'falta el token' }
 
   if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
     // El cron no tiene sesión: sincroniza para la cuenta dueña de la clave de Hevy.
     const { data, error } = await db.auth.admin.listUsers({ perPage: 1000 })
-    if (error) throw error
-    return data.users.find((u) => u.email === ADMIN_EMAIL) ?? null
+    if (error) return { reason: `no se pudo listar usuarios: ${error.message}` }
+    const user = data.users.find((u) => isAdminEmail(u.email))
+    return user ? { user } : { reason: 'no existe la cuenta dueña de Hevy' }
   }
 
-  const { data, error } = await db.auth.getUser(token)
-  if (error || !data?.user) return null
+  // La sesión se comprueba con la clave pública (la misma que usa la app), que es
+  // con la que Supabase emite los tokens; así no depende del tipo de clave secreta.
+  const anonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  const authClient = anonKey
+    ? createClient(supabaseUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } })
+    : db
+  const { data, error } = await authClient.auth.getUser(token)
+  if (error || !data?.user) return { reason: `sesión no válida (${error?.message ?? 'sin usuario'})` }
   // La clave de Hevy es de una sola cuenta: nadie más puede volcar esos datos.
-  return data.user.email === ADMIN_EMAIL ? data.user : null
+  return isAdminEmail(data.user.email) ? { user: data.user } : { reason: 'esta cuenta no tiene Hevy conectado' }
+}
+
+function isAdminEmail(email) {
+  return (email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()
 }
 
 export default async function handler(req, res) {
@@ -182,9 +194,9 @@ export default async function handler(req, res) {
   })
 
   try {
-    const user = await resolveUser(db, req)
+    const { user, reason } = await resolveUser(db, req, supabaseUrl)
     if (!user) {
-      res.status(401).json({ error: 'No autorizado' })
+      res.status(401).json({ error: `No autorizado: ${reason}` })
       return
     }
 
