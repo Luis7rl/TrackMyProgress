@@ -87,3 +87,15 @@ Puesta en marcha (una sola vez):
      Es secreta: nunca con prefijo `VITE_` ni en git.
    - `CRON_SECRET`: cualquier texto largo inventado (Vercel lo usa para autorizar el cron).
 3. Vuelve a desplegar (Deployments → los tres puntos del último → **Redeploy**).
+
+## Pasos automáticos desde el iPhone (Atajos)
+
+`api/pasos.js` recibe los pasos con una sola petición:
+`https://<tu-app>.vercel.app/api/pasos?pasos=8432&clave=<tu-clave>` (opcional `&fecha=AAAA-MM-DD`,
+por defecto hoy). La clave es la de `webhook_secrets` (ver migración 003), y los pasos se guardan
+en la cuenta de `src/lib/adminUser.js` (migración 017).
+
+El Atajo solo necesita tres acciones: **Buscar muestras de Salud** (Pasos, fecha de hoy),
+**Calcular estadísticas** (Suma) y **Obtener contenido de URL** con la dirección de arriba,
+poniendo el resultado de la suma en `pasos=`. Después, en Automatización, se programa cada
+noche a las 23:30 con "Ejecutar inmediatamente".

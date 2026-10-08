@@ -144,7 +144,7 @@ begin
     raise exception 'unauthorized';
   end if;
 
-  select id into v_user_id from auth.users limit 1;
+  select id into v_user_id from auth.users where lower(email) = 'luisherrero1bcsa@gmail.com';
   if v_user_id is null then
     raise exception 'no user found';
   end if;
