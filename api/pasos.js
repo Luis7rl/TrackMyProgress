@@ -10,10 +10,12 @@ function madridToday() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid' }).format(new Date())
 }
 
-// El Atajo puede mandar el número con formato español ("8.432" o "8432,0").
+// El Atajo puede mandar el número con formato español ("8.432" o "8432,0") y a veces
+// con la unidad pegada ("8.432 pasos"): nos quedamos con el primer número.
 export function parseSteps(value) {
-  const text = String(value ?? '').trim().replace(/\s/g, '')
-  if (!text) return null
+  const match = String(value ?? '').replace(/\s/g, '').match(/\d[\d.,]*/)
+  if (!match) return null
+  const text = match[0].replace(/[.,]$/, '')
   if (/^\d{1,3}([.,]\d{3})+$/.test(text)) return Number(text.replace(/[.,]/g, ''))
   const n = Number(text.replace(',', '.'))
   return Number.isFinite(n) && n >= 0 ? Math.round(n) : null
@@ -26,7 +28,7 @@ export default async function handler(req, res) {
   const secret = params.clave || params.key
 
   if (steps === null) {
-    res.status(400).send('Falta el número de pasos (?pasos=...)')
+    res.status(400).send(`Falta el número de pasos (recibido: "${params.pasos ?? params.steps ?? ''}")`)
     return
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
