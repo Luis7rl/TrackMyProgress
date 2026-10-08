@@ -45,6 +45,20 @@ async function fetchEventsSince(since) {
   return events
 }
 
+// Un mismo entrenamiento puede tener varios eventos (editado y luego borrado):
+// solo cuenta el más reciente, para no resucitar uno borrado.
+function latestEventPerWorkout(events) {
+  const eventTime = (e) => new Date(e.workout?.updated_at ?? e.deleted_at ?? 0).getTime()
+  const latest = new Map()
+  for (const event of events) {
+    const id = event.workout?.id ?? event.id
+    if (!id) continue
+    const current = latest.get(id)
+    if (!current || eventTime(event) > eventTime(current)) latest.set(id, event)
+  }
+  return [...latest.values()]
+}
+
 function buildSets(workout) {
   const sets = []
   for (const exercise of workout.exercises ?? []) {
@@ -187,7 +201,7 @@ export default async function handler(req, res) {
     const events = await fetchEventsSince(state?.last_synced_at ?? EPOCH)
 
     const summary = { created: 0, updated: 0, deleted: 0, skipped: 0 }
-    for (const event of events) {
+    for (const event of latestEventPerWorkout(events)) {
       if (event.type === 'updated' && event.workout) {
         summary[await upsertWorkout(db, user.id, event.workout)] += 1
       } else if (event.type === 'deleted' && event.id) {
