@@ -12,6 +12,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: false,
       includeAssets: ['apple-touch-icon.png'],
+      workbox: {
+        // Las funciones de /api (Hevy, pasos del Atajo) las sirve Vercel: que la app
+        // instalada no las intercepte devolviendo la página principal.
+        navigateFallbackDenylist: [/^\/api\//],
+      },
       manifest: {
         name: 'TrackMyProgress',
         short_name: 'TrackMyProgress',
