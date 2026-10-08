@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import HevySync from '../../components/HevySync'
 import MonthCalendar from '../../components/MonthCalendar'
 import MuscleMap from '../../components/MuscleMap'
+import { useAuth } from '../../context/AuthContext'
+import { isAdmin } from '../../lib/adminUser'
 import { supabase } from '../../lib/supabaseClient'
 import { classifyExercise, GROUP_SHORT_LABELS, MUSCLE_GROUPS } from '../../lib/muscleGroups'
 
@@ -36,6 +39,9 @@ export default function Gimnasio() {
   const [error, setError] = useState('')
   const [expanded, setExpanded] = useState(false)
   const [prsExpanded, setPrsExpanded] = useState(false)
+  const [reloadKey, setReloadKey] = useState(0)
+  const { user } = useAuth()
+  const reload = useCallback(() => setReloadKey((k) => k + 1), [])
 
   useEffect(() => {
     let active = true
@@ -63,7 +69,7 @@ export default function Gimnasio() {
     return () => {
       active = false
     }
-  }, [])
+  }, [reloadKey])
 
   const markedDates = useMemo(() => new Set(workouts?.map((w) => w.date) ?? []), [workouts])
 
@@ -133,6 +139,8 @@ export default function Gimnasio() {
       </div>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+
+      {isAdmin(user) && <HevySync onSynced={reload} />}
 
       <div className="mb-6 rounded-2xl border border-violet-500/40 bg-gradient-to-b from-violet-600/20 via-slate-900/50 to-slate-900/50 p-4 shadow-lg shadow-violet-600/10">
         <p className="text-2xl font-semibold">{workouts?.length ?? '—'}</p>

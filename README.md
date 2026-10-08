@@ -66,3 +66,24 @@ La forma más simple y gratuita es desplegarla en **Vercel** o **Netlify**:
 Para añadir un nuevo módulo (peso corporal, dieta, estudios...) se sigue el mismo patrón: una
 tabla nueva en Supabase con RLS por `user_id`, una página en `src/pages/`, y una entrada en la
 navegación de `Layout.jsx`.
+
+## Sincronización automática con Hevy (Hevy Pro)
+
+`api/hevy-sync.js` es una función de Vercel que pide a la API de Hevy los entrenamientos
+nuevos, editados o borrados desde la última vez y los vuelca en `workouts` / `workout_sets`.
+Se ejecuta sola una vez al día (cron en `vercel.json`), cada vez que abres Gimnasio (si han
+pasado más de 10 minutos) y con el botón **Sincronizar ahora**. Solo la cuenta de
+`src/lib/adminUser.js` puede usarla, porque la clave de Hevy es de esa cuenta.
+
+Los entrenamientos que ya importaste desde el CSV se emparejan por fecha y título, así que no
+se duplican.
+
+Puesta en marcha (una sola vez):
+
+1. En Supabase → **SQL Editor**, ejecuta [`supabase/migrations/016_hevy_sync.sql`](supabase/migrations/016_hevy_sync.sql).
+2. En Vercel → tu proyecto → **Settings → Environment Variables**, añade:
+   - `HEVY_API_KEY`: tu clave de hevy.com/settings?developer.
+   - `SUPABASE_SERVICE_ROLE_KEY`: en Supabase → **Project Settings → API** → `service_role`.
+     Es secreta: nunca con prefijo `VITE_` ni en git.
+   - `CRON_SECRET`: cualquier texto largo inventado (Vercel lo usa para autorizar el cron).
+3. Vuelve a desplegar (Deployments → los tres puntos del último → **Redeploy**).

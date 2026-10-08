@@ -351,3 +351,16 @@ create policy "user_goals_update_own" on user_goals
   for update using (auth.uid() = user_id);
 create policy "user_goals_delete_own" on user_goals
   for delete using (auth.uid() = user_id);
+
+-- Sincronización automática con Hevy (ver supabase/migrations/016_hevy_sync.sql)
+
+create table if not exists hevy_sync_state (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  last_synced_at timestamptz not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table hevy_sync_state enable row level security;
+
+create policy "hevy_sync_state_select_own" on hevy_sync_state
+  for select using (auth.uid() = user_id);
